@@ -71,12 +71,10 @@ docker compose up --build
    - `YOOKASSA_SHOP_ID`, `YOOKASSA_SECRET_KEY`;
    - `RUNWAY_API_KEY` (если включаете `VIDEO_PROVIDER`).
    `DATABASE_URL` и `NEXTAUTH_SECRET` подставляются автоматически.
-4. Деплой применит миграции через `preDeployCommand` (`prisma migrate deploy`).
-5. **Первый seed** (создание админа и стартовых данных) выполните один раз через Render Shell:
-   ```bash
-   npx tsx prisma/seed.ts
-   ```
-6. В личном кабинете ЮKassa укажите URL webhook:
+4. Деплой сам применит миграции и seed через `preDeployCommand`
+   (`prisma migrate deploy` + `node prisma/seed.mjs`): создаются таблицы, демо-каталог,
+   услуги и админ-пользователь (из `ADMIN_EMAIL` / `ADMIN_PASSWORD`). seed идемпотентен.
+5. В личном кабинете ЮKassa укажите URL webhook:
    `https://<ваш-домен>/api/payments/yookassa/webhook`.
 
 ---
@@ -86,7 +84,7 @@ docker compose up --build
 src/app            маршруты (страницы + api)
 src/components      UI и блоки (layout, catalog, chat, checkout, admin, ui)
 src/lib            db, auth, ai, yookassa, video, cart, catalog, validators
-prisma             schema.prisma, migrations, seed.ts
+prisma             schema.prisma, migrations, seed.mjs
 design             tokens.json, figma-refs.md
 docker             Dockerfile, .dockerignore
 ```

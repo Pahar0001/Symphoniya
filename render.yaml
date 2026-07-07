@@ -9,8 +9,10 @@ services:
     dockerContext: .
     plan: starter
     healthCheckPath: /
-    # Миграции применяются до запуска нового релиза.
-    preDeployCommand: npx prisma migrate deploy
+    # Миграции + seed применяются до запуска нового релиза (без npx/tsx —
+    # прямой вызов node, чтобы в минимальном образе резолвились wasm-движки Prisma).
+    # seed идемпотентен (upsert): создаёт категории, демо-товары, услуги и админа.
+    preDeployCommand: node node_modules/prisma/build/index.js migrate deploy && node prisma/seed.mjs
     envVars:
       - key: DATABASE_URL
         fromDatabase:

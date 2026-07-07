@@ -31,7 +31,7 @@ services:
       DATABASE_URL: "postgresql://symphony:symphony@postgres:5432/symphony?schema=public"
       ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@symphony-mebeli.ru}"
       ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin12345}"
-    command: sh -c "npx prisma migrate deploy && npx tsx prisma/seed.ts"
+    command: sh -c "npx prisma migrate deploy && node prisma/seed.mjs"
     restart: "no"
 
   app:

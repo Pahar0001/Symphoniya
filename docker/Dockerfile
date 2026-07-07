@@ -31,12 +31,14 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=build /app/public ./public
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
-# Prisma нужна в рантайме: клиент + CLI и движки для `prisma migrate deploy`
-# (локально через docker-compose, на Render — через preDeployCommand).
+# Prisma нужна в рантайме: клиент + CLI и движки для миграций.
+# Миграции/seed запускаются как `node node_modules/prisma/build/index.js migrate deploy`
+# и `node prisma/seed.mjs` (см. render.yaml / docker-compose.yml) — без npx и tsx,
+# чтобы корректно резолвились wasm-движки в node_modules/prisma/build.
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
-COPY --from=build /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
+COPY --from=build /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=build /app/prisma ./prisma
 
 USER nextjs

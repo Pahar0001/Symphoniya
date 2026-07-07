@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 // Плейсхолдер-контент на этапе разработки. Реальные карточки и фото
 // заказчик добавляет через /admin (CRUD) — БД остаётся источником правды.
+// Чистый JS (ESM), чтобы seed запускался и в проде (`node prisma/seed.mjs`) без tsx.
 async function main() {
   // ── Категории ────────────────────────────────────────────────
   const kuhni = await prisma.category.upsert({
