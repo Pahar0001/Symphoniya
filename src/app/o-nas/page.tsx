@@ -31,7 +31,7 @@ export default function AboutPage() {
               { n: "24 мес.", d: "гарантия на изделия" },
             ].map((x) => (
               <div key={x.n}>
-                <div className="font-heading text-3xl text-wood-600">{x.n}</div>
+                <div className="font-display text-3xl text-wood-600">{x.n}</div>
                 <div className="mt-1 text-sm text-graphite-500">{x.d}</div>
               </div>
             ))}

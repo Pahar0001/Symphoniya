@@ -41,7 +41,7 @@ export default function ContactsPage() {
           </div>
 
           <div className="rounded-lg bg-cream-100 p-6 sm:p-8">
-            <h2 className="mb-6 font-heading text-2xl text-graphite-800">Заказать звонок</h2>
+            <h2 className="mb-6 font-display text-2xl text-graphite-800">Заказать звонок</h2>
             <CallbackForm />
           </div>
         </Container>

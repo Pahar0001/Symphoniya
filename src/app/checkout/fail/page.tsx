@@ -9,7 +9,7 @@ export default function FailPage() {
     <section className="section">
       <Container className="max-w-xl text-center">
         <div className="mb-6 text-5xl text-graphite-300">×</div>
-        <h1 className="font-heading text-4xl text-graphite-800">Оплата не завершена</h1>
+        <h1 className="font-display text-4xl text-graphite-800">Оплата не завершена</h1>
         <p className="mt-4 text-graphite-500">
           Платёж не был завершён. Вы можете попробовать снова или связаться с нами — поможем оформить заказ.
         </p>

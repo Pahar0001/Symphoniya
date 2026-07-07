@@ -26,12 +26,12 @@ export function CheckoutForm() {
   return (
     <div className="grid gap-12 lg:grid-cols-2">
       <div>
-        <h2 className="mb-6 font-heading text-2xl text-graphite-800">Ваш заказ</h2>
+        <h2 className="mb-6 font-display text-2xl text-graphite-800">Ваш заказ</h2>
         <CartSummary editable={false} />
       </div>
 
       <div className="rounded-lg bg-cream-100 p-6 sm:p-8">
-        <h2 className="mb-6 font-heading text-2xl text-graphite-800">Контакты и оплата</h2>
+        <h2 className="mb-6 font-display text-2xl text-graphite-800">Контакты и оплата</h2>
         <div className="grid gap-4">
           <Input label="Имя" value={name} onChange={(e) => setName(e.target.value)} required />
           <Input label="Телефон" value={phone} onChange={(e) => setPhone(e.target.value)} required />

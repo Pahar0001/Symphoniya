@@ -18,15 +18,16 @@
 }
 
 .dark {
-  --paper: #15120e;
-  --surface: #1d1913;
-  --surface-2: #29221a;
-  --ink: #ece3d2;
-  --muted: #9d9077;
-  --line: #342b20;
-  --walnut: #c58f52;
-  --brass: #cb9b55;
-  --brass-soft: #8a6a3c;
+  /* Тёплый графит — «затемнённая галерея», а не чёрный провал. */
+  --paper: #232019;
+  --surface: #2b2720;
+  --surface-2: #35302a;
+  --ink: #ece4d4;
+  --muted: #b0a58e;
+  --line: #423a2e;
+  --walnut: #cfa062;
+  --brass: #cba463;
+  --brass-soft: #7f6540;
 }
 
 /* Легаси-палитра (cream/graphite/wood) как алиасы на семантические токены —

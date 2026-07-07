@@ -25,7 +25,7 @@ export async function AdminShell({
   return (
     <div className="flex min-h-screen bg-cream-50">
       <aside className="hidden w-60 shrink-0 flex-col border-r border-wood-100 bg-cream-100 p-6 sm:flex">
-        <div className="mb-8 font-heading text-xl text-graphite-800">Симфония · админ</div>
+        <div className="mb-8 font-display text-xl text-graphite-800">Симфония · админ</div>
         <nav className="flex flex-col gap-1">
           {NAV.map((n) => (
             <Link
@@ -44,7 +44,7 @@ export async function AdminShell({
       </aside>
 
       <main className="flex-1 p-6 sm:p-10">
-        <h1 className="mb-8 font-heading text-3xl text-graphite-800">{title}</h1>
+        <h1 className="mb-8 font-display text-3xl text-graphite-800">{title}</h1>
         {children}
       </main>
     </div>

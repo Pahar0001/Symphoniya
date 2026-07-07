@@ -11,7 +11,7 @@ export default function SuccessPage() {
       <Container className="max-w-xl text-center">
         <ClearCartOnMount />
         <div className="mb-6 text-5xl">✓</div>
-        <h1 className="font-heading text-4xl text-graphite-800">Спасибо! Оплата принята</h1>
+        <h1 className="font-display text-4xl text-graphite-800">Спасибо! Оплата принята</h1>
         <p className="mt-4 text-graphite-500">
           Мы получили ваш платёж. Менеджер свяжется с вами для уточнения деталей проекта.
         </p>

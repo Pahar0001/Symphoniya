@@ -26,7 +26,7 @@ export function ServiceCard({
 
   return (
     <div className="flex flex-col rounded-lg border border-wood-100 bg-surface p-8">
-      <h3 className="font-heading text-2xl text-graphite-800">{title}</h3>
+      <h3 className="font-display text-2xl text-graphite-800">{title}</h3>
       <p className="mt-2 flex-1 text-graphite-500">{description}</p>
       <p className="mt-4 text-xl text-wood-600">{formatPrice(price, false)}</p>
 

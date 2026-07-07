@@ -39,7 +39,7 @@ export function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <h3 className="mb-4 font-heading text-2xl text-graphite-800">{title}</h3>
+          <h3 className="mb-4 font-display text-2xl text-graphite-800">{title}</h3>
         )}
         {children}
       </div>

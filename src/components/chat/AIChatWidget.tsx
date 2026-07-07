@@ -63,7 +63,7 @@ export function AIChatWidget() {
       {open && (
         <div className="fixed bottom-6 right-6 z-40 flex h-[32rem] w-[92vw] max-w-sm flex-col overflow-hidden rounded-lg border border-wood-200 bg-cream-50 shadow-2xl">
           <div className="flex items-center justify-between border-b border-wood-100 bg-cream-100 px-4 py-3">
-            <span className="font-heading text-lg text-graphite-800">ИИ-консультант</span>
+            <span className="font-display text-lg text-graphite-800">ИИ-консультант</span>
             <button onClick={() => setOpen(false)} aria-label="Закрыть" className="text-xl text-graphite-500">
               ×
             </button>

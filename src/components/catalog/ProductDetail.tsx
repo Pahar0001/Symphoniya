@@ -32,7 +32,7 @@ export async function ProductDetail({
           <ProductGallery images={product.images} title={product.title} />
 
           <div>
-            <h1 className="font-heading text-4xl text-graphite-800">{product.title}</h1>
+            <h1 className="font-display text-4xl text-graphite-800">{product.title}</h1>
             <div className="mt-4 flex flex-wrap gap-2 text-sm text-graphite-500">
               {product.style && (
                 <span className="rounded-full bg-cream-200 px-3 py-1">{product.style}</span>
