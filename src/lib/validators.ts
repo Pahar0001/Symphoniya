@@ -2,6 +2,35 @@ import { z } from "zod";
 
 const phoneRegex = /^[\d\s()+-]{7,20}$/;
 
+// Регистрация клиента.
+export const registerSchema = z.object({
+  name: z.string().min(2, "Укажите имя").max(80),
+  email: z.string().email("Некорректный email"),
+  phone: z.string().regex(phoneRegex, "Некорректный телефон").optional().or(z.literal("")),
+  password: z.string().min(6, "Минимум 6 символов").max(100),
+});
+export type RegisterInput = z.infer<typeof registerSchema>;
+
+// Управление пользователями из админки.
+const roleEnum = z.enum(["OWNER", "ADMIN", "MANAGER", "CLIENT"]);
+
+export const createUserSchema = z.object({
+  name: z.string().min(2).max(80),
+  email: z.string().email(),
+  phone: z.string().regex(phoneRegex).optional().or(z.literal("")),
+  password: z.string().min(6).max(100),
+  role: roleEnum,
+});
+export type CreateUserInput = z.infer<typeof createUserSchema>;
+
+export const updateUserSchema = z.object({
+  name: z.string().min(2).max(80).optional(),
+  role: roleEnum.optional(),
+  phone: z.string().regex(phoneRegex).optional().or(z.literal("")),
+  password: z.string().min(6).max(100).optional().or(z.literal("")),
+});
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+
 export const leadSchema = z.object({
   name: z.string().min(2, "Укажите имя").max(80),
   phone: z.string().regex(phoneRegex, "Укажите корректный телефон"),

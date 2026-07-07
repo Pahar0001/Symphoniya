@@ -64,6 +64,16 @@ export function Header() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <Link
+            href="/account"
+            className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-brass"
+            aria-label="Личный кабинет"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="8" r="3.2" />
+              <path d="M5 20a7 7 0 0114 0" />
+            </svg>
+          </Link>
+          <Link
             href="/korzina"
             className="relative grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-brass"
             aria-label="Корзина"

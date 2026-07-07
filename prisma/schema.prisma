@@ -81,11 +81,15 @@ model OrderItem {
   price     Int
 }
 
+// Единая таблица аккаунтов: и администраторы, и клиенты — различаются ролью.
+// Роли (по убыванию прав): OWNER > ADMIN > MANAGER > CLIENT.
 model AdminUser {
   id           String   @id @default(cuid())
   email        String   @unique
   passwordHash String
   name         String?
+  role         String   @default("ADMIN")
+  phone        String?
   createdAt    DateTime @default(now())
 }
 

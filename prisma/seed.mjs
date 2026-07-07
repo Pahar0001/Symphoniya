@@ -17,7 +17,8 @@ async function main() {
     update: {},
     create: {
       email,
-      name: "Администратор",
+      name: "Владелец",
+      role: "OWNER",
       passwordHash: await bcrypt.hash(password, 10),
     },
   });
