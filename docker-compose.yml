@@ -1,4 +1,5 @@
-# Локальная разработка/проверка: postgres + migrate (one-shot) + app.
+# Локальная разработка/проверка: postgres + app.
+# Миграции и seed выполняет entrypoint контейнера app при старте.
 # Запуск: docker compose up --build
 services:
   postgres:
@@ -18,22 +19,6 @@ services:
       timeout: 5s
       retries: 10
 
-  # One-shot: применяет миграции и seed (использует build-стадию с полным набором зависимостей).
-  migrate:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-      target: build
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: "postgresql://symphony:symphony@postgres:5432/symphony?schema=public"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@symphony-mebeli.ru}"
-      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin12345}"
-    command: sh -c "npx prisma migrate deploy && node prisma/seed.mjs"
-    restart: "no"
-
   app:
     build:
       context: .
@@ -43,8 +28,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
     ports:
       - "3000:3000"
     environment:
@@ -52,6 +35,8 @@ services:
       NEXTAUTH_SECRET: "${NEXTAUTH_SECRET:-dev-secret-change-me}"
       NEXTAUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@symphony-mebeli.ru}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin12345}"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
       ANTHROPIC_MODEL: "${ANTHROPIC_MODEL:-claude-haiku-4-5-20251001}"
       YOOKASSA_SHOP_ID: "${YOOKASSA_SHOP_ID:-}"

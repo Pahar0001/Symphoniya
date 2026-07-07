@@ -7,6 +7,30 @@ const prisma = new PrismaClient();
 // заказчик добавляет через /admin (CRUD) — БД остаётся источником правды.
 // Чистый JS (ESM), чтобы seed запускался и в проде (`node prisma/seed.mjs`) без tsx.
 async function main() {
+  // ── Админ (всегда) ───────────────────────────────────────────
+  // Гарантируем наличие админ-пользователя при каждом запуске (upsert не меняет
+  // существующего). Так вход в /admin работает даже после первого деплоя.
+  const email = process.env.ADMIN_EMAIL ?? "admin@symphony-mebeli.ru";
+  const password = process.env.ADMIN_PASSWORD ?? "change-me";
+  await prisma.adminUser.upsert({
+    where: { email },
+    update: {},
+    create: {
+      email,
+      name: "Администратор",
+      passwordHash: await bcrypt.hash(password, 10),
+    },
+  });
+  console.log("admin:", email);
+
+  // Демо-каталог наполняем только при ПЕРВОМ запуске (пустая БД), чтобы не
+  // «воскрешать» товары, удалённые администратором. Дальше каталог — из /admin.
+  const existing = await prisma.category.count();
+  if (existing > 0) {
+    console.log("seed: каталог уже наполнен, пропускаю демо-данные");
+    return;
+  }
+
   // ── Категории ────────────────────────────────────────────────
   const kuhni = await prisma.category.upsert({
     where: { slug: "kuhni" },
@@ -109,19 +133,7 @@ async function main() {
     },
   });
 
-  // ── Админ ────────────────────────────────────────────────────
-  const email = process.env.ADMIN_EMAIL ?? "admin@symphony-mebeli.ru";
-  const password = process.env.ADMIN_PASSWORD ?? "change-me";
-  await prisma.adminUser.upsert({
-    where: { email },
-    update: {},
-    create: {
-      email,
-      name: "Администратор",
-      passwordHash: await bcrypt.hash(password, 10),
-    },
-  });
-  console.log("admin:", email);
+  console.log("seed: демо-каталог создан");
 }
 
 main()

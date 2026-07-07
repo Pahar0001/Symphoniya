@@ -32,16 +32,18 @@ COPY --from=build /app/public ./public
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Prisma нужна в рантайме: клиент + CLI и движки для миграций.
-# Миграции/seed запускаются как `node node_modules/prisma/build/index.js migrate deploy`
-# и `node prisma/seed.mjs` (см. render.yaml / docker-compose.yml) — без npx и tsx,
-# чтобы корректно резолвились wasm-движки в node_modules/prisma/build.
+# Entrypoint запускает `node node_modules/prisma/build/index.js migrate deploy`
+# и `node prisma/seed.mjs` — без npx и tsx, чтобы резолвились wasm-движки Prisma.
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 COPY --from=build /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=build /app/prisma ./prisma
+COPY --chown=nextjs:nodejs docker/entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
 
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000 HOSTNAME=0.0.0.0
-CMD ["node", "server.js"]
+# Миграции + seed + запуск сервера (работает на любом тарифе Render, вкл. Free).
+CMD ["./docker-entrypoint.sh"]

@@ -1,23 +1,22 @@
-# Render Blueprint — Web Service (Docker) + Managed Postgres.
+# Render Blueprint — Web Service (Docker). База данных — внешняя (Neon, бесплатный Postgres).
 # Применение: Render Dashboard → Blueprints → подключить репозиторий → Apply.
-# Секреты (sync:false) задаются вручную в Dashboard после создания сервиса.
+# Секреты (sync:false) задаются вручную в Dashboard.
+#
+# Миграции и seed выполняются в entrypoint контейнера (docker/entrypoint.sh) при старте,
+# поэтому preDeployCommand не нужен — работает и на тарифе Free.
 services:
   - type: web
     name: symphony-mebeli
     runtime: docker
     dockerfilePath: ./docker/Dockerfile
     dockerContext: .
-    plan: starter
+    plan: free # можно поднять до starter для «всегда включённого» инстанса
     healthCheckPath: /
-    # Миграции + seed применяются до запуска нового релиза (без npx/tsx —
-    # прямой вызов node, чтобы в минимальном образе резолвились wasm-движки Prisma).
-    # seed идемпотентен (upsert): создаёт категории, демо-товары, услуги и админа.
-    preDeployCommand: node node_modules/prisma/build/index.js migrate deploy && node prisma/seed.mjs
     envVars:
+      # DATABASE_URL — строка подключения из Neon (neon.tech).
+      # Используйте ПРЯМОЕ подключение (host БЕЗ суффикса «-pooler»), с ?sslmode=require.
       - key: DATABASE_URL
-        fromDatabase:
-          name: symphony-db
-          property: connectionString
+        sync: false
       - key: NEXTAUTH_URL
         sync: false
       - key: NEXT_PUBLIC_SITE_URL
@@ -40,8 +39,3 @@ services:
         value: none
       - key: RUNWAY_API_KEY
         sync: false
-
-databases:
-  - name: symphony-db
-    plan: basic-256mb
-    postgresMajorVersion: "16"

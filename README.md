@@ -58,24 +58,36 @@ docker compose up --build
 
 ---
 
-## 3. Деплой на Render
+## 3. Деплой на Render (Free) + Neon (бесплатный Postgres)
 
-1. Запушьте репозиторий на GitHub/GitLab.
-2. Render Dashboard → **Blueprints** → **New Blueprint Instance** → выберите репозиторий.
-   Render прочитает `render.yaml` (Web Service на Docker + Managed Postgres).
-3. Задайте секреты в Dashboard (переменные с `sync: false`):
+База данных вынесена в Neon (у Render нет бесплатного Postgres). Приложение —
+Web Service на Docker (тариф Free). Миграции и seed выполняет entrypoint контейнера
+при старте, поэтому платный `preDeployCommand` не нужен.
+
+1. **Создайте бесплатную БД на [neon.tech](https://neon.tech)** → New Project.
+   Скопируйте строку подключения. Используйте **прямое** подключение — host **без**
+   суффикса `-pooler` (вкладка Connection Details → Direct connection), с `?sslmode=require`.
+   Пример: `postgresql://user:pass@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=require`.
+2. Запушьте репозиторий на GitHub.
+3. Render Dashboard → **New → Blueprint** → выберите репозиторий. Render прочитает
+   `render.yaml` (Web Service на Docker). Нажмите **Apply**.
+4. Задайте переменные окружения (сервис `symphony-mebeli` → **Environment**):
+   - `DATABASE_URL` — строка из Neon (см. п.1);
    - `NEXTAUTH_URL`, `NEXT_PUBLIC_SITE_URL` — публичный URL сервиса (например
      `https://symphony-mebeli.onrender.com`);
-   - `ADMIN_EMAIL`, `ADMIN_PASSWORD`;
-   - `ANTHROPIC_API_KEY`;
-   - `YOOKASSA_SHOP_ID`, `YOOKASSA_SECRET_KEY`;
-   - `RUNWAY_API_KEY` (если включаете `VIDEO_PROVIDER`).
-   `DATABASE_URL` и `NEXTAUTH_SECRET` подставляются автоматически.
-4. Деплой сам применит миграции и seed через `preDeployCommand`
-   (`prisma migrate deploy` + `node prisma/seed.mjs`): создаются таблицы, демо-каталог,
-   услуги и админ-пользователь (из `ADMIN_EMAIL` / `ADMIN_PASSWORD`). seed идемпотентен.
-5. В личном кабинете ЮKassa укажите URL webhook:
+   - `ADMIN_EMAIL`, `ADMIN_PASSWORD` — данные для входа в админку;
+   - `ANTHROPIC_API_KEY` — ключ Claude (без него чат отвечает заглушкой);
+   - `YOOKASSA_SHOP_ID`, `YOOKASSA_SECRET_KEY` — для оплаты (можно sandbox);
+   - `RUNWAY_API_KEY` — если включаете `VIDEO_PROVIDER`.
+   `NEXTAUTH_SECRET` генерируется автоматически.
+5. При старте контейнер сам применит миграции и seed: создаст таблицы, демо-каталог,
+   услуги и админ-пользователя. Демо-товары добавляются только при первом запуске
+   (пустая БД) — админ полностью управляет каталогом дальше.
+6. В личном кабинете ЮKassa укажите URL webhook:
    `https://<ваш-домен>/api/payments/yookassa/webhook`.
+
+> Тариф Free «засыпает» при простое (первый запрос ~30 сек). Для боевого приёма оплаты
+> позже поднимите web-сервис до `starter`.
 
 ---
 
