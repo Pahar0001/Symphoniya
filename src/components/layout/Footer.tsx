@@ -1,47 +1,56 @@
 import Link from "next/link";
-import { Container } from "@/components/ui/Container";
 
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-24 border-t border-wood-100 bg-cream-100">
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <div className="font-heading text-xl text-graphite-800">Симфония мебели</div>
-          <p className="mt-3 text-sm text-graphite-500">
-            Кухни и корпусная мебель на заказ. Москва. Ранее — THE WOOD.
+    <footer className="mt-24 border-t border-line bg-surface">
+      <div className="container-x grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="lg:col-span-1">
+          <div className="font-display text-2xl text-ink">Симфония мебели</div>
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
+            Кухни и корпусная мебель на заказ. Москва. Мастерская, ранее известная как THE WOOD.
           </p>
         </div>
+        <FooterCol title="Каталог" links={[
+          ["/katalog/kuhni", "Кухни"],
+          ["/katalog/korpusnaya-mebel", "Корпусная мебель"],
+          ["/fasady", "Фасады"],
+          ["/akcii", "Акции"],
+        ]} />
+        <FooterCol title="Компания" links={[
+          ["/o-nas", "О нас"],
+          ["/uslugi", "Услуги"],
+          ["/kontakty", "Контакты"],
+          ["/privacy-policy", "Политика конфиденциальности"],
+        ]} />
         <div>
-          <div className="mb-3 text-sm font-medium text-graphite-700">Каталог</div>
-          <ul className="space-y-2 text-sm text-graphite-500">
-            <li><Link href="/katalog/kuhni" className="hover:text-wood-600">Кухни</Link></li>
-            <li><Link href="/katalog/korpusnaya-mebel" className="hover:text-wood-600">Корпусная мебель</Link></li>
-            <li><Link href="/fasady" className="hover:text-wood-600">Фасады</Link></li>
-            <li><Link href="/akcii" className="hover:text-wood-600">Акции</Link></li>
-          </ul>
-        </div>
-        <div>
-          <div className="mb-3 text-sm font-medium text-graphite-700">Компания</div>
-          <ul className="space-y-2 text-sm text-graphite-500">
-            <li><Link href="/o-nas" className="hover:text-wood-600">О нас</Link></li>
-            <li><Link href="/uslugi" className="hover:text-wood-600">Услуги</Link></li>
-            <li><Link href="/kontakty" className="hover:text-wood-600">Контакты</Link></li>
-            <li><Link href="/privacy-policy" className="hover:text-wood-600">Политика конфиденциальности</Link></li>
-          </ul>
-        </div>
-        <div>
-          <div className="mb-3 text-sm font-medium text-graphite-700">Контакты</div>
-          <ul className="space-y-2 text-sm text-graphite-500">
+          <div className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-muted">Контакты</div>
+          <ul className="space-y-2.5 text-sm text-ink">
             <li>Москва</li>
-            <li><a href="tel:+70000000000" className="hover:text-wood-600">+7 (000) 000-00-00</a></li>
-            <li><a href="mailto:info@symphony-mebeli.ru" className="hover:text-wood-600">info@symphony-mebeli.ru</a></li>
+            <li><a href="tel:+70000000000" className="transition-colors hover:text-brass">+7 (000) 000-00-00</a></li>
+            <li><a href="mailto:info@symphony-mebeli.ru" className="transition-colors hover:text-brass">info@symphony-mebeli.ru</a></li>
           </ul>
         </div>
-      </Container>
-      <Container className="border-t border-wood-100 py-6 text-xs text-graphite-400">
-        © {year} Симфония мебели. Все права защищены.
-      </Container>
+      </div>
+      <div className="container-x flex flex-col items-start justify-between gap-2 border-t border-line py-6 font-mono text-[11px] uppercase tracking-wider text-muted sm:flex-row sm:items-center">
+        <span>© {year} Симфония мебели</span>
+        <span>Сделано с вниманием к материалу</span>
+      </div>
     </footer>
+  );
+}
+
+function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
+  return (
+    <div>
+      <div className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-muted">{title}</div>
+      <ul className="space-y-2.5 text-sm text-ink">
+        {links.map(([href, label]) => (
+          <li key={href}>
+            <Link href={href} className="transition-colors hover:text-brass">{label}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

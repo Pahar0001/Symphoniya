@@ -5,8 +5,7 @@
       "name": "symphony-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "autoPort": true,
-      "port": 3100
+      "autoPort": true
     }
   ]
 }

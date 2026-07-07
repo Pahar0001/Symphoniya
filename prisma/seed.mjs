@@ -10,7 +10,7 @@ async function main() {
   // ── Админ (всегда) ───────────────────────────────────────────
   // Гарантируем наличие админ-пользователя при каждом запуске (upsert не меняет
   // существующего). Так вход в /admin работает даже после первого деплоя.
-  const email = process.env.ADMIN_EMAIL ?? "admin@symphony-mebeli.ru";
+  const email = process.env.ADMIN_EMAIL ?? "marat.saidov.17@mail.ru";
   const password = process.env.ADMIN_PASSWORD ?? "change-me";
   await prisma.adminUser.upsert({
     where: { email },
@@ -55,7 +55,7 @@ async function main() {
       style: "классика",
       material: "массив дуба",
       categoryId: kuhni.id,
-      image: "/images/catalog/kuhni/classic-oak.jpg",
+      image: "https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=1000&q=80&auto=format&fit=crop",
     },
     {
       slug: "kuhnya-hi-tech-graphite",
@@ -66,7 +66,7 @@ async function main() {
       style: "хай-тек",
       material: "МДФ, эмаль",
       categoryId: kuhni.id,
-      image: "/images/catalog/kuhni/hi-tech-graphite.jpg",
+      image: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1000&q=80&auto=format&fit=crop",
     },
     {
       slug: "shkaf-garderobnaya-modern",
@@ -77,7 +77,7 @@ async function main() {
       style: "модерн",
       material: "ЛДСП, шпон",
       categoryId: korpus.id,
-      image: "/images/catalog/korpusnaya-mebel/garderobnaya-modern.jpg",
+      image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1000&q=80&auto=format&fit=crop",
     },
     {
       slug: "stellazh-postmodern",
@@ -88,7 +88,7 @@ async function main() {
       style: "постмодерн",
       material: "шпон ореха",
       categoryId: korpus.id,
-      image: "/images/catalog/korpusnaya-mebel/stellazh-postmodern.jpg",
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=80&auto=format&fit=crop",
     },
   ];
 

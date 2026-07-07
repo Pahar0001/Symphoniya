@@ -1,13 +1,26 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
+import { Playfair_Display, Manrope, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
+import { CustomCursor } from "@/components/layout/CustomCursor";
 
-const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-body" });
-const cormorant = Cormorant_Garamond({
+const display = Playfair_Display({
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600"],
-  variable: "--font-heading",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
+});
+const body = Manrope({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-body",
+  display: "swap",
+});
+const mono = IBM_Plex_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -20,11 +33,24 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
 };
 
+// Устанавливаем тему до первой отрисовки — без «моргания».
+const themeScript = `(function(){try{var t=localStorage.getItem('symphony-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${inter.variable} ${cormorant.variable}`}>
+    <html
+      lang="ru"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
-        <SiteChrome>{children}</SiteChrome>
+        <ThemeProvider>
+          <CustomCursor />
+          <SiteChrome>{children}</SiteChrome>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -31,7 +31,7 @@ export async function AdminShell({
             <Link
               key={n.href}
               href={n.href}
-              className="rounded-md px-3 py-2 text-sm text-graphite-600 hover:bg-white hover:text-wood-600"
+              className="rounded-md px-3 py-2 text-sm text-graphite-600 hover:bg-surface hover:text-wood-600"
             >
               {n.label}
             </Link>

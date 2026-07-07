@@ -14,35 +14,40 @@ export function ProductCard({
   return (
     <Link
       href={`/katalog/${categorySlug}/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-lg border border-wood-100 bg-white transition hover:shadow-lg"
+      data-cursor
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-surface transition-all duration-500 ease-symphony hover:-translate-y-1 hover:border-brass/60 hover:shadow-[0_24px_50px_-24px_rgba(0,0,0,0.45)]"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-cream-200">
+      <div className="relative aspect-[4/3] overflow-hidden bg-surface-2">
         {img ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={img}
             alt={product.images[0]?.alt ?? product.title}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-[1.2s] ease-symphony group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-graphite-300">
+          <div className="grid h-full place-items-center font-mono text-xs uppercase tracking-widest text-muted">
             фото скоро
           </div>
         )}
         {product.isPromo && (
-          <span className="absolute left-3 top-3 rounded-full bg-wood-500 px-3 py-1 text-xs text-cream-50">
+          <span className="absolute left-4 top-4 rounded-full bg-paper/90 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-brass backdrop-blur">
             Акция
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-heading text-xl text-graphite-800">{product.title}</h3>
+      <div className="flex flex-1 flex-col p-6">
         {product.style && (
-          <p className="mt-1 text-sm text-graphite-400">{product.style}</p>
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{product.style}</span>
         )}
-        <p className="mt-auto pt-4 text-lg text-wood-600">
-          {formatPrice(product.price, product.priceFrom)}
-        </p>
+        <h3 className="mt-2 font-display text-xl leading-snug text-ink">{product.title}</h3>
+        <div className="mt-auto flex items-center justify-between pt-6">
+          <span className="text-lg text-brass">{formatPrice(product.price, product.priceFrom)}</span>
+          <span className="translate-x-0 text-muted transition-transform duration-500 ease-symphony group-hover:translate-x-1 group-hover:text-brass">
+            →
+          </span>
+        </div>
       </div>
     </Link>
   );

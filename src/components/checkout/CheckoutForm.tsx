@@ -38,13 +38,13 @@ export function CheckoutForm() {
           <Input label="E-mail (для чека)" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
           <fieldset className="grid gap-2">
-            <label className="flex items-center gap-3 rounded-md border border-wood-200 bg-white p-3">
+            <label className="flex items-center gap-3 rounded-md border border-wood-200 bg-surface p-3">
               <input type="radio" checked={kind === "deposit"} onChange={() => setKind("deposit")} />
               <span className="text-graphite-700">
                 Задаток 30% — {formatPrice(Math.round(sum * DEPOSIT_SHARE), false)}
               </span>
             </label>
-            <label className="flex items-center gap-3 rounded-md border border-wood-200 bg-white p-3">
+            <label className="flex items-center gap-3 rounded-md border border-wood-200 bg-surface p-3">
               <input type="radio" checked={kind === "full"} onChange={() => setKind("full")} />
               <span className="text-graphite-700">Полная оплата — {formatPrice(sum, false)}</span>
             </label>

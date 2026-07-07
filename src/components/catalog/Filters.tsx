@@ -26,7 +26,7 @@ export function Filters({
       <select
         value={params.get("style") ?? ""}
         onChange={(e) => setParam("style", e.target.value)}
-        className="rounded-md border border-wood-200 bg-white px-4 py-2.5 text-sm text-graphite-700"
+        className="rounded-md border border-wood-200 bg-surface px-4 py-2.5 text-sm text-graphite-700"
       >
         <option value="">Стиль: все</option>
         {styles.map((s) => (
@@ -39,7 +39,7 @@ export function Filters({
       <select
         value={params.get("material") ?? ""}
         onChange={(e) => setParam("material", e.target.value)}
-        className="rounded-md border border-wood-200 bg-white px-4 py-2.5 text-sm text-graphite-700"
+        className="rounded-md border border-wood-200 bg-surface px-4 py-2.5 text-sm text-graphite-700"
       >
         <option value="">Материал: все</option>
         {materials.map((m) => (
@@ -52,7 +52,7 @@ export function Filters({
       <select
         value={params.get("sort") ?? ""}
         onChange={(e) => setParam("sort", e.target.value)}
-        className="rounded-md border border-wood-200 bg-white px-4 py-2.5 text-sm text-graphite-700"
+        className="rounded-md border border-wood-200 bg-surface px-4 py-2.5 text-sm text-graphite-700"
       >
         <option value="">Сортировка</option>
         <option value="price_asc">Цена ↑</option>

@@ -1,62 +1,50 @@
 import type { Config } from "tailwindcss";
 
-// Значения синхронизированы с design/tokens.json.
-// После генерации макета в Figma обновлять оба файла вместе.
+// Тема управляется CSS-переменными (см. globals.css): светлая = :root, тёмная = .dark.
+// Семантические токены (paper/surface/ink/…) дают дизайну работать в обеих темах
+// без дублирования dark:-вариантов на каждом элементе.
 const config: Config = {
-  content: [
-    "./src/app/**/*.{ts,tsx}",
-    "./src/components/**/*.{ts,tsx}",
-  ],
+  darkMode: "class",
+  content: ["./src/app/**/*.{ts,tsx}", "./src/components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        wood: {
-          50: "#faf6f0",
-          100: "#f1e7d8",
-          200: "#e2ccae",
-          300: "#cfa97c",
-          400: "#bd8c53",
-          500: "#a5763f",
-          600: "#875e33",
-          700: "#6a4a2c",
-          800: "#553d27",
-          900: "#473324",
-        },
+        paper: "var(--paper)",
+        surface: "var(--surface)",
+        "surface-2": "var(--surface-2)",
+        ink: "var(--ink)",
+        muted: "var(--muted)",
+        line: "var(--line)",
+        walnut: "var(--walnut)",
+        brass: "var(--brass)",
+        "brass-soft": "var(--brass-soft)",
+        // Легаси-алиасы (см. globals.css) — для страниц, ещё не переведённых на семантику.
+        cream: { 50: "var(--c-50)", 100: "var(--c-100)", 200: "var(--c-200)", 300: "var(--c-200)" },
         graphite: {
-          50: "#f4f4f5",
-          100: "#e7e7e9",
-          200: "#c9c9cd",
-          300: "#a3a3aa",
-          400: "#71717a",
-          500: "#52525b",
-          600: "#3f3f46",
-          700: "#2e2e34",
-          800: "#1f1f23",
-          900: "#161619",
+          300: "var(--g-300)", 400: "var(--g-400)", 500: "var(--g-500)", 600: "var(--g-600)",
+          700: "var(--g-700)", 800: "var(--g-800)", 900: "var(--g-900)",
         },
-        cream: {
-          50: "#fdfcf9",
-          100: "#faf7f0",
-          200: "#f4eee1",
-          300: "#ece2cd",
+        wood: {
+          100: "var(--w-100)", 200: "var(--w-200)", 300: "var(--w-300)",
+          400: "var(--w-400)", 500: "var(--w-500)", 600: "var(--w-600)",
         },
       },
       fontFamily: {
-        heading: ["var(--font-heading)", "Cormorant Garamond", "serif"],
-        body: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Playfair Display", "serif"],
+        body: ["var(--font-body)", "Manrope", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "IBM Plex Mono", "monospace"],
       },
-      fontSize: {
-        display: ["clamp(2.75rem, 6vw, 5rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
+      maxWidth: { container: "82rem" },
+      spacing: { section: "7rem" },
+      borderRadius: { md: "0.5rem", lg: "1.25rem", xl: "1.75rem" },
+      transitionTimingFunction: {
+        symphony: "cubic-bezier(0.22, 1, 0.36, 1)",
       },
-      maxWidth: {
-        container: "80rem",
+      keyframes: {
+        marquee: { from: { transform: "translateX(0)" }, to: { transform: "translateX(-50%)" } },
       },
-      spacing: {
-        section: "6rem",
-      },
-      borderRadius: {
-        md: "0.625rem",
-        lg: "1rem",
+      animation: {
+        marquee: "marquee 32s linear infinite",
       },
     },
   },

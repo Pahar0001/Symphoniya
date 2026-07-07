@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 
 const fieldBase =
-  "w-full rounded-md border border-wood-200 bg-white px-4 py-3 text-graphite-800 placeholder:text-graphite-300 focus:border-wood-400 focus:outline-none focus:ring-1 focus:ring-wood-400";
+  "w-full rounded-md border border-wood-200 bg-surface px-4 py-3 text-graphite-800 placeholder:text-graphite-300 focus:border-wood-400 focus:outline-none focus:ring-1 focus:ring-wood-400";
 
 export function Input({
   className,

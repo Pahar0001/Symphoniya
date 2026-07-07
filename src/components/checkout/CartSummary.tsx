@@ -14,7 +14,7 @@ export function CartSummary({ editable = true }: { editable?: boolean }) {
       {items.map((i) => (
         <div
           key={i.productId}
-          className="flex items-center gap-4 rounded-lg border border-wood-100 bg-white p-4"
+          className="flex items-center gap-4 rounded-lg border border-wood-100 bg-surface p-4"
         >
           {i.image && (
             // eslint-disable-next-line @next/next/no-img-element

@@ -14,7 +14,7 @@ export default async function AdminLeadsPage() {
 
   return (
     <AdminShell title="Заявки">
-      <div className="overflow-x-auto rounded-lg border border-wood-100 bg-white">
+      <div className="overflow-x-auto rounded-lg border border-wood-100 bg-surface">
         <table className="w-full text-sm">
           <thead className="bg-cream-100 text-left text-graphite-500">
             <tr>

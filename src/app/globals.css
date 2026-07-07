@@ -2,27 +2,153 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Тема ─────────────────────────────────────────────────────
+   Светлая — тёплая бумага + графитовые чернила + латунный акцент.
+   Тёмная — эспрессо-графит + тёплый пепельно-белый. */
 :root {
-  --font-heading: "Cormorant Garamond", "Times New Roman", serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --paper: #f2ece0;
+  --surface: #fbf8f2;
+  --surface-2: #e9dfce;
+  --ink: #211d18;
+  --muted: #6d6353;
+  --line: #ddd1bd;
+  --walnut: #7a4a24;
+  --brass: #a9762f;
+  --brass-soft: #c79a57;
+}
+
+.dark {
+  --paper: #15120e;
+  --surface: #1d1913;
+  --surface-2: #29221a;
+  --ink: #ece3d2;
+  --muted: #9d9077;
+  --line: #342b20;
+  --walnut: #c58f52;
+  --brass: #cb9b55;
+  --brass-soft: #8a6a3c;
+}
+
+/* Легаси-палитра (cream/graphite/wood) как алиасы на семантические токены —
+   старые страницы автоматически поддерживают тёмную/светлую тему без правок. */
+:root {
+  --c-50: var(--surface);
+  --c-100: var(--surface);
+  --c-200: var(--surface-2);
+  --g-900: var(--ink);
+  --g-800: var(--ink);
+  --g-700: var(--ink);
+  --g-600: var(--muted);
+  --g-500: var(--muted);
+  --g-400: var(--muted);
+  --g-300: var(--muted);
+  --w-100: var(--line);
+  --w-200: var(--line);
+  --w-300: var(--brass-soft);
+  --w-400: var(--brass);
+  --w-500: var(--brass);
+  --w-600: var(--brass);
 }
 
 @layer base {
-  body {
-    @apply bg-cream-50 text-graphite-800 font-body antialiased;
+  html {
+    scroll-behavior: smooth;
   }
-  h1,
-  h2,
-  h3 {
-    @apply font-heading;
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: var(--brass);
+    color: var(--paper);
+  }
+  :focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
 @layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-container px-5 sm:px-8;
+  }
+  /* Тактовая надпись-«эйбрёу»: моно, разрядка, латунь, с тактовой чертой */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-brass;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-8 bg-brass;
+  }
+  .hairline {
+    @apply border-line;
+  }
+  /* Совместимость: старые страницы используют .section для вертикальных отступов. */
   .section {
     @apply py-16 sm:py-24;
   }
-  .eyebrow {
-    @apply text-xs uppercase tracking-[0.2em] text-wood-500;
+}
+
+/* ── Reveal при скролле ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Кастомный курсор (тонкий указатель, только desktop) ─────── */
+@media (hover: hover) and (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [role="button"] {
+    cursor: none;
   }
+}
+.cursor-ring,
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 9999px;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid #f4efe4;
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background-color 0.25s ease;
+}
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  background: #f4efe4;
+}
+.cursor-ring.is-active {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background: rgba(244, 239, 228, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none; }
+  .animate-marquee { animation: none; }
 }

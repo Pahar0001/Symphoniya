@@ -4,29 +4,39 @@ import { cn } from "@/lib/cn";
 type Variant = "primary" | "outline" | "ghost";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-medium tracking-wide transition-colors disabled:opacity-50 disabled:pointer-events-none";
+  "group relative inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-medium tracking-wide transition-all duration-500 ease-symphony disabled:opacity-50 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-graphite-800 text-cream-50 hover:bg-graphite-700",
-  outline: "border border-wood-300 text-graphite-800 hover:bg-wood-50",
-  ghost: "text-graphite-700 hover:text-wood-600",
+  primary: "bg-ink text-paper hover:-translate-y-0.5 hover:shadow-[0_16px_34px_-14px_rgba(0,0,0,0.55)]",
+  outline: "border border-line text-ink hover:border-brass hover:-translate-y-0.5",
+  ghost: "px-2 text-muted hover:text-brass",
 };
 
-interface CommonProps {
-  variant?: Variant;
-  className?: string;
-  children: React.ReactNode;
+// Стрелка, «выезжающая» при наведении — общий микро-жест кнопок.
+function Arrow() {
+  return (
+    <span className="inline-block translate-x-0 transition-transform duration-500 ease-symphony group-hover:translate-x-1">
+      →
+    </span>
+  );
 }
 
 export function Button({
   variant = "primary",
   className,
   children,
+  withArrow = false,
   ...rest
-}: CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+}: {
+  variant?: Variant;
+  className?: string;
+  children: React.ReactNode;
+  withArrow?: boolean;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button className={cn(base, variants[variant], className)} {...rest}>
       {children}
+      {withArrow && <Arrow />}
     </button>
   );
 }
@@ -36,10 +46,18 @@ export function ButtonLink({
   className,
   href,
   children,
-}: CommonProps & { href: string }) {
+  withArrow = false,
+}: {
+  variant?: Variant;
+  className?: string;
+  href: string;
+  children: React.ReactNode;
+  withArrow?: boolean;
+}) {
   return (
     <Link href={href} className={cn(base, variants[variant], className)}>
       {children}
+      {withArrow && <Arrow />}
     </Link>
   );
 }

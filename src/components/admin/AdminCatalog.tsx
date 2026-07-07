@@ -77,7 +77,7 @@ export function AdminCatalog({
             e.preventDefault();
             save(new FormData(e.currentTarget), editing?.id);
           }}
-          className="mb-8 grid gap-4 rounded-lg border border-wood-200 bg-white p-6 sm:grid-cols-2"
+          className="mb-8 grid gap-4 rounded-lg border border-wood-200 bg-surface p-6 sm:grid-cols-2"
         >
           <Input name="title" label="Название" defaultValue={editing?.title} required />
           <Input name="slug" label="Slug (латиница)" defaultValue={editing?.slug} required />
@@ -116,7 +116,7 @@ export function AdminCatalog({
         </form>
       )}
 
-      <div className="overflow-x-auto rounded-lg border border-wood-100 bg-white">
+      <div className="overflow-x-auto rounded-lg border border-wood-100 bg-surface">
         <table className="w-full text-sm">
           <thead className="bg-cream-100 text-left text-graphite-500">
             <tr>

@@ -25,7 +25,7 @@ export function ServiceCard({
   const ready = name.trim().length >= 2 && phone.trim().length >= 7;
 
   return (
-    <div className="flex flex-col rounded-lg border border-wood-100 bg-white p-8">
+    <div className="flex flex-col rounded-lg border border-wood-100 bg-surface p-8">
       <h3 className="font-heading text-2xl text-graphite-800">{title}</h3>
       <p className="mt-2 flex-1 text-graphite-500">{description}</p>
       <p className="mt-4 text-xl text-wood-600">{formatPrice(price, false)}</p>
