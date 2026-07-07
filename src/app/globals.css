@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-heading: "Cormorant Garamond", "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cream-50 text-graphite-800 font-body antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  .section {
+    @apply py-16 sm:py-24;
+  }
+  .eyebrow {
+    @apply text-xs uppercase tracking-[0.2em] text-wood-500;
+  }
+}

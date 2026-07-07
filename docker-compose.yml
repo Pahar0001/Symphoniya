@@ -1,0 +1,62 @@
+# Локальная разработка/проверка: postgres + migrate (one-shot) + app.
+# Запуск: docker compose up --build
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: symphony
+      POSTGRES_PASSWORD: symphony
+      POSTGRES_DB: symphony
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U symphony -d symphony"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # One-shot: применяет миграции и seed (использует build-стадию с полным набором зависимостей).
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: build
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://symphony:symphony@postgres:5432/symphony?schema=public"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@symphony-mebeli.ru}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin12345}"
+    command: sh -c "npx prisma migrate deploy && npx tsx prisma/seed.ts"
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runner
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://symphony:symphony@postgres:5432/symphony?schema=public"
+      NEXTAUTH_SECRET: "${NEXTAUTH_SECRET:-dev-secret-change-me}"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      ANTHROPIC_MODEL: "${ANTHROPIC_MODEL:-claude-haiku-4-5-20251001}"
+      YOOKASSA_SHOP_ID: "${YOOKASSA_SHOP_ID:-}"
+      YOOKASSA_SECRET_KEY: "${YOOKASSA_SECRET_KEY:-}"
+      VIDEO_PROVIDER: "${VIDEO_PROVIDER:-none}"
+
+volumes:
+  pgdata:

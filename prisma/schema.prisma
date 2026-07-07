@@ -1,0 +1,115 @@
+// «Симфония мебели» — единая БД, полностью управляемая из /admin.
+// Одна БД = источник правды (устранение проблемы «потерянной БД» старого сайта на WooCommerce).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique // "kuhni" | "korpusnaya-mebel"
+  title    String
+  order    Int       @default(0)
+  parentId String?
+  parent   Category? @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  products Product[]
+}
+
+model Product {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
+  description String
+  price       Int? // может отсутствовать («цена по запросу»)
+  priceFrom   Boolean        @default(true) // цена указывается «от»
+  style       String? // классика / хай-тек / постмодерн
+  material    String?
+  categoryId  String
+  category    Category       @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  isPromo     Boolean        @default(false)
+  isPublished Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int     @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  message   String?
+  source    String? // "callback_form" | "ai_chat" | "checkout"
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  customerName      String
+  phone             String
+  email             String?
+  items             OrderItem[]
+  totalAmount       Int
+  kind              String      @default("deposit") // deposit | full | ai_service | virtualization
+  status            String      @default("pending") // pending | paid | failed | cancelled
+  yookassaPaymentId String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  title     String
+  qty       Int     @default(1)
+  price     Int
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+}
+
+// Платные услуги (напр. расширенная консультация ИИ-агента, виртуализация квартиры).
+model Service {
+  id          String   @id @default(cuid())
+  slug        String   @unique // "ai-consultation" | "apartment-virtualization"
+  title       String
+  description String
+  price       Int
+  kind        String   @default("ai_service") // ai_service | virtualization
+  isActive    Boolean  @default(true)
+}
+
+// Задания видеогенерации (виртуализация квартиры по планировке через Runway/аналог).
+model GenerationJob {
+  id           String   @id @default(cuid())
+  leadId       String?
+  orderId      String?
+  provider     String   @default("runway") // runway | higgsfield
+  status       String   @default("queued") // queued | processing | done | failed
+  inputUrl     String? // загруженная планировка
+  resultUrl    String? // ссылка на готовое видео
+  prompt       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
