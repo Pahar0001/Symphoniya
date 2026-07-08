@@ -60,31 +60,42 @@ export function aiConfigured(): boolean {
   return detectProvider() !== "none";
 }
 
-async function askOpenAICompatible(provider: "groq" | "gemini", messages: ChatMessage[]): Promise<string> {
+function buildSystem(siteContext?: string): string {
+  if (!siteContext) return CONSULTANT_SYSTEM_PROMPT;
+  return `${CONSULTANT_SYSTEM_PROMPT}
+
+АКТУАЛЬНЫЕ ДАННЫЕ САЙТА (опирайся на них в ответах; если чего-то нет — предложи оставить контакт для расчёта):
+${siteContext}`;
+}
+
+async function askOpenAICompatible(
+  provider: "groq" | "gemini",
+  messages: ChatMessage[],
+  system: string
+): Promise<string> {
   const cfg = OPENAI_COMPAT[provider];
+  const key = process.env[cfg.keyEnv];
+  if (!key) throw new Error(`Не задан ${cfg.keyEnv} для провайдера ${provider}`);
   const res = await fetch(`${cfg.base}/chat/completions`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env[cfg.keyEnv]}`,
-    },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${key.trim()}` },
     body: JSON.stringify({
       model: cfg.model,
-      max_tokens: 512,
-      messages: [{ role: "system", content: CONSULTANT_SYSTEM_PROMPT }, ...messages],
+      max_tokens: 700,
+      messages: [{ role: "system", content: system }, ...messages],
     }),
   });
-  if (!res.ok) throw new Error(`${provider} error ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`${provider} ${res.status}: ${(await res.text()).slice(0, 300)}`);
   const data = await res.json();
   return (data?.choices?.[0]?.message?.content ?? "").trim();
 }
 
-async function askAnthropic(messages: ChatMessage[]): Promise<string> {
+async function askAnthropic(messages: ChatMessage[], system: string): Promise<string> {
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const response = await anthropic.messages.create({
     model: process.env.AI_MODEL ?? process.env.ANTHROPIC_MODEL ?? "claude-haiku-4-5-20251001",
-    max_tokens: 512,
-    system: CONSULTANT_SYSTEM_PROMPT,
+    max_tokens: 700,
+    system,
     messages: messages.map((m) => ({ role: m.role, content: m.content })),
   });
   return response.content
@@ -94,12 +105,18 @@ async function askAnthropic(messages: ChatMessage[]): Promise<string> {
     .trim();
 }
 
-export async function askConsultant(messages: ChatMessage[]): Promise<string> {
+// siteContext — актуальные данные каталога/услуг из БД (см. lib/ai-context.ts).
+export async function askConsultant(messages: ChatMessage[], siteContext?: string): Promise<string> {
   const provider = detectProvider();
   if (provider === "none") return FALLBACK;
+  const system = buildSystem(siteContext);
   const text =
     provider === "anthropic"
-      ? await askAnthropic(messages)
-      : await askOpenAICompatible(provider, messages);
+      ? await askAnthropic(messages, system)
+      : await askOpenAICompatible(provider, messages, system);
   return text || "Извините, не удалось сформировать ответ. Оставьте телефон — мы перезвоним.";
+}
+
+export function currentProviderName(): string {
+  return detectProvider();
 }
