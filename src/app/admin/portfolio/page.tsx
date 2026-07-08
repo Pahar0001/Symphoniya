@@ -12,6 +12,7 @@ export default async function AdminPortfolioPage() {
         items={items.map((i) => ({
           id: i.id, title: i.title, image: i.image, category: i.category,
           city: i.city, year: i.year, material: i.material, isPublished: i.isPublished,
+          description: i.description,
         }))}
       />
     </AdminShell>
