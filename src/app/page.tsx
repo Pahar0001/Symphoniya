@@ -55,9 +55,9 @@ export default async function HomePage() {
               <img src={HERO_IMG} alt="Интерьер кухни на заказ" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
             </div>
-            <div className="absolute -left-4 bottom-6 rounded-lg border border-line bg-paper/90 px-5 py-3 backdrop-blur">
-              <div className="font-mono text-[11px] uppercase tracking-widest text-muted">Срок</div>
-              <div className="font-display text-2xl text-ink">4–8 недель</div>
+            <div className="absolute -left-4 bottom-6 rounded-xl bg-black/80 px-5 py-3 shadow-lg ring-1 ring-white/10 backdrop-blur-md">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">Срок изготовления</div>
+              <div className="font-display text-2xl text-white">4–8 недель</div>
             </div>
           </Reveal>
         </Container>
@@ -91,10 +91,10 @@ export default async function HomePage() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={c.img} alt={c.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-symphony group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <div className="relative text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/10" />
+                <div className="relative text-white [text-shadow:0_1px_16px_rgba(0,0,0,0.6)]">
                   <h3 className="font-display text-3xl">{c.title}</h3>
-                  <p className="mt-2 max-w-xs text-sm text-white/80">{c.desc}</p>
+                  <p className="mt-2 max-w-xs text-sm text-white/85">{c.desc}</p>
                   <span className="mt-5 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest">
                     Смотреть <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
                   </span>
