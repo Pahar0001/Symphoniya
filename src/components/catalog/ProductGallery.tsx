@@ -14,12 +14,13 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
   }
   return (
     <div>
-      <div className="overflow-hidden rounded-lg bg-cream-200">
+      <div className="group overflow-hidden rounded-xl border border-line bg-surface-2">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          key={active}
           src={images[active].url}
           alt={images[active].alt ?? title}
-          className="aspect-[4/3] w-full object-cover"
+          className="aspect-[4/3] w-full animate-[fadeIn_0.5s_ease] object-cover transition-transform duration-[1.2s] ease-symphony group-hover:scale-105"
         />
       </div>
       {images.length > 1 && (

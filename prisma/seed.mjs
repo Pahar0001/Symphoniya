@@ -135,7 +135,35 @@ async function main() {
   });
 
   console.log("seed: демо-каталог создан");
+
+  // ── Портфолио (только если пусто) ────────────────────────────
+  if ((await prisma.portfolioItem.count()) === 0) {
+    await prisma.portfolioItem.createMany({ data: PORTFOLIO });
+    console.log("seed: портфолио создано");
+  }
+
+  // ── Отзывы (только если пусто) ───────────────────────────────
+  if ((await prisma.review.count()) === 0) {
+    await prisma.review.createMany({ data: REVIEWS });
+    console.log("seed: отзывы созданы");
+  }
 }
+
+const PORTFOLIO = [
+  { title: "Кухня в квартире у парка", description: "Матовая эмаль цвета графит, кварцевая столешница, интегрированная техника.", image: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "Москва", year: 2025, material: "МДФ, эмаль", order: 1 },
+  { title: "Классическая кухня из дуба", description: "Массив дуба с ручной патиной, латунная фурнитура.", image: "https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "Москва", year: 2024, material: "Массив дуба", order: 2 },
+  { title: "Гардеробная под потолок", description: "Система хранения по индивидуальному проекту, шпон ореха.", image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1000&q=80&auto=format&fit=crop", category: "korpusnaya-mebel", city: "Химки", year: 2025, material: "ЛДСП, шпон", order: 3 },
+  { title: "Кухня-остров в загородном доме", description: "Островная планировка, натуральный камень, тёплое дерево.", image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "МО", year: 2024, material: "Шпон, камень", order: 4 },
+  { title: "Стеллаж-перегородка", description: "Открытый стеллаж из шпона ореха, зонирование гостиной.", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=80&auto=format&fit=crop", category: "korpusnaya-mebel", city: "Москва", year: 2025, material: "Шпон ореха", order: 5 },
+  { title: "Минималистичная белая кухня", description: "Фасады без ручек, скрытая подсветка, мраморная столешница.", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "Москва", year: 2025, material: "МДФ, эмаль", order: 6 },
+];
+
+const REVIEWS = [
+  { author: "Анна К.", city: "Москва", rating: 5, text: "Заказывали кухню из дуба — сделали точно в срок, качество превзошло ожидания. Отдельное спасибо за ИИ-консультанта, помог определиться со стилем.", source: "site" },
+  { author: "Дмитрий В.", city: "Химки", rating: 5, text: "Гардеробная встала идеально, всё по миллиметру. Приятно, что цену рассчитали заранее, без сюрпризов.", source: "site" },
+  { author: "Марина С.", city: "Москва", rating: 4, text: "Красивая кухня, спокойный дизайн — как и хотели. Небольшая задержка по фурнитуре, но менеджер держал в курсе.", source: "yandex" },
+  { author: "Олег П.", city: "Московская обл.", rating: 5, text: "Остров с камнем — мечта. Монтаж аккуратный, за собой всё убрали. Рекомендую.", source: "yandex" },
+];
 
 main()
   .then(() => prisma.$disconnect())

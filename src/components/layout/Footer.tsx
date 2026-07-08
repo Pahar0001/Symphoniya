@@ -14,12 +14,15 @@ export function Footer() {
         <FooterCol title="Каталог" links={[
           ["/katalog/kuhni", "Кухни"],
           ["/katalog/korpusnaya-mebel", "Корпусная мебель"],
+          ["/portfolio", "Портфолио"],
+          ["/raschet", "Расчёт стоимости"],
           ["/fasady", "Фасады"],
-          ["/akcii", "Акции"],
         ]} />
         <FooterCol title="Компания" links={[
           ["/o-nas", "О нас"],
           ["/uslugi", "Услуги"],
+          ["/otzyvy", "Отзывы"],
+          ["/akcii", "Акции"],
           ["/kontakty", "Контакты"],
           ["/privacy-policy", "Политика конфиденциальности"],
         ]} />

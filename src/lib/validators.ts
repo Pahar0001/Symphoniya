@@ -11,6 +11,29 @@ export const registerSchema = z.object({
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
+// Отзыв, оставленный на сайте (публикуется после модерации).
+export const reviewSchema = z.object({
+  author: z.string().min(2, "Укажите имя").max(80),
+  city: z.string().max(80).optional().or(z.literal("")),
+  rating: z.number().int().min(1).max(5),
+  text: z.string().min(10, "Слишком короткий отзыв").max(2000),
+});
+export type ReviewInput = z.infer<typeof reviewSchema>;
+
+// Портфолио — создание/редактирование из админки.
+export const portfolioSchema = z.object({
+  title: z.string().min(2).max(120),
+  description: z.string().max(600).optional().or(z.literal("")),
+  image: z.string().min(4, "Укажите ссылку на фото"),
+  category: z.enum(["kuhni", "korpusnaya-mebel"]),
+  city: z.string().max(80).optional().or(z.literal("")),
+  year: z.number().int().min(2000).max(2100).nullable().optional(),
+  material: z.string().max(120).optional().or(z.literal("")),
+  order: z.number().int().optional(),
+  isPublished: z.boolean().optional(),
+});
+export type PortfolioInput = z.infer<typeof portfolioSchema>;
+
 // Управление пользователями из админки.
 const roleEnum = z.enum(["OWNER", "ADMIN", "MANAGER", "CLIENT"]);
 

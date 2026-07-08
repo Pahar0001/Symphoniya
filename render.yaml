@@ -48,3 +48,8 @@ services:
         value: none
       - key: RUNWAY_API_KEY
         sync: false
+      # Яндекс.Карты — карта на «Контактах» и виджет отзывов на «Отзывах».
+      - key: NEXT_PUBLIC_YANDEX_ORG_ID
+        sync: false
+      - key: NEXT_PUBLIC_YANDEX_MAP_SRC
+        sync: false

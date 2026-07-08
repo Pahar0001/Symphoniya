@@ -4,6 +4,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { CallbackForm } from "@/components/forms/CallbackForm";
+import { Calculator } from "@/components/calculator/Calculator";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -136,6 +137,30 @@ export default async function HomePage() {
           ))}
         </div>
       </Movement>
+
+      {/* ── Калькулятор персональной стоимости ── */}
+      <section className="pt-section">
+        <Container>
+          <Reveal>
+            <div className="overflow-hidden rounded-xl border border-line bg-surface p-6 sm:p-10">
+              <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
+                <div>
+                  <p className="eyebrow mb-3">Калькулятор</p>
+                  <h2 className="font-display text-4xl text-ink sm:text-5xl">Расчёт персональной стоимости</h2>
+                  <p className="mt-3 max-w-xl text-muted">
+                    Подберите материалы и параметры — ориентир появится мгновенно. Бесплатно и без
+                    регистрации.
+                  </p>
+                </div>
+                <span className="hidden font-mono text-xs uppercase tracking-widest text-brass sm:block">
+                  Movement IV
+                </span>
+              </div>
+              <Calculator />
+            </div>
+          </Reveal>
+        </Container>
+      </section>
 
       {/* ── Заявка ── */}
       <section className="py-section">

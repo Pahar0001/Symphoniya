@@ -117,3 +117,30 @@ model GenerationJob {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+// Портфолио — уже изготовленные проекты (кухни, корпусная мебель).
+model PortfolioItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  image       String
+  category    String   @default("kuhni") // kuhni | korpusnaya-mebel
+  city        String?
+  year        Int?
+  material    String?
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+// Отзывы клиентов. source: site — оставлен на сайте, yandex — импортирован из Яндекса.
+model Review {
+  id          String   @id @default(cuid())
+  author      String
+  city        String?
+  rating      Int      @default(5) // 1..5
+  text        String
+  source      String   @default("site") // site | yandex
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}

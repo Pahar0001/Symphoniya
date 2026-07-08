@@ -6,13 +6,28 @@ import { useCart } from "@/lib/cart";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
+// Полный список — для мобильного меню и футера.
 export const NAV_LINKS = [
   { href: "/", label: "Главная" },
   { href: "/katalog/kuhni", label: "Кухни" },
   { href: "/katalog/korpusnaya-mebel", label: "Корпусная мебель" },
+  { href: "/portfolio", label: "Портфолио" },
+  { href: "/raschet", label: "Расчёт" },
   { href: "/fasady", label: "Фасады" },
   { href: "/uslugi", label: "Услуги" },
   { href: "/akcii", label: "Акции" },
+  { href: "/otzyvy", label: "Отзывы" },
+  { href: "/o-nas", label: "О нас" },
+  { href: "/kontakty", label: "Контакты" },
+];
+
+// Курированный набор для десктопной шапки (чтобы не переполнять строку).
+const NAV_DESKTOP = [
+  { href: "/katalog/kuhni", label: "Кухни" },
+  { href: "/katalog/korpusnaya-mebel", label: "Корпус" },
+  { href: "/portfolio", label: "Портфолио" },
+  { href: "/raschet", label: "Расчёт" },
+  { href: "/otzyvy", label: "Отзывы" },
   { href: "/o-nas", label: "О нас" },
   { href: "/kontakty", label: "Контакты" },
 ];
@@ -48,8 +63,8 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex">
-          {NAV_LINKS.slice(1).map((l) => (
+        <nav className="hidden items-center gap-6 lg:flex">
+          {NAV_DESKTOP.map((l) => (
             <Link
               key={l.href}
               href={l.href}

@@ -4,8 +4,9 @@ import { Container } from "@/components/ui/Container";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
 import { AddToCartButton } from "@/components/catalog/AddToCartButton";
 import { ButtonLink } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
 import { getProduct } from "@/lib/catalog";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, articleFor } from "@/lib/format";
 
 export async function ProductDetail({
   categorySlug,
@@ -17,57 +18,72 @@ export async function ProductDetail({
   const product = await getProduct(categorySlug, productSlug);
   if (!product) notFound();
 
+  const specs = [
+    ["Артикул", articleFor(product.id)],
+    product.style ? ["Стиль", product.style] : null,
+    product.material ? ["Материал", product.material] : null,
+    ["Срок", "4–8 недель"],
+    ["Гарантия", "24 месяца"],
+  ].filter(Boolean) as [string, string][];
+
   return (
     <section className="section">
       <Container>
-        <nav className="mb-8 text-sm text-graphite-400">
-          <Link href="/katalog" className="hover:text-wood-600">Каталог</Link>
-          {" · "}
-          <Link href={`/katalog/${categorySlug}`} className="hover:text-wood-600">
-            {product.category.title}
-          </Link>
-        </nav>
+        <Reveal>
+          <nav className="mb-8 font-mono text-xs uppercase tracking-wider text-muted">
+            <Link href="/katalog" className="hover:text-brass">Каталог</Link>
+            {" · "}
+            <Link href={`/katalog/${categorySlug}`} className="hover:text-brass">
+              {product.category.title}
+            </Link>
+          </nav>
+        </Reveal>
 
-        <div className="grid gap-10 lg:grid-cols-2">
-          <ProductGallery images={product.images} title={product.title} />
+        <div className="grid gap-12 lg:grid-cols-2">
+          <Reveal>
+            <ProductGallery images={product.images} title={product.title} />
+          </Reveal>
 
-          <div>
-            <h1 className="font-display text-4xl text-graphite-800">{product.title}</h1>
-            <div className="mt-4 flex flex-wrap gap-2 text-sm text-graphite-500">
-              {product.style && (
-                <span className="rounded-full bg-cream-200 px-3 py-1">{product.style}</span>
-              )}
-              {product.material && (
-                <span className="rounded-full bg-cream-200 px-3 py-1">{product.material}</span>
-              )}
+          <Reveal delay={140}>
+            <div>
+              <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl">{product.title}</h1>
+
+              <p className="mt-5 text-3xl text-brass">{formatPrice(product.price, product.priceFrom)}</p>
+
+              <p className="mt-6 leading-relaxed text-muted">{product.description}</p>
+
+              {/* Технические данные — моноширинный редакционный ряд */}
+              <dl className="mt-8 divide-y divide-line border-y border-line">
+                {specs.map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between py-3">
+                    <dt className="font-mono text-[11px] uppercase tracking-wider text-muted">{k}</dt>
+                    <dd className="text-ink">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <ButtonLink href="/kontakty" withArrow>Оставить заявку на расчёт</ButtonLink>
+                <ButtonLink href="/raschet" variant="outline">Рассчитать стоимость</ButtonLink>
+                {product.price != null && (
+                  <AddToCartButton
+                    item={{
+                      productId: product.id,
+                      slug: product.slug,
+                      title: product.title,
+                      price: product.price,
+                      qty: 1,
+                      image: product.images[0]?.url,
+                    }}
+                  />
+                )}
+              </div>
+
+              <p className="mt-6 text-sm text-muted">
+                Точную стоимость рассчитываем индивидуально по вашим размерам.
+              </p>
             </div>
-
-            <p className="mt-6 text-2xl text-wood-600">
-              {formatPrice(product.price, product.priceFrom)}
-            </p>
-
-            <p className="mt-6 leading-relaxed text-graphite-600">{product.description}</p>
-
-            <div className="mt-8 flex flex-wrap gap-4">
-              <ButtonLink href="/kontakty">Оставить заявку на расчёт</ButtonLink>
-              {product.price != null && (
-                <AddToCartButton
-                  item={{
-                    productId: product.id,
-                    slug: product.slug,
-                    title: product.title,
-                    price: product.price,
-                    qty: 1,
-                    image: product.images[0]?.url,
-                  }}
-                />
-              )}
-            </div>
-
-            <p className="mt-6 text-sm text-graphite-400">
-              Точную стоимость рассчитываем индивидуально по вашим размерам. Срок изготовления 4–8 недель.
-            </p>
-          </div>
+          </Reveal>
         </div>
       </Container>
     </section>

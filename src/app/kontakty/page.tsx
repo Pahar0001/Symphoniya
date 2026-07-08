@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { CallbackForm } from "@/components/forms/CallbackForm";
+import { YandexMap } from "@/components/maps/YandexMap";
 
 export const metadata: Metadata = { title: "Контакты" };
 
@@ -32,12 +33,7 @@ export default function ContactsPage() {
               <div className="text-sm text-graphite-400">Режим работы</div>
               <div className="text-lg text-graphite-800">Ежедневно 10:00–20:00</div>
             </div>
-            <div className="aspect-[16/9] rounded-lg bg-cream-200">
-              {/* Здесь встраивается Яндекс/Google карта */}
-              <div className="flex h-full items-center justify-center text-graphite-300">
-                Карта проезда
-              </div>
-            </div>
+            <YandexMap className="aspect-[16/10]" />
           </div>
 
           <div className="rounded-lg bg-cream-100 p-6 sm:p-8">
