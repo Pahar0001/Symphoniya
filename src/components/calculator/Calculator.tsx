@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { formatPrice } from "@/lib/format";
 import {
   calcPrice,
@@ -34,6 +35,42 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
   const result = useMemo(() => calcPrice(input), [kind, size, facade, layout, countertop, hardware, lighting, niche]);
 
   const isKitchen = kind === "kitchen";
+
+  // Платная ИИ-визуализация: мини-форма контакта → оплата → страница результата.
+  const [showOrder, setShowOrder] = useState(false);
+  const [oName, setOName] = useState("");
+  const [oPhone, setOPhone] = useState("");
+  const [oEmail, setOEmail] = useState("");
+  const [ordering, setOrdering] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
+
+  async function orderVisualization(e: React.FormEvent) {
+    e.preventDefault();
+    setOrdering(true);
+    setOrderError(null);
+    try {
+      const res = await fetch("/api/visualization/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          config: { kind, size, facade, layout, countertop, hardware, lighting, appliancesNiche: niche },
+          customerName: oName,
+          phone: oPhone,
+          email: oEmail || undefined,
+        }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok || !d.url) {
+        setOrderError(d.error ?? "Не удалось оформить. Попробуйте позже.");
+        setOrdering(false);
+        return;
+      }
+      window.location.href = d.url;
+    } catch {
+      setOrderError("Сеть недоступна. Попробуйте позже.");
+      setOrdering(false);
+    }
+  }
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
@@ -117,9 +154,30 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
         </p>
 
         <div className="mt-auto space-y-3 pt-6">
-          <Button variant="outline" className="w-full" disabled title="Скоро">
-            ИИ-визуализация по вашим параметрам · {formatPrice(AI_IMAGE_PRICE, false)} — скоро
-          </Button>
+          {!showOrder ? (
+            <Button variant="outline" className="w-full" onClick={() => setShowOrder(true)}>
+              ИИ-визуализация по вашим параметрам · {formatPrice(AI_IMAGE_PRICE, false)}
+            </Button>
+          ) : (
+            <form onSubmit={orderVisualization} className="space-y-3 rounded-xl border border-line bg-surface p-4">
+              <p className="text-xs leading-relaxed text-muted">
+                Фотореалистичный рендер вашей конфигурации. После оплаты {formatPrice(AI_IMAGE_PRICE, false)} —
+                сразу на экране, плюс мы сохраним заявку.
+              </p>
+              <Input label="Имя" value={oName} onChange={(e) => setOName(e.target.value)} required />
+              <Input label="Телефон" value={oPhone} onChange={(e) => setOPhone(e.target.value)} required />
+              <Input label="E-mail (необязательно)" type="email" value={oEmail} onChange={(e) => setOEmail(e.target.value)} />
+              {orderError && <p className="text-sm text-red-500">{orderError}</p>}
+              <div className="flex gap-2">
+                <Button type="submit" className="flex-1" disabled={ordering}>
+                  {ordering ? "Оформляем…" : `Оплатить ${formatPrice(AI_IMAGE_PRICE, false)}`}
+                </Button>
+                <Button type="button" variant="outline" onClick={() => setShowOrder(false)} disabled={ordering}>
+                  Отмена
+                </Button>
+              </div>
+            </form>
+          )}
           <Button className="w-full" withArrow onClick={() => (window.location.href = "/kontakty")}>
             Получить точный расчёт
           </Button>
