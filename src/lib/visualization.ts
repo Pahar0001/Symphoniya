@@ -64,31 +64,16 @@ export function buildPrompt(c: VisualizationConfig): string {
   return `Фотореалистичная визуализация: ${base}. ${bits.join(", ")}. Тёплое дневное освещение, интерьер премиум-класса.`;
 }
 
+// Курированный рендер-фолбэк по типу×фасаду (всегда доступен, без внешних вызовов).
+export function curatedImage(c: VisualizationConfig): string {
+  return RENDERS[c.kind as Kind][c.facade as FacadeKey];
+}
+
 export type VisualizationProvider = "curated" | "higgsfield";
 
+// curated (по умолчанию) — подбор готового рендера по типу×фасаду.
+// higgsfield — живая генерация под точные параметры (см. lib/higgsfield.ts,
+// оркестрация с поллингом и фолбэком — в app/visualizaciya/[id]/page.tsx).
 export function currentVisualizationProvider(): VisualizationProvider {
   return (process.env.VISUALIZATION_PROVIDER as VisualizationProvider) ?? "curated";
-}
-
-export interface VisualizationResult {
-  status: "done" | "processing" | "failed";
-  imageUrl: string;
-  prompt: string;
-  provider: VisualizationProvider;
-}
-
-// Возвращает визуализацию по конфигурации.
-// curated (по умолчанию) — подбор готового Higgsfield-рендера по типу×фасаду.
-// higgsfield — задел под живую генерацию по HIGGSFIELD_API_KEY (пока падает в curated).
-export async function generateVisualization(c: VisualizationConfig): Promise<VisualizationResult> {
-  const prompt = buildPrompt(c);
-  const provider = currentVisualizationProvider();
-
-  if (provider === "higgsfield" && process.env.HIGGSFIELD_API_KEY) {
-    // TODO: реальный вызов image-API Higgsfield с prompt → resultUrl.
-    // Пока ключ/интеграции нет — отдаём курированный рендер.
-  }
-
-  const imageUrl = RENDERS[c.kind as Kind][c.facade as FacadeKey];
-  return { status: "done", imageUrl, prompt, provider };
 }

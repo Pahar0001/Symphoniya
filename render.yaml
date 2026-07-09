@@ -48,6 +48,13 @@ services:
         value: none
       - key: RUNWAY_API_KEY
         sync: false
+      # ИИ-визуализация: curated (курированные рендеры) | higgsfield (живая генерация).
+      - key: VISUALIZATION_PROVIDER
+        value: curated
+      - key: HIGGSFIELD_KEY_ID
+        sync: false
+      - key: HIGGSFIELD_KEY_SECRET
+        sync: false
       # Яндекс.Карты — карта на «Контактах» и виджет отзывов на «Отзывах».
       - key: NEXT_PUBLIC_YANDEX_ORG_ID
         sync: false
