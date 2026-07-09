@@ -1,14 +1,21 @@
 import { z } from "zod";
+import { registrationEmailError } from "@/lib/email-policy";
 
 const phoneRegex = /^[\d\s()+-]{7,20}$/;
 
-// Регистрация клиента.
-export const registerSchema = z.object({
-  name: z.string().min(2, "Укажите имя").max(80),
-  email: z.string().email("Некорректный email"),
-  phone: z.string().regex(phoneRegex, "Некорректный телефон").optional().or(z.literal("")),
-  password: z.string().min(6, "Минимум 6 символов").max(100),
-});
+// Регистрация клиента. Помимо формата email проверяем политику доменов
+// (иностранные бесплатные почтовые сервисы к регистрации не допускаются).
+export const registerSchema = z
+  .object({
+    name: z.string().min(2, "Укажите имя").max(80),
+    email: z.string().email("Некорректный email"),
+    phone: z.string().regex(phoneRegex, "Некорректный телефон").optional().or(z.literal("")),
+    password: z.string().min(6, "Минимум 6 символов").max(100),
+  })
+  .superRefine((data, ctx) => {
+    const err = registrationEmailError(data.email);
+    if (err) ctx.addIssue({ code: z.ZodIssueCode.custom, message: err, path: ["email"] });
+  });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 // Отзыв, оставленный на сайте (публикуется после модерации).

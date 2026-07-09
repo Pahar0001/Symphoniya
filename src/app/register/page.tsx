@@ -58,7 +58,13 @@ export default function RegisterPage() {
           <h2 className="mb-8 font-display text-3xl text-ink">Новый аккаунт</h2>
           <div className="grid gap-4">
             <Input label="Имя" value={form.name} onChange={set("name")} required />
-            <Input label="Email" type="email" value={form.email} onChange={set("email")} required />
+            <div>
+              <Input label="Email" type="email" value={form.email} onChange={set("email")} required />
+              <p className="mt-1.5 text-xs text-muted">
+                Подойдёт корпоративная или российская почта (mail.ru, Яндекс). Регистрация с Gmail и
+                других иностранных бесплатных сервисов недоступна.
+              </p>
+            </div>
             <Input label="Телефон (необязательно)" value={form.phone} onChange={set("phone")} />
             <Input label="Пароль" type="password" value={form.password} onChange={set("password")} required />
             {error && <p className="text-sm text-red-500">{error}</p>}

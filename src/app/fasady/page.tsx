@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { Reveal } from "@/components/ui/Reveal";
+import { MATERIALS, MATERIALS_INTRO } from "@/lib/materials";
+import { formatPrice } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Фасады и отделка" };
-
-const materials = [
-  { name: "Массив дуба", desc: "Натуральная древесина с выраженной текстурой, ручная патина.", tint: "#8a5a2f" },
-  { name: "Эмаль (МДФ)", desc: "Матовые и глянцевые покрытия в приглушённых оттенках.", tint: "#e7dcc9" },
-  { name: "Шпон ореха", desc: "Тёплая природная фактура для акцентных поверхностей.", tint: "#5a3c26" },
-  { name: "ЛДСП премиум", desc: "Практичные фактуры для систем хранения, устойчивы к износу.", tint: "#b7a488" },
-];
+export const metadata: Metadata = {
+  title: "Фасады и материалы",
+  description:
+    "Честное сравнение материалов фасадов: ЛДСП, МДФ-эмаль, шпон и массив дуба. Где выгодно сэкономить, а где переплата окупается сроком службы.",
+};
 
 // Реальные оттенки палитры — приглушённые тёплые тона.
 const finishes = [
@@ -32,21 +32,74 @@ export default function FasadyPage() {
       />
       <section className="section">
         <Container>
+          {/* Сквозная маркетинговая мысль */}
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <p className="text-lg leading-relaxed text-muted">{MATERIALS_INTRO}</p>
+          </div>
+
+          {/* Карточки-статьи по материалам */}
           <div className="grid gap-6 sm:grid-cols-2">
-            {materials.map((m, i) => (
-              <Reveal key={m.name} delay={i * 80}>
-                <div className="rounded-xl border border-line bg-surface p-8">
+            {MATERIALS.map((m, i) => (
+              <Reveal key={m.slug} delay={i * 80}>
+                <Link
+                  href={`/fasady/${m.slug}`}
+                  className="group block h-full rounded-xl border border-line bg-surface p-8 transition-colors hover:border-brass"
+                >
                   <div
                     className="mb-5 h-28 rounded-lg"
                     style={{ background: `linear-gradient(135deg, ${m.tint}, ${m.tint}cc)` }}
                   />
-                  <h3 className="font-display text-2xl text-ink">{m.name}</h3>
-                  <p className="mt-2 text-muted">{m.desc}</p>
-                </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="font-display text-2xl text-ink">{m.name}</h3>
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
+                      Уровень {m.tier}/4
+                    </span>
+                  </div>
+                  <p className="mt-2 text-muted">{m.tagline}</p>
+                  <div className="mt-4 flex items-center justify-between border-t border-line pt-4">
+                    <span className="text-sm text-ink">{formatPrice(m.pricePerUnit, true)}</span>
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-brass group-hover:underline">
+                      Читать →
+                    </span>
+                  </div>
+                </Link>
               </Reveal>
             ))}
           </div>
 
+          {/* Компактное сравнение */}
+          <h2 className="mb-6 mt-20 font-display text-3xl text-ink">Сравнение материалов</h2>
+          <div className="overflow-x-auto rounded-xl border border-line">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead className="bg-surface-2 text-muted">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Материал</th>
+                  <th className="px-4 py-3 font-medium">Цена</th>
+                  <th className="px-4 py-3 font-medium">Срок службы</th>
+                  <th className="px-4 py-3 font-medium">Где выгоднее</th>
+                </tr>
+              </thead>
+              <tbody>
+                {MATERIALS.map((m) => (
+                  <tr key={m.slug} className="border-t border-line">
+                    <td className="px-4 py-3">
+                      <Link href={`/fasady/${m.slug}`} className="text-ink hover:text-brass">
+                        {m.name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-ink">{formatPrice(m.pricePerUnit, true)}</td>
+                    <td className="px-4 py-3 text-muted">{m.lifespan}</td>
+                    <td className="px-4 py-3 text-muted">{m.bestFor}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-xs text-muted">
+            Цены ориентировочные, за пог.м (кухня) или кв.м (корпус). Точная стоимость — после замера.
+          </p>
+
+          {/* Палитра */}
           <h2 className="mb-8 mt-20 font-display text-3xl text-ink">Палитра</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {finishes.map((f, i) => (
