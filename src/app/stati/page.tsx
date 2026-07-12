@@ -5,6 +5,7 @@ import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionNav } from "@/components/ui/SectionNav";
 import { articlesByCategory } from "@/lib/articles";
+import { GUIDES } from "@/lib/guides";
 
 export const metadata: Metadata = {
   title: "Статьи",
@@ -13,7 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default function ArticlesHubPage() {
-  const groups = articlesByCategory();
+  const guidesGroup = {
+    category: "Гайды",
+    items: GUIDES.map((g) => ({ href: `/stati/${g.slug}`, title: g.title, summary: g.summary })),
+  };
+  const groups = [guidesGroup, ...articlesByCategory()];
 
   return (
     <>
