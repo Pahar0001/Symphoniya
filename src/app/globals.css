@@ -127,8 +127,36 @@ summary {
   cursor: not-allowed;
 }
 
+/* ── Анимации сцены фасадов ─────────────────────────────────── */
+@keyframes floatSlow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -22px, 0) scale(1.06); }
+}
+@keyframes floatSlow2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50% { transform: translate3d(18px, 14px, 0) scale(1); }
+}
+@keyframes sheen {
+  0% { transform: translateX(-60%) skewX(-14deg); opacity: 0; }
+  25% { opacity: 0.5; }
+  100% { transform: translateX(180%) skewX(-14deg); opacity: 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.facade-stage {
+  transition: background-color 0.8s ease, background-image 0.8s ease;
+}
+.facade-fade { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.facade-blob { will-change: transform; filter: blur(38px); }
+.facade-sheen { animation: sheen 5.5s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none; }
-  .animate-marquee { animation: none; }
+  .animate-marquee,
+  .facade-blob,
+  .facade-sheen,
+  .facade-fade { animation: none; }
 }

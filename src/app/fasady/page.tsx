@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { Reveal } from "@/components/ui/Reveal";
+import { FasadyStage } from "@/components/fasady/FasadyStage";
 import { MATERIALS, MATERIALS_INTRO } from "@/lib/materials";
 import { formatPrice } from "@/lib/format";
 
@@ -32,6 +33,21 @@ export default function FasadyPage() {
       />
       <section className="section">
         <Container>
+          {/* Интерактивная сцена — стиль и фон меняются под выбранный материал */}
+          <div className="mb-14">
+            <FasadyStage
+              materials={MATERIALS.map((m) => ({
+                slug: m.slug,
+                name: m.name,
+                tagline: m.tagline,
+                tint: m.tint,
+                pricePerUnit: m.pricePerUnit,
+                lifespan: m.lifespan,
+                strengths: m.strengths,
+              }))}
+            />
+          </div>
+
           {/* Сквозная маркетинговая мысль */}
           <div className="mx-auto mb-14 max-w-3xl text-center">
             <p className="text-lg leading-relaxed text-muted">{MATERIALS_INTRO}</p>
