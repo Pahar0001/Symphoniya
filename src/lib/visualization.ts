@@ -6,7 +6,7 @@
 // провайдером higgsfield по ключу HIGGSFIELD_API_KEY (см. VISUALIZATION_PROVIDER).
 
 import { z } from "zod";
-import { FACADE, LAYOUT, COUNTERTOP, HARDWARE, type Kind, type FacadeKey, type LayoutKey, type CountertopKey, type HardwareKey } from "@/lib/pricing";
+import { FACADE, LAYOUT, COUNTERTOP, HARDWARE, OPENING, APPLIANCES, type Kind, type FacadeKey, type LayoutKey, type CountertopKey, type HardwareKey, type OpeningKey, type AppliancesKey } from "@/lib/pricing";
 
 export const AI_IMAGE_PRICE = 200; // ₽ за визуализацию
 
@@ -18,6 +18,9 @@ export const visualizationConfigSchema = z.object({
   layout: z.enum(["line", "corner", "ushape", "island"]),
   countertop: z.enum(["ldsp", "compact", "quartz", "stone"]),
   hardware: z.enum(["standard", "comfort", "premium"]),
+  // Новые критерии — необязательны для обратной совместимости со старыми заявками.
+  opening: z.enum(["handles", "handleless", "gola"]).optional().default("handles"),
+  appliances: z.enum(["none", "partial", "full"]).optional().default("none"),
   lighting: z.boolean(),
   appliancesNiche: z.boolean(),
 });
@@ -51,6 +54,10 @@ export function describeConfig(c: VisualizationConfig): string[] {
   );
   if (c.kind === "kitchen") parts.push(`Столешница: ${COUNTERTOP[c.countertop as CountertopKey].label}`);
   parts.push(`Фурнитура: ${HARDWARE[c.hardware as HardwareKey].label}`);
+  parts.push(`Открывание: ${OPENING[(c.opening ?? "handles") as OpeningKey].label}`);
+  if (c.kind === "kitchen" && c.appliances && c.appliances !== "none") {
+    parts.push(`Техника: ${APPLIANCES[c.appliances as AppliancesKey].label}`);
+  }
   if (c.lighting) parts.push("Светодиодная подсветка");
   if (c.kind === "kitchen" && c.appliancesNiche) parts.push("Ниши под встроенную технику");
   return parts;

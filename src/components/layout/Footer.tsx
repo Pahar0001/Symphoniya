@@ -17,6 +17,7 @@ export function Footer() {
           ["/portfolio", "Портфолио"],
           ["/raschet", "Расчёт стоимости"],
           ["/fasady", "Фасады"],
+          ["/stati", "Статьи"],
         ]} />
         <FooterCol title="Компания" links={[
           ["/o-nas", "О нас"],

@@ -44,6 +44,22 @@ export const HARDWARE = {
 } as const;
 export type HardwareKey = keyof typeof HARDWARE;
 
+// ── Тип открывания фасадов (множитель) ──
+export const OPENING = {
+  handles: { label: "На ручки", factor: 1.0 },
+  handleless: { label: "Без ручек (нажимные)", factor: 1.06 },
+  gola: { label: "Профиль Gola", factor: 1.08 },
+} as const;
+export type OpeningKey = keyof typeof OPENING;
+
+// ── Комплектация встроенной техникой (надбавка, кухня) ──
+export const APPLIANCES = {
+  none: { label: "Без встроенной техники", price: 0 },
+  partial: { label: "Базовый комплект (панель, духовка, вытяжка)", price: 60000 },
+  full: { label: "Полный комплект (+ холодильник, посудомойка)", price: 160000 },
+} as const;
+export type AppliancesKey = keyof typeof APPLIANCES;
+
 export interface CalcInput {
   kind: Kind;
   size: number; // пог.м (кухня) или кв.м (корпус)
@@ -51,6 +67,8 @@ export interface CalcInput {
   layout: LayoutKey; // используется для кухни
   countertop: CountertopKey; // используется для кухни
   hardware: HardwareKey;
+  opening: OpeningKey; // тип открывания фасадов
+  appliances: AppliancesKey; // комплектация встроенной техникой (кухня)
   lighting: boolean; // подсветка
   appliancesNiche: boolean; // ниши под встроенную технику (кухня)
 }
@@ -81,6 +99,11 @@ export function calcPrice(input: CalcInput): CalcResult {
       extras += v;
       breakdown.push({ label: "Ниши под встроенную технику", value: v });
     }
+    const appl = APPLIANCES[input.appliances].price;
+    if (appl > 0) {
+      extras += appl;
+      breakdown.push({ label: `Встроенная техника · ${APPLIANCES[input.appliances].label}`, value: appl });
+    }
   }
   if (input.lighting) {
     const v = Math.round(4500 * size);
@@ -88,15 +111,21 @@ export function calcPrice(input: CalcInput): CalcResult {
     breakdown.push({ label: "Светодиодная подсветка", value: v });
   }
 
-  const beforeHardware = base + extras;
-  const withHardware = Math.round(beforeHardware * hardwareFactor);
-  const hardwareAdd = withHardware - beforeHardware;
+  // Фурнитура и тип открывания — множители на весь объём.
+  const openingFactor = OPENING[input.opening].factor;
+  const beforeMul = base + extras;
+  const withMul = Math.round(beforeMul * hardwareFactor * openingFactor);
+  const hardwareAdd = Math.round(beforeMul * hardwareFactor) - beforeMul;
   if (hardwareAdd > 0) breakdown.push({ label: `Фурнитура · ${HARDWARE[input.hardware].label}`, value: hardwareAdd });
+  const openingAdd = withMul - Math.round(beforeMul * hardwareFactor);
+  if (openingAdd > 0) breakdown.push({ label: `Открывание · ${OPENING[input.opening].label}`, value: openingAdd });
 
-  return { total: withHardware, breakdown };
+  return { total: withMul, breakdown };
 }
 
 export const facadeOptions: Option[] = (Object.keys(FACADE) as FacadeKey[]).map((k) => ({ value: k, label: FACADE[k].label }));
 export const layoutOptions: Option[] = (Object.keys(LAYOUT) as LayoutKey[]).map((k) => ({ value: k, label: LAYOUT[k].label }));
 export const countertopOptions: Option[] = (Object.keys(COUNTERTOP) as CountertopKey[]).map((k) => ({ value: k, label: COUNTERTOP[k].label }));
 export const hardwareOptions: Option[] = (Object.keys(HARDWARE) as HardwareKey[]).map((k) => ({ value: k, label: HARDWARE[k].label, hint: `×${HARDWARE[k].factor}` }));
+export const openingOptions: Option[] = (Object.keys(OPENING) as OpeningKey[]).map((k) => ({ value: k, label: OPENING[k].label }));
+export const appliancesOptions: Option[] = (Object.keys(APPLIANCES) as AppliancesKey[]).map((k) => ({ value: k, label: APPLIANCES[k].label }));

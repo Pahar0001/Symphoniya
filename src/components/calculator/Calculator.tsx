@@ -1,25 +1,58 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { formatPrice } from "@/lib/format";
+import { articleHref } from "@/lib/articles";
 import {
   calcPrice,
   facadeOptions,
   layoutOptions,
   countertopOptions,
   hardwareOptions,
+  openingOptions,
+  appliancesOptions,
   type CalcInput,
   type Kind,
   type FacadeKey,
   type LayoutKey,
   type CountertopKey,
   type HardwareKey,
+  type OpeningKey,
+  type AppliancesKey,
 } from "@/lib/pricing";
 
-const AI_IMAGE_PRICE = 200; // будущая платная ИИ-визуализация
+const AI_IMAGE_PRICE = 200; // платная ИИ-визуализация по параметрам
+
+// Поле критерия со ссылкой «что это?» на статью с описанием опции.
+function CriterionField({
+  criterion,
+  value,
+  children,
+}: {
+  criterion: string;
+  value: string;
+  children: React.ReactNode;
+}) {
+  const href = articleHref(criterion, value);
+  return (
+    <div>
+      {children}
+      {href && (
+        <Link
+          href={href}
+          className="mt-1 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-muted transition-colors hover:text-brass"
+        >
+          <span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-current text-[8px]">?</span>
+          Что это
+        </Link>
+      )}
+    </div>
+  );
+}
 
 export function Calculator({ compact = false }: { compact?: boolean }) {
   const [kind, setKind] = useState<Kind>("kitchen");
@@ -28,11 +61,13 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
   const [layout, setLayout] = useState<LayoutKey>("corner");
   const [countertop, setCountertop] = useState<CountertopKey>("quartz");
   const [hardware, setHardware] = useState<HardwareKey>("comfort");
+  const [opening, setOpening] = useState<OpeningKey>("handleless");
+  const [appliances, setAppliances] = useState<AppliancesKey>("partial");
   const [lighting, setLighting] = useState(true);
   const [niche, setNiche] = useState(true);
 
-  const input: CalcInput = { kind, size, facade, layout, countertop, hardware, lighting, appliancesNiche: niche };
-  const result = useMemo(() => calcPrice(input), [kind, size, facade, layout, countertop, hardware, lighting, niche]);
+  const input: CalcInput = { kind, size, facade, layout, countertop, hardware, opening, appliances, lighting, appliancesNiche: niche };
+  const result = useMemo(() => calcPrice(input), [kind, size, facade, layout, countertop, hardware, opening, appliances, lighting, niche]);
 
   const isKitchen = kind === "kitchen";
 
@@ -53,7 +88,7 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          config: { kind, size, facade, layout, countertop, hardware, lighting, appliancesNiche: niche },
+          config: { kind, size, facade, layout, countertop, hardware, opening, appliances, lighting, appliancesNiche: niche },
           customerName: oName,
           phone: oPhone,
           email: oEmail || undefined,
@@ -108,16 +143,34 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
           <div className="mt-1 font-mono text-sm text-ink">{size} {isKitchen ? "пог.м" : "кв.м"}</div>
         </label>
 
-        <Select label="Материал фасада" value={facade} onChange={(v) => setFacade(v as FacadeKey)} options={facadeOptions} />
+        <CriterionField criterion="facade" value={facade}>
+          <Select label="Материал фасада" value={facade} onChange={(v) => setFacade(v as FacadeKey)} options={facadeOptions} />
+        </CriterionField>
 
         {isKitchen && (
           <>
-            <Select label="Планировка" value={layout} onChange={(v) => setLayout(v as LayoutKey)} options={layoutOptions} />
-            <Select label="Столешница" value={countertop} onChange={(v) => setCountertop(v as CountertopKey)} options={countertopOptions} />
+            <CriterionField criterion="layout" value={layout}>
+              <Select label="Планировка" value={layout} onChange={(v) => setLayout(v as LayoutKey)} options={layoutOptions} />
+            </CriterionField>
+            <CriterionField criterion="countertop" value={countertop}>
+              <Select label="Столешница" value={countertop} onChange={(v) => setCountertop(v as CountertopKey)} options={countertopOptions} />
+            </CriterionField>
           </>
         )}
 
-        <Select label="Фурнитура" value={hardware} onChange={(v) => setHardware(v as HardwareKey)} options={hardwareOptions} />
+        <CriterionField criterion="hardware" value={hardware}>
+          <Select label="Фурнитура" value={hardware} onChange={(v) => setHardware(v as HardwareKey)} options={hardwareOptions} />
+        </CriterionField>
+
+        <CriterionField criterion="opening" value={opening}>
+          <Select label="Тип открывания" value={opening} onChange={(v) => setOpening(v as OpeningKey)} options={openingOptions} />
+        </CriterionField>
+
+        {isKitchen && (
+          <CriterionField criterion="appliances" value={appliances}>
+            <Select label="Встроенная техника" value={appliances} onChange={(v) => setAppliances(v as AppliancesKey)} options={appliancesOptions} />
+          </CriterionField>
+        )}
 
         <div className="flex flex-col justify-end gap-2 pb-1">
           <label className="flex items-center gap-2.5 text-sm text-ink">
@@ -156,7 +209,7 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
         <div className="mt-auto space-y-3 pt-6">
           {!showOrder ? (
             <Button variant="outline" className="w-full" onClick={() => setShowOrder(true)}>
-              ИИ-визуализация по вашим параметрам · {formatPrice(AI_IMAGE_PRICE, false)}
+              Заказать визуализацию по параметрам · {formatPrice(AI_IMAGE_PRICE, false)}
             </Button>
           ) : (
             <form onSubmit={orderVisualization} className="space-y-3 rounded-xl border border-line bg-surface p-4">

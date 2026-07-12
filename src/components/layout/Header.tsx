@@ -14,6 +14,7 @@ export const NAV_LINKS = [
   { href: "/portfolio", label: "Портфолио" },
   { href: "/raschet", label: "Расчёт" },
   { href: "/fasady", label: "Фасады" },
+  { href: "/stati", label: "Статьи" },
   { href: "/uslugi", label: "Услуги" },
   { href: "/akcii", label: "Акции" },
   { href: "/otzyvy", label: "Отзывы" },
@@ -27,7 +28,7 @@ const NAV_DESKTOP = [
   { href: "/katalog/korpusnaya-mebel", label: "Корпус" },
   { href: "/portfolio", label: "Портфолио" },
   { href: "/raschet", label: "Расчёт" },
-  { href: "/otzyvy", label: "Отзывы" },
+  { href: "/stati", label: "Статьи" },
   { href: "/o-nas", label: "О нас" },
   { href: "/kontakty", label: "Контакты" },
 ];
