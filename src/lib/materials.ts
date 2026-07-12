@@ -139,6 +139,17 @@ export function getMaterial(slug: string): MaterialArticle | undefined {
   return MATERIALS.find((m) => m.slug === slug);
 }
 
+// Сопоставляет свободный текст материала (например, «Массив дуба») со статьёй фасада.
+export function facadeSlugFromText(text?: string | null): FacadeKey | null {
+  if (!text) return null;
+  const t = text.toLowerCase();
+  if (t.includes("массив")) return "solid";
+  if (t.includes("шпон")) return "veneer";
+  if (t.includes("эмал") || t.includes("мдф")) return "mdf";
+  if (t.includes("лдсп")) return "ldsp";
+  return null;
+}
+
 // Сквозная мысль страницы: почему материал важнее сиюминутной цены.
 export const MATERIALS_INTRO =
   "Цена фасада — это не разовый чек, а стоимость владения в пересчёте на срок службы. " +

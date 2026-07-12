@@ -17,7 +17,7 @@ export function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
     <div className="grid auto-rows-[15rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((it, i) => (
         <Reveal key={it.id} delay={Math.min(i, 6) * 60} className={`${span(i)} min-h-0`}>
-          <article className="group relative h-full overflow-hidden rounded-xl border border-line">
+          <Link href={`/portfolio/${it.id}`} className="group relative block h-full overflow-hidden rounded-xl border border-line">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={it.image}
@@ -42,7 +42,7 @@ export function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
             <span className="absolute right-4 top-4 rounded-full bg-black/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white/85 backdrop-blur">
               {it.category === "kuhni" ? "Кухня" : "Корпус"}
             </span>
-          </article>
+          </Link>
         </Reveal>
       ))}
     </div>
