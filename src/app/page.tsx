@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/catalog/ProductCard";
 import { CallbackForm } from "@/components/forms/CallbackForm";
 import { Calculator } from "@/components/calculator/Calculator";
 import { HeroMedia } from "@/components/home/HeroMedia";
+import { HomeMenu } from "@/components/home/HomeMenu";
 import { HERO, HERO_MARQUEE } from "@/lib/site-content";
 import { prisma } from "@/lib/db";
 
@@ -74,6 +75,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Меню разделов — быстрая навигация по сайту ── */}
+      <HomeMenu />
 
       {/* ── Movement I — направления ── */}
       <Movement kicker="Каталог" title="Два направления" className="pt-section">
