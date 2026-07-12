@@ -18,7 +18,7 @@ export default async function ServicesPage() {
       <CategoryHero
         eyebrow="Сервис"
         title="Цифровые услуги"
-        description="Помимо изготовления мебели мы предлагаем цифровые сервисы: расширенную ИИ-консультацию и виртуализацию квартиры по планировке."
+        description="Кроме самой мебели у нас есть цифровые сервисы: подробная ИИ-консультация по вашему проекту и визуализация будущего интерьера по планировке."
       />
       <section className="section">
         <Container className="grid gap-6 sm:grid-cols-2">

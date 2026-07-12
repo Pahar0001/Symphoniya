@@ -38,8 +38,8 @@ export default async function HomePage() {
             </Reveal>
             <Reveal delay={180}>
               <p className="mt-7 max-w-md text-lg leading-relaxed text-muted">
-                Кухни и корпусная мебель на заказ. Натуральные материалы, точная геометрия,
-                спокойная эстетика без лишнего шума.
+                Проектируем и делаем кухни и шкафы под ваше пространство. Натуральные материалы,
+                честная работа и спокойный дизайн, который не надоедает через год.
               </p>
             </Reveal>
             <Reveal delay={260}>
@@ -173,8 +173,8 @@ export default async function HomePage() {
               <p className="eyebrow mb-5">Расчёт проекта</p>
               <h2 className="font-display text-4xl text-ink sm:text-5xl">Обсудим ваш проект</h2>
               <p className="mt-4 max-w-md text-muted">
-                Оставьте телефон — консультант перезвонит и подготовит расчёт. Либо спросите
-                ИИ-консультанта в правом нижнем углу.
+                Оставьте телефон — перезвоним, обсудим задумку и подготовим расчёт. Или задайте
+                вопрос ИИ-консультанту, он внизу справа.
               </p>
             </Reveal>
             <Reveal delay={120}>
