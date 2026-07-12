@@ -146,7 +146,7 @@ export default async function HomePage() {
       <section className="pt-section">
         <Container>
           <Reveal>
-            <div className="overflow-hidden rounded-xl border border-line bg-surface p-6 sm:p-10">
+            <div className="rounded-xl border border-line bg-surface p-6 sm:p-10">
               <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
                 <div>
                   <p className="eyebrow mb-3">Калькулятор</p>

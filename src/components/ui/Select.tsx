@@ -75,7 +75,7 @@ export function Select({
       <div
         role="listbox"
         className={cn(
-          "absolute z-30 mt-2 w-full origin-top overflow-hidden rounded-xl border border-line bg-surface shadow-[0_24px_50px_-24px_rgba(0,0,0,0.45)] transition-all duration-200 ease-symphony",
+          "absolute left-0 top-full z-50 mt-2 w-full origin-top overflow-hidden rounded-xl border border-line bg-surface shadow-[0_24px_50px_-24px_rgba(0,0,0,0.45)] transition-all duration-200 ease-symphony",
           open ? "pointer-events-auto scale-100 opacity-100" : "pointer-events-none -translate-y-1 scale-[0.98] opacity-0"
         )}
       >

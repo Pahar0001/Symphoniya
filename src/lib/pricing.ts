@@ -55,8 +55,8 @@ export type OpeningKey = keyof typeof OPENING;
 // ── Комплектация встроенной техникой (надбавка, кухня) ──
 export const APPLIANCES = {
   none: { label: "Без встроенной техники", price: 0 },
-  partial: { label: "Базовый комплект (панель, духовка, вытяжка)", price: 60000 },
-  full: { label: "Полный комплект (+ холодильник, посудомойка)", price: 160000 },
+  partial: { label: "Базовый комплект", price: 60000 },
+  full: { label: "Полный комплект", price: 160000 },
 } as const;
 export type AppliancesKey = keyof typeof APPLIANCES;
 

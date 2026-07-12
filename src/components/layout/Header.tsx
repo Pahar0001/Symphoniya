@@ -49,10 +49,10 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b transition-all duration-500 ${
+      className={`sticky top-0 z-40 border-b border-line backdrop-blur-md transition-all duration-500 ${
         scrolled
-          ? "border-line bg-paper/95 shadow-[0_6px_28px_-18px_rgba(0,0,0,0.55)] backdrop-blur-lg"
-          : "border-transparent bg-paper/60 backdrop-blur-sm"
+          ? "bg-paper/95 shadow-[0_6px_28px_-18px_rgba(0,0,0,0.55)]"
+          : "bg-paper/85"
       }`}
     >
       <div className="container-x flex h-20 items-center justify-between gap-6">
@@ -73,7 +73,7 @@ export function Header() {
             <Link
               key={l.href}
               href={l.href}
-              className="group relative text-sm text-muted transition-colors hover:text-ink"
+              className="group relative text-sm font-medium text-ink/75 transition-colors hover:text-ink"
             >
               {l.label}
               <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-brass transition-all duration-500 ease-symphony group-hover:w-full" />

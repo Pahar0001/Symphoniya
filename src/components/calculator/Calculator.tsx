@@ -194,9 +194,9 @@ export function Calculator({ compact = false }: { compact?: boolean }) {
         {!compact && (
           <dl className="mt-5 space-y-2 border-t border-line pt-4 text-sm">
             {result.breakdown.map((b) => (
-              <div key={b.label} className="flex items-center justify-between gap-4">
-                <dt className="text-muted">{b.label}</dt>
-                <dd className="font-mono text-ink">{formatPrice(b.value, false)}</dd>
+              <div key={b.label} className="flex items-baseline justify-between gap-4">
+                <dt className="min-w-0 text-muted">{b.label}</dt>
+                <dd className="shrink-0 whitespace-nowrap font-mono text-ink">{formatPrice(b.value, false)}</dd>
               </div>
             ))}
           </dl>
