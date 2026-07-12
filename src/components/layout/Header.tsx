@@ -19,6 +19,8 @@ export const NAV_LINKS = [
   { href: "/akcii", label: "Акции" },
   { href: "/otzyvy", label: "Отзывы" },
   { href: "/o-nas", label: "О нас" },
+  { href: "/garantiya", label: "Гарантия" },
+  { href: "/faq", label: "Вопросы и ответы" },
   { href: "/kontakty", label: "Контакты" },
 ];
 
