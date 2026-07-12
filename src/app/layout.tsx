@@ -3,7 +3,6 @@ import { Playfair_Display, Manrope, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
-import { CustomCursor } from "@/components/layout/CustomCursor";
 
 const display = Playfair_Display({
   subsets: ["latin", "cyrillic"],
@@ -48,7 +47,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider>
-          <CustomCursor />
           <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
       </body>

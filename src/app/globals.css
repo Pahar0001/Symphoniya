@@ -114,43 +114,17 @@
   transform: none;
 }
 
-/* ── Кастомный курсор (тонкий указатель, только desktop) ─────── */
-@media (hover: hover) and (pointer: fine) {
-  body.has-custom-cursor,
-  body.has-custom-cursor a,
-  body.has-custom-cursor button,
-  body.has-custom-cursor [role="button"] {
-    cursor: none;
-  }
+/* Стандартный курсор: указатель-«рука» на интерактивных элементах. */
+a,
+button,
+[role="button"],
+label,
+summary {
+  cursor: pointer;
 }
-.cursor-ring,
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  pointer-events: none;
-  border-radius: 9999px;
-  mix-blend-mode: difference;
-}
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1.5px solid #f4efe4;
-  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background-color 0.25s ease;
-}
-.cursor-dot {
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
-  background: #f4efe4;
-}
-.cursor-ring.is-active {
-  width: 56px;
-  height: 56px;
-  margin: -28px 0 0 -28px;
-  background: rgba(244, 239, 228, 0.12);
+:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {

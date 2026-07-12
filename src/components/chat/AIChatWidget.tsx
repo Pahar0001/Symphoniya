@@ -17,7 +17,6 @@ export function AIChatWidget() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          data-cursor
           className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-ink px-6 py-4 text-sm text-paper shadow-[0_18px_40px_-16px_rgba(0,0,0,0.6)] transition-transform hover:-translate-y-0.5"
         >
           <span className="h-2 w-2 rounded-full bg-brass" />

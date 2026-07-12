@@ -19,7 +19,6 @@ export function ProductCard({
   return (
     <Link
       href={`/katalog/${categorySlug}/${product.slug}`}
-      data-cursor
       className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-surface transition-[transform,border-color,box-shadow] duration-500 ease-symphony hover:-translate-y-1 hover:border-brass/60 hover:shadow-[0_28px_60px_-28px_rgba(0,0,0,0.5)]"
     >
       <div className={`relative overflow-hidden bg-surface-2 ${featured ? "aspect-[16/11]" : "aspect-[4/3]"}`}>

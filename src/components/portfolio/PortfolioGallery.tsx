@@ -17,7 +17,7 @@ export function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
     <div className="grid auto-rows-[15rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((it, i) => (
         <Reveal key={it.id} delay={Math.min(i, 6) * 60} className={`${span(i)} min-h-0`}>
-          <article className="group relative h-full overflow-hidden rounded-xl border border-line" data-cursor>
+          <article className="group relative h-full overflow-hidden rounded-xl border border-line">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={it.image}
