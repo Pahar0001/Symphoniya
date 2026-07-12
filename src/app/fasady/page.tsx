@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionNav } from "@/components/ui/SectionNav";
 import { FasadyStage } from "@/components/fasady/FasadyStage";
 import { MATERIALS, MATERIALS_INTRO } from "@/lib/materials";
 import { formatPrice } from "@/lib/format";
@@ -33,8 +34,16 @@ export default function FasadyPage() {
       />
       <section className="section">
         <Container>
+          <SectionNav
+            items={[
+              { id: "podbor", label: "Подбор" },
+              { id: "materialy", label: "Материалы" },
+              { id: "sravnenie", label: "Сравнение" },
+              { id: "palitra", label: "Палитра" },
+            ]}
+          />
           {/* Интерактивная сцена — стиль и фон меняются под выбранный материал */}
-          <div className="mb-14">
+          <div id="podbor" className="mb-14 scroll-mt-28">
             <FasadyStage
               materials={MATERIALS.map((m) => ({
                 slug: m.slug,
@@ -54,7 +63,7 @@ export default function FasadyPage() {
           </div>
 
           {/* Карточки-статьи по материалам */}
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div id="materialy" className="grid scroll-mt-28 gap-6 sm:grid-cols-2">
             {MATERIALS.map((m, i) => (
               <Reveal key={m.slug} delay={i * 80}>
                 <Link
@@ -84,7 +93,7 @@ export default function FasadyPage() {
           </div>
 
           {/* Компактное сравнение */}
-          <h2 className="mb-6 mt-20 font-display text-3xl text-ink">Сравнение материалов</h2>
+          <h2 id="sravnenie" className="mb-6 mt-20 scroll-mt-28 font-display text-3xl text-ink">Сравнение материалов</h2>
           <div className="overflow-x-auto rounded-xl border border-line">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead className="bg-surface-2 text-muted">
@@ -116,7 +125,7 @@ export default function FasadyPage() {
           </p>
 
           {/* Палитра */}
-          <h2 className="mb-8 mt-20 font-display text-3xl text-ink">Палитра</h2>
+          <h2 id="palitra" className="mb-8 mt-20 scroll-mt-28 font-display text-3xl text-ink">Палитра</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {finishes.map((f, i) => (
               <Reveal key={f.name} delay={i * 60}>

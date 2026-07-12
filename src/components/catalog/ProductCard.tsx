@@ -14,6 +14,7 @@ export function ProductCard({
   featured?: boolean;
 }) {
   const img = product.images[0]?.url;
+  const hoverImg = product.images[1]?.url;
   const article = articleFor(product.id);
 
   return (
@@ -23,13 +24,25 @@ export function ProductCard({
     >
       <div className={`relative overflow-hidden bg-surface-2 ${featured ? "aspect-[16/11]" : "aspect-[4/3]"}`}>
         {img ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={img}
-            alt={product.images[0]?.alt ?? product.title}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-[1.3s] ease-symphony group-hover:scale-[1.06]"
-          />
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={img}
+              alt={product.images[0]?.alt ?? product.title}
+              loading="lazy"
+              className={`h-full w-full object-cover transition-transform duration-[1.3s] ease-symphony group-hover:scale-[1.06] ${hoverImg ? "group-hover:opacity-0 transition-opacity" : ""}`}
+            />
+            {hoverImg && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={hoverImg}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-symphony group-hover:opacity-100"
+              />
+            )}
+          </>
         ) : (
           <div className="grid h-full place-items-center font-mono text-xs uppercase tracking-widest text-muted">
             фото скоро

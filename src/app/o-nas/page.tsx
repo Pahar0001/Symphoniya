@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionNav } from "@/components/ui/SectionNav";
 
 export const metadata: Metadata = {
   title: "О компании",
@@ -32,8 +33,19 @@ export default function AboutPage() {
         description="Сменили имя, оставили суть: свой цех, честные материалы и внимание к мелочам, из которых складывается хорошая мебель."
       />
 
+      <Container>
+        <SectionNav
+          items={[
+            { id: "istoriya", label: "История" },
+            { id: "principy", label: "Принципы" },
+            { id: "process", label: "Процесс" },
+            { id: "materialy", label: "Материалы" },
+          ]}
+        />
+      </Container>
+
       {/* История */}
-      <section className="section">
+      <section id="istoriya" className="section pt-2">
         <Container className="max-w-3xl space-y-6 text-lg leading-relaxed text-muted">
           <Reveal>
             <p>
@@ -55,7 +67,7 @@ export default function AboutPage() {
       </section>
 
       {/* Принципы */}
-      <section className="section pt-0">
+      <section id="principy" className="section pt-0">
         <Container>
           <Reveal>
             <div className="mb-10 flex items-end justify-between gap-6 border-b border-line pb-5">
@@ -78,7 +90,7 @@ export default function AboutPage() {
       </section>
 
       {/* Как работаем — этапы */}
-      <section className="section pt-0">
+      <section id="process" className="section pt-0">
         <Container>
           <Reveal>
             <div className="mb-10 flex items-end justify-between gap-6 border-b border-line pb-5">
@@ -123,7 +135,7 @@ export default function AboutPage() {
       </section>
 
       {/* Материалы + CTA */}
-      <section className="section pt-0">
+      <section id="materialy" className="section pt-0">
         <Container>
           <div className="grid gap-8 rounded-xl border border-line bg-surface p-8 sm:p-12 lg:grid-cols-2 lg:items-center">
             <Reveal>

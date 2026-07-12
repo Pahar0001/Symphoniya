@@ -5,14 +5,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { CallbackForm } from "@/components/forms/CallbackForm";
 import { Calculator } from "@/components/calculator/Calculator";
+import { HeroMedia } from "@/components/home/HeroMedia";
+import { HERO, HERO_MARQUEE } from "@/lib/site-content";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
-
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1400&q=80&auto=format&fit=crop";
-
-const MATERIALS = ["Массив дуба", "Эмаль", "Шпон ореха", "Латунь", "Камень", "Стекло", "ЛДСП премиум"];
 
 export default async function HomePage() {
   const promo = await prisma.product.findMany({
@@ -52,14 +49,15 @@ export default async function HomePage() {
 
           <Reveal delay={200} className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={HERO_IMG} alt="Интерьер кухни на заказ" className="h-full w-full object-cover" />
+              <HeroMedia media={HERO.media} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
             </div>
-            <div className="absolute -left-4 bottom-6 rounded-xl bg-black/80 px-5 py-3 shadow-lg ring-1 ring-white/10 backdrop-blur-md">
-              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">Срок изготовления</div>
-              <div className="font-display text-2xl text-white">4–8 недель</div>
-            </div>
+            {HERO.badge && (
+              <div className="absolute -left-4 bottom-6 rounded-xl bg-black/80 px-5 py-3 shadow-lg ring-1 ring-white/10 backdrop-blur-md">
+                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">{HERO.badge.label}</div>
+                <div className="font-display text-2xl text-white">{HERO.badge.value}</div>
+              </div>
+            )}
           </Reveal>
         </Container>
 
@@ -67,7 +65,7 @@ export default async function HomePage() {
         <div className="border-y border-line py-4">
           <div className="flex overflow-hidden">
             <div className="flex shrink-0 animate-marquee items-center gap-10 pr-10">
-              {[...MATERIALS, ...MATERIALS].map((m, i) => (
+              {[...HERO_MARQUEE, ...HERO_MARQUEE].map((m, i) => (
                 <span key={i} className="flex items-center gap-10 font-mono text-sm uppercase tracking-[0.2em] text-muted">
                   {m} <span className="text-brass">✳</span>
                 </span>

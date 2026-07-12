@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionNav } from "@/components/ui/SectionNav";
 import { articlesByCategory } from "@/lib/articles";
 
 export const metadata: Metadata = {
@@ -22,9 +23,12 @@ export default function ArticlesHubPage() {
         description="Коротко и по делу о том, из чего складывается мебель на заказ. Поможем выбрать без переплат и разочарований."
       />
       <section className="section">
+        <Container>
+          <SectionNav items={groups.map((g, i) => ({ id: `cat-${i}`, label: g.category }))} />
+        </Container>
         <Container className="space-y-16">
           {groups.map((g, gi) => (
-            <div key={g.category}>
+            <div key={g.category} id={`cat-${gi}`} className="scroll-mt-28">
               <h2 className="mb-6 font-display text-2xl text-ink sm:text-3xl">{g.category}</h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {g.items.map((it, i) => (
