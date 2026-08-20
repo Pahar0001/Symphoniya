@@ -82,7 +82,7 @@ export default function FaqPage() {
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <ButtonLink href="/kontakty">Связаться</ButtonLink>
-              <ButtonLink href="/raschet" variant="outline">Калькулятор</ButtonLink>
+              <ButtonLink href="/portfolio" variant="outline">Наши работы</ButtonLink>
             </div>
           </div>
         </Container>

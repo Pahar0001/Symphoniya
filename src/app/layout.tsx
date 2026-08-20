@@ -1,26 +1,10 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Manrope, IBM_Plex_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
-
-const display = Playfair_Display({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-display",
-  display: "swap",
-});
-const body = Manrope({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-body",
-  display: "swap",
-});
-const mono = IBM_Plex_Mono({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
-  display: "swap",
-});
+import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +12,7 @@ export const metadata: Metadata = {
     template: "%s · Симфония мебели",
   },
   description:
-    "Производство кухонь и корпусной мебели на заказ в Москве. Спокойный, статусный дизайн, натуральные материалы, индивидуальный расчёт.",
+    "Симфония — мебель, спроектированная как архитектура. Кухни и корпусная мебель на заказ. Москва. Натуральные материалы, спокойный современный дизайн.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
 };
 
@@ -39,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="ru"
-      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -48,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <SiteChrome>{children}</SiteChrome>
+          <AnalyticsTracker />
         </ThemeProvider>
       </body>
     </html>

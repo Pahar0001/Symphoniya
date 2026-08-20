@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Textarea } from "@/components/ui/Input";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { PORTFOLIO_CATEGORIES, catLabel } from "@/lib/portfolio-categories";
 
 interface Row {
   id: string;
@@ -137,9 +139,11 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
             </div>
           )}
           <Input label="Название" value={form.title} onChange={set("title")} required />
-          <Input label="URL фото" value={form.image} onChange={set("image")} required />
+          <div className="sm:col-span-2">
+            <ImageUploader label="Фото проекта" value={form.image} onChange={(u) => setForm((f) => ({ ...f, image: u }))} />
+          </div>
           <Select label="Категория" value={form.category} onChange={(v) => setForm({ ...form, category: v })}
-            options={[{ value: "kuhni", label: "Кухни" }, { value: "korpusnaya-mebel", label: "Корпусная мебель" }]} />
+            options={PORTFOLIO_CATEGORIES.map((c) => ({ value: c.slug, label: c.label }))} />
           <Input label="Город" value={form.city} onChange={set("city")} />
           <Input label="Год" type="number" value={form.year} onChange={set("year")} />
           <Input label="Материал" value={form.material} onChange={set("material")} />
@@ -180,7 +184,7 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
             <div className="p-4">
               <div className="text-ink">{it.title}</div>
               <div className="mt-1 font-mono text-[11px] uppercase tracking-wider text-muted">
-                {it.category === "kuhni" ? "Кухня" : "Корпус"}{it.city ? ` · ${it.city}` : ""}{it.year ? ` · ${it.year}` : ""}
+                {catLabel(it.category)}{it.city ? ` · ${it.city}` : ""}{it.year ? ` · ${it.year}` : ""}
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                 <button onClick={() => openEdit(it)} className="text-wood-600 hover:underline">Редактировать</button>

@@ -8,14 +8,15 @@ export function Footer() {
         <div className="lg:col-span-1">
           <div className="font-display text-2xl text-ink">Симфония мебели</div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-            Кухни и корпусная мебель на заказ. Москва. Мастерская, ранее известная как THE WOOD.
+            Мебель на заказ: кухни, шкафы, гардеробные и сан-узлы. Москва и область.
           </p>
         </div>
         <FooterCol title="Каталог" links={[
           ["/katalog/kuhni", "Кухни"],
-          ["/katalog/korpusnaya-mebel", "Корпусная мебель"],
+          ["/katalog/shkafy", "Шкафы"],
+          ["/katalog/garderobnye", "Гардеробные"],
+          ["/katalog/sanuzly", "Сан-узлы"],
           ["/portfolio", "Портфолио"],
-          ["/raschet", "Расчёт стоимости"],
           ["/fasady", "Фасады"],
           ["/stati", "Статьи"],
         ]} />
@@ -32,8 +33,7 @@ export function Footer() {
           <div className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-muted">Контакты</div>
           <ul className="space-y-2.5 text-sm text-ink">
             <li>Москва</li>
-            <li><a href="tel:+70000000000" className="transition-colors hover:text-brass">+7 (000) 000-00-00</a></li>
-            <li><a href="mailto:info@symphony-mebeli.ru" className="transition-colors hover:text-brass">info@symphony-mebeli.ru</a></li>
+            <li><a href="tel:+79951167286" className="transition-colors hover:text-brass">+7 (995) 116 72 86</a></li>
           </ul>
         </div>
       </div>

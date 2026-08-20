@@ -2,13 +2,13 @@
 type Kind = "line" | "corner" | "ushape" | "island";
 
 export function LayoutSchematic({ kind }: { kind: Kind }) {
-  const wall = "var(--line)";
-  const counter = "var(--brass)";
-  const soft = "var(--brass-soft)";
+  const wall = "rgb(var(--line))";
+  const counter = "rgb(var(--brass))";
+  const soft = "rgb(var(--brass-soft))";
   return (
     <svg viewBox="0 0 200 140" className="h-full w-full" role="img" aria-label="Схема планировки">
       {/* комната */}
-      <rect x="6" y="6" width="188" height="128" rx="6" fill="var(--surface)" stroke={wall} strokeWidth="2" />
+      <rect x="6" y="6" width="188" height="128" rx="6" fill="rgb(var(--surface))" stroke={wall} strokeWidth="2" />
       {kind === "line" && <rect x="20" y="106" width="160" height="16" rx="3" fill={counter} />}
       {kind === "corner" && (
         <>

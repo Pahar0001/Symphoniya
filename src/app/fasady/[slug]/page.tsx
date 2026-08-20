@@ -90,7 +90,7 @@ export default function MaterialArticlePage({ params }: { params: { slug: string
         </div>
 
         <div className="mt-10 flex flex-wrap gap-4">
-          <ButtonLink href="/raschet">Рассчитать с этим материалом</ButtonLink>
+          <ButtonLink href="/katalog">Подобрать в каталоге</ButtonLink>
           <ButtonLink href="/kontakty" variant="outline">Обсудить проект</ButtonLink>
         </div>
 

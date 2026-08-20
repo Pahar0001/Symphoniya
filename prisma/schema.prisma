@@ -12,7 +12,7 @@ datasource db {
 
 model Category {
   id       String    @id @default(cuid())
-  slug     String    @unique // "kuhni" | "korpusnaya-mebel"
+  slug     String    @unique // "kuhni" | "shkafy" | "garderobnye" | "sanuzly"
   title    String
   order    Int       @default(0)
   parentId String?
@@ -124,7 +124,8 @@ model PortfolioItem {
   title       String
   description String?
   image       String
-  category    String   @default("kuhni") // kuhni | korpusnaya-mebel
+  category    String   @default("kuhni") // kuhni | shkafy | garderobnye | sanuzly
+  gallery     String[] @default([])
   city        String?
   year        Int?
   material    String?
@@ -143,4 +144,23 @@ model Review {
   source      String   @default("site") // site | yandex
   isPublished Boolean  @default(true)
   createdAt   DateTime @default(now())
+}
+
+// Собственная аналитика (без внешних сервисов). Анонимно, без PII:
+// хранится только тип события, путь, реферер, устройство и случайный ID сессии
+// (первичная cookie). Питает дашборд /admin/analytics.
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  type      String   // page_view | lead | product_view | cta_click | visualization
+  path      String   @default("/")
+  referrer  String?  // источник перехода (домен)
+  session   String?  // анонимный ID посетителя (first-party cookie)
+  device    String?  // mobile | tablet | desktop
+  meta      Json?    // доп. данные события: { source, productId, ... }
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+  @@index([createdAt])
+  @@index([path])
+  @@index([session])
 }

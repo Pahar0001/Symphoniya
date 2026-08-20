@@ -94,7 +94,7 @@ export default async function VisualizationResultPage({
 
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <ButtonLink href="/kontakty">Получить точный расчёт</ButtonLink>
-          <ButtonLink href="/raschet" variant="outline">Новый расчёт</ButtonLink>
+          <ButtonLink href="/portfolio" variant="outline">Смотреть проекты</ButtonLink>
         </div>
       </Container>
     </section>
@@ -176,7 +176,7 @@ function WaitState({ kind }: { kind: "payment" | "rendering" }) {
         </p>
         {!rendering && (
           <div className="mt-8">
-            <ButtonLink href="/raschet">Вернуться к расчёту</ButtonLink>
+            <ButtonLink href="/">На главную</ButtonLink>
           </div>
         )}
       </Container>
@@ -191,7 +191,7 @@ function ErrorState() {
         <h1 className="font-display text-3xl text-ink">Не удалось собрать визуализацию</h1>
         <p className="mt-4 text-muted">Параметры расчёта повреждены. Попробуйте оформить заново.</p>
         <div className="mt-8">
-          <ButtonLink href="/raschet">К расчёту</ButtonLink>
+          <ButtonLink href="/kontakty">Обсудить проект</ButtonLink>
         </div>
       </Container>
     </section>

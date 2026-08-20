@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { CategoryHero } from "@/components/catalog/CategoryHero";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionNav } from "@/components/ui/SectionNav";
-import { FasadyStage } from "@/components/fasady/FasadyStage";
-import { MATERIALS, MATERIALS_INTRO } from "@/lib/materials";
+import { MetaRow } from "@/components/layout/GridOverlay";
+import { MATERIALS } from "@/lib/materials";
 import { formatPrice } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Фасады и материалы",
+  title: "Материалы и фактуры",
   description:
-    "Честное сравнение материалов фасадов: ЛДСП, МДФ-эмаль, шпон и массив дуба. Где выгодно сэкономить, а где переплата окупается сроком службы.",
+    "Натуральные материалы фасадов: ЛДСП, МДФ-эмаль, шпон и массив дуба. Честные фактуры без плёнок «под дерево».",
 };
 
-// Реальные оттенки палитры — приглушённые тёплые тона.
+// Приглушённая палитра отделки.
 const finishes = [
   { name: "Тёплый белый", hex: "#EFE7D6" },
   { name: "Песочный", hex: "#D8C3A0" },
@@ -27,116 +25,150 @@ const finishes = [
 export default function FasadyPage() {
   return (
     <>
-      <CategoryHero
-        eyebrow="Материалы"
-        title="Фасады и отделка"
-        description="Спокойные фактуры и приглушённые цвета — основа статусного, ненавязчивого интерьера."
-      />
-      <section className="section">
+      {/* ── Масткед ── */}
+      <header className="border-b border-line">
+        <Container className="py-16 sm:py-24">
+          <Reveal>
+            <p className="eyebrow">Материалы</p>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-8">
+              <h1 className="display-lg max-w-3xl text-ink">Материалы<br />и фактуры</h1>
+              <p className="max-w-sm text-muted">
+                Массив, шпон, эмаль. Честные фактуры без плёнок «под дерево» — так, как выглядит
+                настоящий материал.
+              </p>
+            </div>
+          </Reveal>
+        </Container>
+      </header>
+
+      {/* ── Бренды: материалы и фурнитура ── */}
+      <section className="border-b border-line">
+        <Container className="grid gap-8 py-10 sm:grid-cols-2">
+          <div>
+            <span className="label text-ink/60">Материалы фасадов</span>
+            <p className="mt-3 font-display text-2xl leading-tight text-ink">
+              Эмаль · Плёнка · AGT · Egger · Arpa · Fenix
+            </p>
+          </div>
+          <div>
+            <span className="label text-ink/60">Фурнитура</span>
+            <p className="mt-3 font-display text-2xl leading-tight text-ink">
+              Blum · Hettich · Boyard · Samet · DTC
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Editorial-индекс материалов ── */}
+      <section className="pb-8 pt-6 sm:pt-10">
         <Container>
-          <SectionNav
-            items={[
-              { id: "podbor", label: "Подбор" },
-              { id: "materialy", label: "Материалы" },
-              { id: "sravnenie", label: "Сравнение" },
-              { id: "palitra", label: "Палитра" },
-            ]}
-          />
-          {/* Интерактивная сцена — стиль и фон меняются под выбранный материал */}
-          <div id="podbor" className="mb-14 scroll-mt-28">
-            <FasadyStage
-              materials={MATERIALS.map((m) => ({
-                slug: m.slug,
-                name: m.name,
-                tagline: m.tagline,
-                tint: m.tint,
-                pricePerUnit: m.pricePerUnit,
-                lifespan: m.lifespan,
-                strengths: m.strengths,
-              }))}
-            />
+          <MetaRow index="01" label="Материалы фасадов" right={`01 — ${String(MATERIALS.length).padStart(2, "0")}`} />
+          <div className="mt-4">
+            {MATERIALS.map((m, i) => {
+              const n = String(i + 1).padStart(2, "0");
+              const left = i % 2 === 0;
+              return (
+                <Reveal key={m.slug}>
+                  <Link
+                    href={`/fasady/${m.slug}`}
+                    data-cursor="Читать"
+                    className="group grid items-center gap-6 border-t border-line py-8 lg:grid-cols-12 lg:gap-8 lg:py-12"
+                  >
+                    <div
+                      className={`relative aspect-[16/10] overflow-hidden lg:col-span-7 ${left ? "lg:order-1" : "lg:order-2"}`}
+                      style={{ background: `linear-gradient(135deg, ${m.tint}, ${m.tint}bb 60%, ${m.tint}77)` }}
+                    >
+                      <span className="absolute left-5 top-5 num text-sm text-black/45">{n}</span>
+                      <span className="absolute bottom-5 left-5 font-display text-3xl tracking-tight text-black/55 sm:text-4xl">
+                        {m.name}
+                      </span>
+                    </div>
+                    <div className={`lg:col-span-5 ${left ? "lg:order-2" : "lg:order-1"}`}>
+                      <div className="label mb-4 flex items-center gap-4">
+                        <span className="text-ink/60">{n}</span>
+                        <span className="h-px flex-1 bg-line" />
+                        <span>Уровень {m.tier}/4</span>
+                      </div>
+                      <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-ink transition-colors group-hover:text-brass sm:text-5xl">
+                        {m.name}
+                      </h2>
+                      <p className="mt-4 max-w-md leading-relaxed text-muted">{m.tagline}</p>
+                      <ul className="mt-5 space-y-1.5">
+                        {m.strengths.slice(0, 3).map((s) => (
+                          <li key={s} className="flex gap-3 text-sm leading-relaxed text-muted">
+                            <span className="mt-2 h-px w-3 shrink-0 bg-brass" />
+                            <span>{s}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-6 flex items-center gap-6">
+                        <span className="num text-sm text-ink">{formatPrice(m.pricePerUnit, true)}</span>
+                        <span className="label">{m.lifespan}</span>
+                        <span className="ml-auto inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink">
+                          Читать
+                          <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </Reveal>
+              );
+            })}
           </div>
+        </Container>
+      </section>
 
-          {/* Сквозная маркетинговая мысль */}
-          <div className="mx-auto mb-14 max-w-3xl text-center">
-            <p className="text-lg leading-relaxed text-muted">{MATERIALS_INTRO}</p>
-          </div>
-
-          {/* Карточки-статьи по материалам */}
-          <div id="materialy" className="grid scroll-mt-28 gap-6 sm:grid-cols-2">
-            {MATERIALS.map((m, i) => (
-              <Reveal key={m.slug} delay={i * 80}>
-                <Link
-                  href={`/fasady/${m.slug}`}
-                  className="group block h-full rounded-xl border border-line bg-surface p-8 transition-colors hover:border-brass"
-                >
-                  <div
-                    className="mb-5 h-28 rounded-lg"
-                    style={{ background: `linear-gradient(135deg, ${m.tint}, ${m.tint}cc)` }}
-                  />
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="font-display text-2xl text-ink">{m.name}</h3>
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
-                      Уровень {m.tier}/4
-                    </span>
-                  </div>
-                  <p className="mt-2 text-muted">{m.tagline}</p>
-                  <div className="mt-4 flex items-center justify-between border-t border-line pt-4">
-                    <span className="text-sm text-ink">{formatPrice(m.pricePerUnit, true)}</span>
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-brass group-hover:underline">
-                      Читать →
-                    </span>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-
-          {/* Компактное сравнение */}
-          <h2 id="sravnenie" className="mb-6 mt-20 scroll-mt-28 font-display text-3xl text-ink">Сравнение материалов</h2>
-          <div className="overflow-x-auto rounded-xl border border-line">
+      {/* ── Сравнение ── */}
+      <section className="border-t border-line py-16 sm:py-24">
+        <Container>
+          <MetaRow index="02" label="Сравнение материалов" right="₽ за пог.м / кв.м" />
+          <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-sm">
-              <thead className="bg-surface-2 text-muted">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Материал</th>
-                  <th className="px-4 py-3 font-medium">Цена</th>
-                  <th className="px-4 py-3 font-medium">Срок службы</th>
-                  <th className="px-4 py-3 font-medium">Где выгоднее</th>
+              <thead>
+                <tr className="label border-b border-line [&>th]:pb-3 [&>th]:pr-4 [&>th]:font-normal">
+                  <th>Материал</th>
+                  <th>Цена</th>
+                  <th>Срок службы</th>
+                  <th>Где выгоднее</th>
                 </tr>
               </thead>
               <tbody>
                 {MATERIALS.map((m) => (
-                  <tr key={m.slug} className="border-t border-line">
-                    <td className="px-4 py-3">
-                      <Link href={`/fasady/${m.slug}`} className="text-ink hover:text-brass">
+                  <tr key={m.slug} className="border-b border-line [&>td]:py-4 [&>td]:pr-4">
+                    <td>
+                      <Link href={`/fasady/${m.slug}`} className="text-ink transition-colors hover:text-brass">
                         {m.name}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-ink">{formatPrice(m.pricePerUnit, true)}</td>
-                    <td className="px-4 py-3 text-muted">{m.lifespan}</td>
-                    <td className="px-4 py-3 text-muted">{m.bestFor}</td>
+                    <td className="num text-ink">{formatPrice(m.pricePerUnit, true)}</td>
+                    <td className="text-muted">{m.lifespan}</td>
+                    <td className="text-muted">{m.bestFor}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p className="mt-3 text-xs text-muted">
-            Цены ориентировочные, за пог.м (кухня) или кв.м (корпус). Точная стоимость — после замера.
+            Цены ориентировочные. Точная стоимость — после замера.
           </p>
+        </Container>
+      </section>
 
-          {/* Палитра */}
-          <h2 id="palitra" className="mb-8 mt-20 scroll-mt-28 font-display text-3xl text-ink">Палитра</h2>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {finishes.map((f, i) => (
-              <Reveal key={f.name} delay={i * 60}>
-                <div className="overflow-hidden rounded-xl border border-line bg-surface">
-                  <div className="h-24 w-full" style={{ background: f.hex }} />
-                  <div className="px-4 py-3">
-                    <div className="text-sm text-ink">{f.name}</div>
-                    <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">{f.hex}</div>
-                  </div>
+      {/* ── Палитра ── */}
+      <section className="border-t border-line py-16 sm:py-24">
+        <Container>
+          <MetaRow index="03" label="Палитра отделки" right="6 тонов" />
+          <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden border border-line bg-line sm:grid-cols-3 lg:grid-cols-6">
+            {finishes.map((f) => (
+              <div key={f.name} className="bg-paper">
+                <div className="aspect-square w-full" style={{ background: f.hex }} />
+                <div className="px-3 py-3">
+                  <div className="text-sm text-ink">{f.name}</div>
+                  <div className="num mt-0.5 text-[11px] uppercase text-muted">{f.hex}</div>
                 </div>
-              </Reveal>
+              </div>
             ))}
           </div>
         </Container>

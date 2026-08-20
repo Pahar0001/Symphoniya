@@ -17,6 +17,10 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
 ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* инлайнятся в бандл на этапе сборки — передаём домен как build-arg,
+# чтобы абсолютные URL в метаданных/канониках были боевыми, а не localhost.
+ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 RUN npm run build
 
 # ─── runner: минимальный образ для продакшена ────────────────────

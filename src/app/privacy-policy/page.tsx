@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const OPERATOR = "ООО «Симфония мебели»";
-const OPERATOR_EMAIL = "info@symphony-mebeli.ru";
+const OPERATOR_PHONE = "+7 (995) 116 72 86";
 const OPERATOR_ADDRESS = "г. Москва, ул. Тимирязевская, д. 2/3";
 const EFFECTIVE_DATE = "8 июля 2026 г.";
 
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
         <Clause n="1" title="Общие положения">
           <P>
             Оператором персональных данных является {OPERATOR} (далее — «Оператор»), адрес:{" "}
-            {OPERATOR_ADDRESS}, адрес электронной почты: {OPERATOR_EMAIL}. Реквизиты Оператора
+            {OPERATOR_ADDRESS}, телефон: {OPERATOR_PHONE}. Реквизиты Оператора
             (ИНН, ОГРН) указываются в договоре и по запросу субъекта.
           </P>
           <P>
@@ -169,9 +169,9 @@ export default function PrivacyPage() {
             ]}
           />
           <P>
-            Для реализации прав, отзыва согласия или удаления данных направьте запрос на адрес{" "}
-            <a href={`mailto:${OPERATOR_EMAIL}`} className="text-brass hover:underline">
-              {OPERATOR_EMAIL}
+            Для реализации прав, отзыва согласия или удаления данных свяжитесь с Оператором по телефону{" "}
+            <a href="tel:+79951167286" className="text-brass hover:underline">
+              {OPERATOR_PHONE}
             </a>
             . Оператор рассматривает обращение в сроки, установленные 152-ФЗ.
           </P>
@@ -195,9 +195,9 @@ export default function PrivacyPage() {
 
         <Clause n="15" title="Контакты">
           <P>
-            По вопросам обработки персональных данных: {OPERATOR}, {OPERATOR_ADDRESS}, e-mail:{" "}
-            <a href={`mailto:${OPERATOR_EMAIL}`} className="text-brass hover:underline">
-              {OPERATOR_EMAIL}
+            По вопросам обработки персональных данных: {OPERATOR}, {OPERATOR_ADDRESS}, телефон:{" "}
+            <a href="tel:+79951167286" className="text-brass hover:underline">
+              {OPERATOR_PHONE}
             </a>
             .
           </P>

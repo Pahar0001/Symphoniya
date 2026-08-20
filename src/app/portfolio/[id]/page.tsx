@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
+import { TrackEvent } from "@/components/analytics/TrackEvent";
 import { prisma } from "@/lib/db";
 import { facadeSlugFromText, getMaterial } from "@/lib/materials";
+import { catLabel } from "@/lib/portfolio-categories";
 
 export const dynamic = "force-dynamic";
 
@@ -18,8 +20,8 @@ export default async function PortfolioCasePage({ params }: { params: { id: stri
   const item = await prisma.portfolioItem.findUnique({ where: { id: params.id } });
   if (!item) notFound();
 
-  const categoryLabel = item.category === "kuhni" ? "Кухни" : "Корпусная мебель";
-  const categoryHref = `/katalog/${item.category === "kuhni" ? "kuhni" : "korpusnaya-mebel"}`;
+  const categoryLabel = catLabel(item.category);
+  const categoryHref = `/portfolio?cat=${item.category}`;
   const facadeSlug = facadeSlugFromText(item.material);
   const facade = facadeSlug ? getMaterial(facadeSlug) : undefined;
 
@@ -32,6 +34,7 @@ export default async function PortfolioCasePage({ params }: { params: { id: stri
 
   return (
     <section className="section">
+      <TrackEvent type="project_view" meta={{ id: item.id, title: item.title, category: item.category }} />
       <Container className="max-w-4xl">
         <Link href="/portfolio" className="font-mono text-[11px] uppercase tracking-widest text-muted hover:text-brass">
           ← Все работы
@@ -41,6 +44,21 @@ export default async function PortfolioCasePage({ params }: { params: { id: stri
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={item.image} alt={item.title} className="aspect-[16/10] w-full object-cover" />
         </div>
+
+        {item.gallery.length > 0 && (
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {item.gallery.map((src, i) => (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                key={i}
+                src={src}
+                alt={`${item.title} — фото ${i + 2}`}
+                loading="lazy"
+                className="aspect-[4/3] w-full rounded-xl border border-line object-cover"
+              />
+            ))}
+          </div>
+        )}
 
         <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-widest text-muted">
           <span className="text-brass">{categoryLabel}</span>
@@ -81,8 +99,8 @@ export default async function PortfolioCasePage({ params }: { params: { id: stri
         </div>
 
         <div className="mt-10 flex flex-wrap gap-4">
-          <ButtonLink href="/raschet">Рассчитать похожий проект</ButtonLink>
-          <ButtonLink href="/kontakty" variant="outline">Обсудить свой</ButtonLink>
+          <ButtonLink href="/kontakty">Обсудить похожий проект</ButtonLink>
+          <ButtonLink href="/portfolio" variant="outline">Другие проекты</ButtonLink>
         </div>
 
         {related.length > 0 && (

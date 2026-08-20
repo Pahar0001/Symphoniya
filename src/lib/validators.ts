@@ -32,7 +32,7 @@ export const portfolioSchema = z.object({
   title: z.string().min(2).max(120),
   description: z.string().max(600).optional().or(z.literal("")),
   image: z.string().min(4, "Укажите ссылку на фото"),
-  category: z.enum(["kuhni", "korpusnaya-mebel"]),
+  category: z.enum(["kuhni", "shkafy", "garderobnye", "sanuzly"]),
   city: z.string().max(80).optional().or(z.literal("")),
   year: z.number().int().min(2000).max(2100).nullable().optional(),
   material: z.string().max(120).optional().or(z.literal("")),
@@ -60,27 +60,6 @@ export const updateUserSchema = z.object({
   password: z.string().min(6).max(100).optional().or(z.literal("")),
 });
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
-
-export const leadSchema = z.object({
-  name: z.string().min(2, "Укажите имя").max(80),
-  phone: z.string().regex(phoneRegex, "Укажите корректный телефон"),
-  message: z.string().max(1000).optional(),
-  source: z.enum(["callback_form", "ai_chat", "checkout"]).optional(),
-});
-export type LeadInput = z.infer<typeof leadSchema>;
-
-export const chatSchema = z.object({
-  messages: z
-    .array(
-      z.object({
-        role: z.enum(["user", "assistant"]),
-        content: z.string().min(1).max(4000),
-      })
-    )
-    .min(1)
-    .max(30),
-});
-export type ChatInput = z.infer<typeof chatSchema>;
 
 export const productSchema = z.object({
   slug: z.string().min(2).regex(/^[a-z0-9-]+$/, "Только латиница, цифры и дефис"),

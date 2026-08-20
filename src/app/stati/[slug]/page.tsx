@@ -89,7 +89,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         </div>
 
         <div className="mt-10 flex flex-wrap gap-4">
-          <ButtonLink href="/raschet">Учесть в расчёте</ButtonLink>
+          <ButtonLink href="/katalog">Смотреть каталог</ButtonLink>
           <ButtonLink href="/kontakty" variant="outline">Обсудить проект</ButtonLink>
         </div>
 
@@ -157,7 +157,7 @@ function GuideView({ guide }: { guide: (typeof GUIDES)[number] }) {
         </article>
 
         <div className="mt-10 flex flex-wrap gap-4">
-          <ButtonLink href="/raschet">Рассчитать кухню</ButtonLink>
+          <ButtonLink href="/katalog/kuhni">Смотреть кухни</ButtonLink>
           <ButtonLink href="/kontakty" variant="outline">Обсудить проект</ButtonLink>
         </div>
 

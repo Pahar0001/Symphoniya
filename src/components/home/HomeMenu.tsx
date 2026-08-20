@@ -8,9 +8,11 @@ const GROUPS: { title: string; links: { href: string; label: string; desc: strin
     title: "Каталог и заказ",
     links: [
       { href: "/katalog/kuhni", label: "Кухни", desc: "Проекты под ваше пространство" },
-      { href: "/katalog/korpusnaya-mebel", label: "Корпусная мебель", desc: "Шкафы, гардеробные, хранение" },
+      { href: "/katalog/shkafy", label: "Шкафы", desc: "Распашные и купе" },
+      { href: "/katalog/garderobnye", label: "Гардеробные", desc: "Хранение под потолок" },
+      { href: "/katalog/sanuzly", label: "Сан-узлы", desc: "Мебель для ванной" },
       { href: "/portfolio", label: "Портфолио", desc: "Наши выполненные работы" },
-      { href: "/raschet", label: "Расчёт стоимости", desc: "Прикиньте бюджет за пару минут" },
+      { href: "/kontakty", label: "Обсудить проект", desc: "Бесплатная консультация и смета" },
       { href: "/akcii", label: "Акции", desc: "Актуальные предложения" },
     ],
   },

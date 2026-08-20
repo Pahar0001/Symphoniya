@@ -12,5 +12,5 @@ export interface CartItem {
   image?: string;
 }
 
-export const CATEGORY_SLUGS = ["kuhni", "korpusnaya-mebel"] as const;
+export const CATEGORY_SLUGS = ["kuhni", "shkafy", "garderobnye", "sanuzly"] as const;
 export type CategorySlug = (typeof CATEGORY_SLUGS)[number];

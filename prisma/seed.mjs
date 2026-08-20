@@ -39,10 +39,22 @@ async function main() {
     create: { slug: "kuhni", title: "Кухни", order: 1 },
   });
 
-  const korpus = await prisma.category.upsert({
-    where: { slug: "korpusnaya-mebel" },
+  const shkafy = await prisma.category.upsert({
+    where: { slug: "shkafy" },
     update: {},
-    create: { slug: "korpusnaya-mebel", title: "Корпусная мебель", order: 2 },
+    create: { slug: "shkafy", title: "Шкафы", order: 2 },
+  });
+
+  const garderobnye = await prisma.category.upsert({
+    where: { slug: "garderobnye" },
+    update: {},
+    create: { slug: "garderobnye", title: "Гардеробные", order: 3 },
+  });
+
+  const sanuzly = await prisma.category.upsert({
+    where: { slug: "sanuzly" },
+    update: {},
+    create: { slug: "sanuzly", title: "Сан-узлы", order: 4 },
   });
 
   // ── Товары ───────────────────────────────────────────────────
@@ -77,7 +89,7 @@ async function main() {
       price: 180000,
       style: "модерн",
       material: "ЛДСП, шпон",
-      categoryId: korpus.id,
+      categoryId: garderobnye.id,
       image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1000&q=80&auto=format&fit=crop",
     },
     {
@@ -88,7 +100,7 @@ async function main() {
       price: null, // цена по запросу
       style: "постмодерн",
       material: "шпон ореха",
-      categoryId: korpus.id,
+      categoryId: shkafy.id,
       image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=80&auto=format&fit=crop",
     },
   ];
@@ -152,9 +164,9 @@ async function main() {
 const PORTFOLIO = [
   { title: "Кухня в квартире у парка", description: "Матовая эмаль цвета графит, кварцевая столешница, интегрированная техника.", image: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "Москва", year: 2025, material: "МДФ, эмаль", order: 1 },
   { title: "Классическая кухня из дуба", description: "Массив дуба с ручной патиной, латунная фурнитура.", image: "https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "Москва", year: 2024, material: "Массив дуба", order: 2 },
-  { title: "Гардеробная под потолок", description: "Система хранения по индивидуальному проекту, шпон ореха.", image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1000&q=80&auto=format&fit=crop", category: "korpusnaya-mebel", city: "Химки", year: 2025, material: "ЛДСП, шпон", order: 3 },
+  { title: "Гардеробная под потолок", description: "Система хранения по индивидуальному проекту, шпон ореха.", image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1000&q=80&auto=format&fit=crop", category: "garderobnye", city: "Химки", year: 2025, material: "ЛДСП, шпон", order: 3 },
   { title: "Кухня-остров в загородном доме", description: "Островная планировка, натуральный камень, тёплое дерево.", image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "МО", year: 2024, material: "Шпон, камень", order: 4 },
-  { title: "Стеллаж-перегородка", description: "Открытый стеллаж из шпона ореха, зонирование гостиной.", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=80&auto=format&fit=crop", category: "korpusnaya-mebel", city: "Москва", year: 2025, material: "Шпон ореха", order: 5 },
+  { title: "Стеллаж-перегородка", description: "Открытый стеллаж из шпона ореха, зонирование гостиной.", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=80&auto=format&fit=crop", category: "shkafy", city: "Москва", year: 2025, material: "Шпон ореха", order: 5 },
   { title: "Минималистичная белая кухня", description: "Фасады без ручек, скрытая подсветка, мраморная столешница.", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1000&q=80&auto=format&fit=crop", category: "kuhni", city: "Москва", year: 2025, material: "МДФ, эмаль", order: 6 },
 ];
 

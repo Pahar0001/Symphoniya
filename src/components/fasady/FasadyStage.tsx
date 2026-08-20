@@ -30,7 +30,7 @@ export function FasadyStage({ materials }: { materials: StageMaterial[] }) {
   return (
     <div
       className="facade-stage relative overflow-hidden rounded-2xl border border-line"
-      style={{ backgroundColor: "var(--surface)" }}
+      style={{ backgroundColor: "rgb(var(--surface))" }}
     >
       {/* Анимированный фон — цвет под выбранный материал */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
@@ -79,10 +79,10 @@ export function FasadyStage({ materials }: { materials: StageMaterial[] }) {
               Подробно о материале →
             </Link>
             <Link
-              href="/raschet"
+              href="/kontakty"
               className="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm text-ink transition-colors hover:border-brass"
             >
-              Рассчитать
+              Обсудить проект
             </Link>
           </div>
         </div>

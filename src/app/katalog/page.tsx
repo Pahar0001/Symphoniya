@@ -18,8 +18,8 @@ export default async function CatalogPage() {
     <>
       <CategoryHero
         eyebrow="Каталог"
-        title="Два направления, один почерк"
-        description="Кухни и корпусная мебель на заказ. Единый стиль, натуральные материалы, индивидуальный расчёт."
+        title="Четыре направления, один почерк"
+        description="Кухни, шкафы, гардеробные и сан-узлы на заказ. Единый стиль, натуральные материалы, индивидуальный расчёт."
       />
       <section className="section">
         <Container className="grid gap-6 sm:grid-cols-2">

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ProductGallery } from "@/components/catalog/ProductGallery";
-import { AddToCartButton } from "@/components/catalog/AddToCartButton";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { getProduct } from "@/lib/catalog";
@@ -63,20 +62,8 @@ export async function ProductDetail({
               </dl>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <ButtonLink href="/kontakty" withArrow>Оставить заявку на расчёт</ButtonLink>
-                <ButtonLink href="/raschet" variant="outline">Рассчитать стоимость</ButtonLink>
-                {product.price != null && (
-                  <AddToCartButton
-                    item={{
-                      productId: product.id,
-                      slug: product.slug,
-                      title: product.title,
-                      price: product.price,
-                      qty: 1,
-                      image: product.images[0]?.url,
-                    }}
-                  />
-                )}
+                <ButtonLink href="/kontakty" withArrow>Оставить заявку</ButtonLink>
+                <ButtonLink href="/portfolio" variant="outline">Смотреть работы</ButtonLink>
               </div>
 
               <p className="mt-6 text-sm text-muted">

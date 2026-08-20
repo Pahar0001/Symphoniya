@@ -32,7 +32,7 @@ export async function CategoryListing({
 
   return (
     <>
-      <CategoryHero eyebrow={eyebrow} title={category.title} description={description} />
+      <CategoryHero eyebrow={eyebrow ?? `Каталог · ${category.title}`} title={category.title} description={description} />
       <section className="section">
         <Container>
           <div className="mb-12">

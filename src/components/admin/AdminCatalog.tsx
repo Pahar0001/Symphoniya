@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Textarea } from "@/components/ui/Input";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/ui/Button";
 import type { Category } from "@prisma/client";
 import type { ProductWithImages } from "@/types";
@@ -77,6 +78,7 @@ export function AdminCatalog({
             e.preventDefault();
             save(new FormData(e.currentTarget), editing?.id);
           }}
+          key={editing?.id ?? "new"}
           className="mb-8 grid gap-4 rounded-lg border border-wood-200 bg-surface p-6 sm:grid-cols-2"
         >
           <Input name="title" label="Название" defaultValue={editing?.title} required />
@@ -96,7 +98,9 @@ export function AdminCatalog({
           <Input name="price" label="Цена, ₽ (пусто = по запросу)" type="number" defaultValue={editing?.price ?? ""} />
           <Input name="style" label="Стиль" defaultValue={editing?.style ?? ""} />
           <Input name="material" label="Материал" defaultValue={editing?.material ?? ""} />
-          <Input name="image" label="URL изображения" defaultValue={editing?.images[0]?.url ?? ""} />
+          <div className="sm:col-span-2">
+            <ImageUploader name="image" label="Фото товара" defaultValue={editing?.images[0]?.url ?? ""} />
+          </div>
           <div className="sm:col-span-2">
             <Textarea name="description" label="Описание" defaultValue={editing?.description} required />
           </div>

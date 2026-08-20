@@ -2,36 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Тема ─────────────────────────────────────────────────────
-   Светлая — тёплая бумага + графитовые чернила + латунный акцент.
-   Тёмная — эспрессо-графит + тёплый пепельно-белый. */
+/* ── R100 art-direction ───────────────────────────────────────
+   Тёплый архитектурный нейтрал: бумага/камень + графитовые чернила.
+   Акцент максимально сдержанный (дерево/бронза), премиальность —
+   через пространство, типографику и фотографию, не через золото. */
+/* Цвета — в виде RGB-каналов «R G B», чтобы работали модификаторы прозрачности
+   Tailwind (ink/40, line/35 и т.п.). Значения см. в комментариях (hex). */
 :root {
-  --paper: #f2ece0;
-  --surface: #fbf8f2;
-  --surface-2: #e9dfce;
-  --ink: #211d18;
-  --muted: #6d6353;
-  --line: #ddd1bd;
-  --walnut: #7a4a24;
-  --brass: #a9762f;
-  --brass-soft: #c79a57;
+  --paper: 243 241 236;      /* #f3f1ec */
+  --surface: 250 248 244;    /* #faf8f4 */
+  --surface-2: 230 226 217;  /* #e6e2d9 */
+  --ink: 23 22 19;           /* #171613 */
+  --muted: 114 109 99;       /* #726d63 */
+  --line: 216 211 201;       /* #d8d3c9 */
+  --walnut: 111 83 58;       /* #6f533a */
+  --brass: 138 111 74;       /* #8a6f4a — сдержанное дерево-бронза, редко */
+  --brass-soft: 182 164 131; /* #b6a483 */
 }
 
 .dark {
-  /* Тёплый графит — «затемнённая галерея», а не чёрный провал. */
-  --paper: #232019;
-  --surface: #2b2720;
-  --surface-2: #35302a;
-  --ink: #ece4d4;
-  --muted: #b0a58e;
-  --line: #423a2e;
-  --walnut: #cfa062;
-  --brass: #cba463;
-  --brass-soft: #7f6540;
+  --paper: 20 19 16;         /* #141310 */
+  --surface: 27 26 21;       /* #1b1a15 */
+  --surface-2: 38 36 30;     /* #26241e */
+  --ink: 240 237 228;        /* #f0ede4 */
+  --muted: 162 155 141;      /* #a29b8d */
+  --line: 50 47 40;          /* #322f28 */
+  --walnut: 195 154 106;     /* #c39a6a */
+  --brass: 192 160 112;      /* #c0a070 */
+  --brass-soft: 122 100 68;  /* #7a6444 */
 }
 
-/* Легаси-палитра (cream/graphite/wood) как алиасы на семантические токены —
-   старые страницы автоматически поддерживают тёмную/светлую тему без правок. */
+/* Легаси-алиасы (cream/graphite/wood) → семантические токены. */
 :root {
   --c-50: var(--surface);
   --c-100: var(--surface);
@@ -57,53 +58,77 @@
   }
   body {
     @apply bg-paper text-ink font-body antialiased;
+    font-feature-settings: "ss01", "cv01", "cv03";
     transition: background-color 0.5s ease, color 0.5s ease;
   }
+  /* Крупная гротеск-типографика R100: плотный трекинг, тугой leading. */
   h1, h2, h3, h4 {
     @apply font-display;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
   }
   ::selection {
-    background: var(--brass);
-    color: var(--paper);
+    background: rgb(var(--ink));
+    color: rgb(var(--paper));
   }
   :focus-visible {
-    outline: 2px solid var(--brass);
+    outline: 1.5px solid rgb(var(--ink));
     outline-offset: 3px;
-    border-radius: 2px;
   }
 }
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-container px-5 sm:px-8;
+    @apply mx-auto w-full max-w-container px-6 sm:px-10 lg:px-14;
   }
-  /* Тактовая надпись-«эйбрёу»: моно, разрядка, латунь, с тактовой чертой */
+  /* Редакционный лейбл: моно, разрядка, тонкая черта-такт. */
   .eyebrow {
-    @apply inline-flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-brass;
+    @apply inline-flex items-center gap-3 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-muted;
   }
   .eyebrow::before {
     content: "";
-    @apply h-px w-8 bg-brass;
+    @apply h-px w-6;
+    background-color: rgb(var(--ink) / 0.4);
+  }
+  /* Моно-лейбл без черты (номера, координаты, служебные подписи). */
+  .label {
+    @apply font-mono text-[0.68rem] uppercase tracking-[0.24em] text-muted;
+  }
+  /* Табличные номера каталога. */
+  .num {
+    @apply font-mono tabular-nums;
   }
   .hairline {
     @apply border-line;
   }
-  /* Совместимость: старые страницы используют .section для вертикальных отступов. */
+  /* Крупный editorial-заголовок. */
+  .display-xl {
+    @apply font-display font-medium;
+    font-size: clamp(2.6rem, 9vw, 10rem);
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+  }
+  .display-lg {
+    @apply font-display font-medium;
+    font-size: clamp(2.2rem, 6vw, 5.5rem);
+    letter-spacing: -0.04em;
+    line-height: 0.96;
+  }
+  /* Совместимость: вертикальные отступы старых страниц. */
   .section {
     @apply py-16 sm:py-24;
   }
+  /* Краевое затухание горизонтальной ленты. */
+  .rail-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* ── Reveal при скролле ─────────────────────────────────────── */
+/* ── Reveal при скролле (до интеграции Motion) ──────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(22px);
   transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
@@ -114,40 +139,77 @@
   transform: none;
 }
 
-/* Стандартный курсор: указатель-«рука» на интерактивных элементах. */
-a,
-button,
-[role="button"],
-label,
-summary {
-  cursor: pointer;
+/* Клип-ревил изображения (маска сверху вниз). */
+.img-reveal {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
 }
-:disabled,
-[aria-disabled="true"] {
-  cursor: not-allowed;
+.img-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
 }
 
-/* ── Анимации сцены фасадов ─────────────────────────────────── */
-@keyframes floatSlow {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(0, -22px, 0) scale(1.06); }
+a, button, [role="button"], label, summary { cursor: pointer; }
+:disabled, [aria-disabled="true"] { cursor: not-allowed; }
+
+/* ── Custom cursor (desktop) ────────────────────────────────── */
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor [role="button"],
+html.has-cursor label,
+html.has-cursor summary { cursor: none; }
+html.has-cursor :where(input, textarea, select) { cursor: text; }
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.25s ease;
+  will-change: transform;
 }
-@keyframes floatSlow2 {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
-  50% { transform: translate3d(18px, 14px, 0) scale(1); }
+.cursor-dot[data-hover="link"] { width: 36px; height: 36px; }
+.cursor-dot[data-hover="label"] { opacity: 0; }
+
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 9px 15px;
+  border-radius: 9999px;
+  background: rgb(var(--ink));
+  color: rgb(var(--paper));
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transition: opacity 0.25s ease, scale 0.25s ease;
+  will-change: transform;
 }
-@keyframes sheen {
-  0% { transform: translateX(-60%) skewX(-14deg); opacity: 0; }
-  25% { opacity: 0.5; }
-  100% { transform: translateX(180%) skewX(-14deg); opacity: 0; }
+.cursor-label[data-on] { opacity: 1; scale: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot, .cursor-label { display: none; }
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
-}
-.facade-stage {
-  transition: background-color 0.8s ease, background-image 0.8s ease;
-}
+
+/* ── Анимации сцены фасадов (используются на /fasady) ───────── */
+@keyframes floatSlow { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(0,-22px,0) scale(1.06)} }
+@keyframes floatSlow2 { 0%,100%{transform:translate3d(0,0,0) scale(1.05)} 50%{transform:translate3d(18px,14px,0) scale(1)} }
+@keyframes sheen { 0%{transform:translateX(-60%) skewX(-14deg);opacity:0} 25%{opacity:.5} 100%{transform:translateX(180%) skewX(-14deg);opacity:0} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+.facade-stage { transition: background-color 0.8s ease, background-image 0.8s ease; }
 .facade-fade { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .facade-blob { will-change: transform; filter: blur(38px); }
 .facade-sheen { animation: sheen 5.5s ease-in-out infinite; }
@@ -155,8 +217,11 @@ summary {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none; }
-  .animate-marquee,
-  .facade-blob,
-  .facade-sheen,
-  .facade-fade { animation: none; }
+  .img-reveal { clip-path: inset(0 0 0 0) !important; transition: none; }
+  .animate-marquee, .facade-blob, .facade-sheen, .facade-fade { animation: none; }
 }
+
+/* Ken-burns для героя-слайдшоу (медленный наезд активного кадра). */
+@keyframes heroKenburns { from { transform: scale(1.02); } to { transform: scale(1.09); } }
+.hero-kenburns { animation: heroKenburns 6s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .hero-kenburns { animation: none; } }
