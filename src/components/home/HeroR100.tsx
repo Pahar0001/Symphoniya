@@ -23,18 +23,9 @@ export function HeroR100() {
     <section className="relative overflow-hidden border-b border-line">
       <GridOverlay />
       <div className="container-x relative z-10">
-        {/* верхняя строка-такт */}
-        <div className="flex items-center justify-between border-b border-line py-4">
-          <span className="label text-ink/70">Симфония мебели</span>
-          <span className="label hidden sm:block">Москва и область · Мебель / Архитектура</span>
-          <span className="label">2026</span>
-        </div>
-
         <div className="grid items-center gap-10 py-12 lg:min-h-[82vh] lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7 text-center">
-            <Reveal>
-              <h1 className="display-xl text-ink">Симфония<br />Мебели</h1>
-            </Reveal>
+            <h1 className="sr-only">Симфония мебели — кухни, шкафы, гардеробные и сан-узлы на заказ</h1>
             <Reveal delay={120}>
               <p className="mt-8 mx-auto max-w-lg text-lg leading-relaxed text-muted lg:text-xl">
                 Мебель, созданная для пространства. Кухни, шкафы, гардеробные и сан-узлы на заказ —

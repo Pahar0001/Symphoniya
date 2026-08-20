@@ -152,57 +152,6 @@
 a, button, [role="button"], label, summary { cursor: pointer; }
 :disabled, [aria-disabled="true"] { cursor: not-allowed; }
 
-/* ── Custom cursor (desktop) ────────────────────────────────── */
-html.has-cursor,
-html.has-cursor a,
-html.has-cursor button,
-html.has-cursor [role="button"],
-html.has-cursor label,
-html.has-cursor summary { cursor: none; }
-html.has-cursor :where(input, textarea, select) { cursor: text; }
-
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  width: 8px;
-  height: 8px;
-  border-radius: 9999px;
-  background: #fff;
-  mix-blend-mode: difference;
-  pointer-events: none;
-  transition: width 0.3s ease, height 0.3s ease, opacity 0.25s ease;
-  will-change: transform;
-}
-.cursor-dot[data-hover="link"] { width: 36px; height: 36px; }
-.cursor-dot[data-hover="label"] { opacity: 0; }
-
-.cursor-label {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  padding: 9px 15px;
-  border-radius: 9999px;
-  background: rgb(var(--ink));
-  color: rgb(var(--paper));
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  scale: 0.6;
-  transition: opacity 0.25s ease, scale 0.25s ease;
-  will-change: transform;
-}
-.cursor-label[data-on] { opacity: 1; scale: 1; }
-
-@media (prefers-reduced-motion: reduce) {
-  .cursor-dot, .cursor-label { display: none; }
-}
 
 /* ── Анимации сцены фасадов (используются на /fasady) ───────── */
 @keyframes floatSlow { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(0,-22px,0) scale(1.06)} }

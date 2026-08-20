@@ -45,9 +45,9 @@ export function Header() {
     >
       <div className="container-x flex h-16 items-center justify-between gap-6">
         {/* Вордмарк */}
-        <Link href="/" className="flex items-baseline gap-2.5 leading-none" aria-label="Симфония мебели">
-          <span className="font-display text-xl font-semibold uppercase tracking-tight text-ink">Симфония</span>
-          <span className="label hidden sm:inline">мебели</span>
+        <Link href="/" className="flex items-center leading-none" aria-label="Симфония мебели">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-symphony.png" alt="Симфония мебели" className="h-10 w-auto sm:h-11 dark:invert" />
         </Link>
 
         {/* Навигация — моно-лейблы */}

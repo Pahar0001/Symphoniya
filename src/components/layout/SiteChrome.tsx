@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { CustomCursor } from "@/components/ui/CustomCursor";
 
 // Показывает публичную «обвязку» сайта. В админ-панели (/admin) — только контент.
 export function SiteChrome({ children }: { children: React.ReactNode }) {
@@ -17,7 +16,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <CustomCursor />
     </div>
   );
 }
