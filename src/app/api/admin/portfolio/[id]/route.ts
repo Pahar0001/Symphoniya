@@ -28,6 +28,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       ...(d.city !== undefined ? { city: d.city || null } : {}),
       ...(d.year !== undefined ? { year: d.year ?? null } : {}),
       ...(d.material !== undefined ? { material: d.material || null } : {}),
+      ...(d.complex !== undefined ? { complex: d.complex || null } : {}),
+      ...(d.onHome !== undefined ? { onHome: d.onHome } : {}),
+      ...(d.gallery !== undefined ? { gallery: d.gallery } : {}),
       ...(d.isPublished !== undefined ? { isPublished: d.isPublished } : {}),
     },
   });

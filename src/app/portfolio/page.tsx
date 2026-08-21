@@ -20,12 +20,35 @@ function chip(active: boolean): string {
   }`;
 }
 
-export default async function PortfolioPage({ searchParams }: { searchParams: { cat?: string } }) {
+export default async function PortfolioPage({
+  searchParams,
+}: {
+  searchParams: { cat?: string; zhk?: string };
+}) {
   const cat = PORTFOLIO_CATEGORIES.find((c) => c.slug === searchParams?.cat)?.slug;
+
+  // Список ЖК для фильтра.
+  const complexesRaw = await prisma.portfolioItem.findMany({
+    where: { isPublished: true, complex: { not: null } },
+    select: { complex: true },
+    distinct: ["complex"],
+    orderBy: { complex: "asc" },
+  });
+  const complexes = complexesRaw.map((c) => c.complex).filter((v): v is string => Boolean(v));
+  const zhk = searchParams?.zhk && complexes.includes(searchParams.zhk) ? searchParams.zhk : undefined;
+
   const items = await prisma.portfolioItem.findMany({
-    where: { isPublished: true, ...(cat ? { category: cat } : {}) },
+    where: { isPublished: true, ...(cat ? { category: cat } : {}), ...(zhk ? { complex: zhk } : {}) },
     orderBy: [{ order: "asc" }, { createdAt: "desc" }],
   });
+
+  const q = (params: { cat?: string; zhk?: string }) => {
+    const sp = new URLSearchParams();
+    if (params.cat) sp.set("cat", params.cat);
+    if (params.zhk) sp.set("zhk", params.zhk);
+    const s = sp.toString();
+    return s ? `/portfolio?${s}` : "/portfolio";
+  };
 
   return (
     <>
@@ -38,7 +61,7 @@ export default async function PortfolioPage({ searchParams }: { searchParams: { 
           <Reveal delay={80}>
             <div className="mt-6 flex flex-wrap items-end justify-between gap-8">
               <h1 className="display-lg max-w-3xl text-ink">
-                {cat ? catLabel(cat) : <>Реализованные<br />работы</>}
+                {zhk ? <>ЖК&nbsp;{zhk}</> : cat ? catLabel(cat) : <>Реализованные<br />работы</>}
               </h1>
               <p className="max-w-sm text-muted">
                 Каждый проект — под конкретное пространство и сценарий жизни. Кухни, шкафы,
@@ -48,13 +71,23 @@ export default async function PortfolioPage({ searchParams }: { searchParams: { 
           </Reveal>
           <Reveal delay={140}>
             <div className="mt-8 flex flex-wrap gap-2">
-              <Link href="/portfolio" className={chip(!cat)}>Все</Link>
+              <Link href={q({ zhk })} className={chip(!cat)}>Все</Link>
               {PORTFOLIO_CATEGORIES.map((c) => (
-                <Link key={c.slug} href={`/portfolio?cat=${c.slug}`} className={chip(cat === c.slug)}>
+                <Link key={c.slug} href={q({ cat: c.slug, zhk })} className={chip(cat === c.slug)}>
                   {c.label}
                 </Link>
               ))}
             </div>
+            {complexes.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link href={q({ cat })} className={chip(!zhk)}>Все&nbsp;ЖК</Link>
+                {complexes.map((name) => (
+                  <Link key={name} href={q({ cat, zhk: name })} className={chip(zhk === name)}>
+                    {name}
+                  </Link>
+                ))}
+              </div>
+            )}
           </Reveal>
         </Container>
       </header>

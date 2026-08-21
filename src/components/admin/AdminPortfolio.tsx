@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Textarea } from "@/components/ui/Input";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { GalleryUploader } from "@/components/admin/GalleryUploader";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { PORTFOLIO_CATEGORIES, catLabel } from "@/lib/portfolio-categories";
@@ -16,6 +17,9 @@ interface Row {
   city: string | null;
   year: number | null;
   material: string | null;
+  complex: string | null;
+  onHome: boolean;
+  gallery: string[];
   isPublished: boolean;
   description: string | null;
 }
@@ -27,17 +31,20 @@ type FormState = {
   city: string;
   year: string;
   material: string;
+  complex: string;
+  onHome: boolean;
+  gallery: string[];
   description: string;
 };
 
 const EMPTY: FormState = {
-  title: "", image: "", category: "kuhni", city: "", year: "", material: "", description: "",
+  title: "", image: "", category: "kuhni", city: "", year: "", material: "", complex: "", onHome: true, gallery: [], description: "",
 };
 
 // null — форма закрыта, "new" — создание, иначе id редактируемой работы.
 type Mode = null | "new" | string;
 
-export function AdminPortfolio({ items }: { items: Row[] }) {
+export function AdminPortfolio({ items, scope = "home" }: { items: Row[]; scope?: "all" | "home" }) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>(null);
   const [busy, setBusy] = useState(false);
@@ -50,7 +57,7 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
 
   function openCreate() {
     setError(null);
-    setForm(EMPTY);
+    setForm({ ...EMPTY, onHome: scope !== "all" });
     setMode((m) => (m === "new" ? null : "new"));
   }
 
@@ -63,6 +70,9 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
       city: it.city ?? "",
       year: it.year ? String(it.year) : "",
       material: it.material ?? "",
+      complex: it.complex ?? "",
+      onHome: it.onHome,
+      gallery: it.gallery ?? [],
       description: it.description ?? "",
     });
     setMode(it.id);
@@ -89,6 +99,9 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
         category: form.category,
         city: form.city,
         material: form.material,
+        complex: form.complex,
+        onHome: form.onHome,
+        gallery: form.gallery,
         description: form.description,
         year: form.year ? Number(form.year) : null,
       }),
@@ -140,13 +153,21 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
           )}
           <Input label="Название" value={form.title} onChange={set("title")} required />
           <div className="sm:col-span-2">
-            <ImageUploader label="Фото проекта" value={form.image} onChange={(u) => setForm((f) => ({ ...f, image: u }))} />
+            <ImageUploader label="Заглавное фото" value={form.image} onChange={(u) => setForm((f) => ({ ...f, image: u }))} />
+          </div>
+          <div className="sm:col-span-2">
+            <GalleryUploader value={form.gallery} onChange={(g) => setForm((f) => ({ ...f, gallery: g }))} />
           </div>
           <Select label="Категория" value={form.category} onChange={(v) => setForm({ ...form, category: v })}
             options={PORTFOLIO_CATEGORIES.map((c) => ({ value: c.slug, label: c.label }))} />
           <Input label="Город" value={form.city} onChange={set("city")} />
           <Input label="Год" type="number" value={form.year} onChange={set("year")} />
           <Input label="Материал" value={form.material} onChange={set("material")} />
+          <Input label="ЖК (жилой комплекс)" value={form.complex} onChange={set("complex")} placeholder="напр. Прайм Парк" />
+          <label className="flex items-center gap-2 text-sm text-graphite-600 sm:col-span-2">
+            <input type="checkbox" checked={form.onHome} onChange={(e) => setForm((f) => ({ ...f, onHome: e.target.checked }))} />
+            Показывать на главной странице
+          </label>
           <div className="sm:col-span-2">
             <Textarea label="Описание" value={form.description} onChange={set("description")} />
           </div>
@@ -180,11 +201,16 @@ export function AdminPortfolio({ items }: { items: Row[] }) {
               >
                 {it.isPublished ? "Опубликовано" : "Скрыто"}
               </span>
+              {it.onHome && (
+                <span className="absolute right-2 top-2 rounded-full bg-wood-500/90 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white">
+                  На главной
+                </span>
+              )}
             </div>
             <div className="p-4">
               <div className="text-ink">{it.title}</div>
               <div className="mt-1 font-mono text-[11px] uppercase tracking-wider text-muted">
-                {catLabel(it.category)}{it.city ? ` · ${it.city}` : ""}{it.year ? ` · ${it.year}` : ""}
+                {catLabel(it.category)}{it.complex ? ` · ЖК ${it.complex}` : ""}{it.city ? ` · ${it.city}` : ""}{it.year ? ` · ${it.year}` : ""}
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                 <button onClick={() => openEdit(it)} className="text-wood-600 hover:underline">Редактировать</button>

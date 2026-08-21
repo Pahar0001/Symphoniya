@@ -1,21 +1,33 @@
 import { AdminShell } from "@/components/admin/AdminShell";
-import { AdminCatalog } from "@/components/admin/AdminCatalog";
+import { AdminPortfolio } from "@/components/admin/AdminPortfolio";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+// «Каталог» — управление ВСЕМИ проектами сайта (страница /portfolio).
 export default async function AdminCatalogPage() {
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({
-      include: { images: { orderBy: { order: "asc" } }, category: true },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.category.findMany({ orderBy: { order: "asc" } }),
-  ]);
-
+  const items = await prisma.portfolioItem.findMany({
+    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+  });
   return (
-    <AdminShell title="Каталог">
-      <AdminCatalog products={products} categories={categories} />
+    <AdminShell title="Каталог — все проекты">
+      <AdminPortfolio
+        scope="all"
+        items={items.map((i) => ({
+          id: i.id,
+          title: i.title,
+          image: i.image,
+          category: i.category,
+          city: i.city,
+          year: i.year,
+          material: i.material,
+          complex: i.complex,
+          onHome: i.onHome,
+          gallery: i.gallery,
+          isPublished: i.isPublished,
+          description: i.description,
+        }))}
+      />
     </AdminShell>
   );
 }

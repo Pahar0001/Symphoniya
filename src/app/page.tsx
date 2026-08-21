@@ -11,16 +11,17 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const projects = await prisma.portfolioItem.findMany({
-    where: { isPublished: true },
+    where: { isPublished: true, onHome: true },
     orderBy: [{ order: "asc" }, { createdAt: "desc" }],
     take: 8,
-    select: { id: true, title: true, image: true, category: true, city: true, year: true, material: true },
+    select: { id: true, title: true, image: true, category: true, complex: true },
   });
 
   const slides: Slide[] = projects.map((p) => ({
     src: p.image,
     title: p.title,
-    tag: [catLabel(p.category), [p.city, p.year].filter(Boolean).join(" ")].filter(Boolean).join(" · "),
+    tag: catLabel(p.category),
+    complex: p.complex ?? undefined,
   }));
 
   return (
@@ -60,7 +61,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* ── ПРОЕКТЫ — горизонтальная сцена ── */}
+      {/* ── ПРОЕКТЫ — горизонтальная сцена (scroll-jack), карточки с ЖК ── */}
       {slides.length > 0 && (
         <div id="projects" className="scroll-mt-24 pt-16 sm:pt-24">
           <HeroGallery slides={slides} />

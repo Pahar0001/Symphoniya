@@ -36,6 +36,9 @@ export const portfolioSchema = z.object({
   city: z.string().max(80).optional().or(z.literal("")),
   year: z.number().int().min(2000).max(2100).nullable().optional(),
   material: z.string().max(120).optional().or(z.literal("")),
+  complex: z.string().max(120).optional().or(z.literal("")),
+  onHome: z.boolean().optional(),
+  gallery: z.array(z.string()).optional(),
   order: z.number().int().optional(),
   isPublished: z.boolean().optional(),
 });

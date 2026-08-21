@@ -43,11 +43,11 @@ export function Header() {
         scrolled ? "border-line bg-paper/90" : "border-transparent bg-paper/70"
       }`}
     >
-      <div className="container-x flex h-16 items-center justify-between gap-6">
+      <div className="container-x flex h-20 items-center justify-between gap-6 sm:h-24">
         {/* Вордмарк */}
         <Link href="/" className="flex items-center leading-none" aria-label="Симфония мебели">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-symphony.png" alt="Симфония мебели" className="h-10 w-auto sm:h-11 dark:invert" />
+          <img src="/logo-symphony.png" alt="Симфония мебели" className="h-14 w-auto sm:h-16 dark:invert" />
         </Link>
 
         {/* Навигация — моно-лейблы */}

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export type Slide = { src: string; title: string; tag: string };
+export type Slide = { src: string; title: string; tag: string; complex?: string };
 
 // Полноэкранная галерея в духе r-100.no.
 // Desktop: вертикальная прокрутка «переводится» в горизонтальное движение ленты
@@ -98,7 +98,7 @@ export function HeroGallery({ slides }: { slides: Slide[] }) {
         <figure
           key={s.src}
           data-cursor="Проект"
-          className="group relative m-0 h-full w-[86vw] shrink-0 snap-start overflow-hidden rounded-xl sm:w-[62vw] lg:w-[46vw]"
+          className="group relative m-0 aspect-[3/4] h-[58svh] shrink-0 snap-start overflow-hidden rounded-xl sm:h-[68vh]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -108,11 +108,14 @@ export function HeroGallery({ slides }: { slides: Slide[] }) {
             loading={i < 2 ? "eager" : "lazy"}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
           <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 text-white sm:p-8">
             <div className="[text-shadow:0_1px_16px_rgba(0,0,0,0.6)]">
-              <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-white/75">{s.tag}</div>
+              {s.complex && (
+                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-white/85">ЖК {s.complex}</div>
+              )}
               <div className="mt-1 font-display text-2xl leading-tight sm:text-3xl">{s.title}</div>
+              <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-white/70">{s.tag}</div>
             </div>
           </figcaption>
         </figure>
@@ -138,7 +141,7 @@ export function HeroGallery({ slides }: { slides: Slide[] }) {
     return (
       <section aria-label="Галерея работ" className="relative">
         {Overlay}
-        <div className="flex h-[86svh] snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-3 pt-20 [scrollbar-width:none] sm:gap-5 sm:px-6 [&::-webkit-scrollbar]:hidden">
+        <div className="flex h-[86svh] items-center snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-3 pt-20 [scrollbar-width:none] sm:gap-5 sm:px-6 [&::-webkit-scrollbar]:hidden">
           {Slides}
         </div>
       </section>
@@ -157,7 +160,7 @@ export function HeroGallery({ slides }: { slides: Slide[] }) {
         {Overlay}
         <div
           ref={trackRef}
-          className="flex h-screen items-stretch gap-5 px-6 pb-6 pt-24 will-change-transform"
+          className="flex h-screen items-center gap-5 px-6 pb-6 pt-24 will-change-transform"
         >
           {Slides}
         </div>

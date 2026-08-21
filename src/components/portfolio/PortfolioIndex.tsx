@@ -3,63 +3,47 @@ import { Reveal } from "@/components/ui/Reveal";
 import type { PortfolioItem } from "@prisma/client";
 import { catLabel } from "@/lib/portfolio-categories";
 
-// R100-индекс проектов: не карточки, а редакционные композиции.
-// Крупное изображение пересекает сетку, номер, тонкие строки-такты.
+// Мозаика проектов с ориентированием по ЖК: крупные фото в 2 колонки,
+// на каждом — жилой комплекс, название и ветка (референс: neapol-design.ru).
 export function PortfolioIndex({ items }: { items: PortfolioItem[] }) {
   if (items.length === 0) {
     return <p className="label">Работы скоро появятся.</p>;
   }
   return (
-    <div>
-      {items.map((it, i) => {
-        const n = String(i + 1).padStart(2, "0");
-        const meta = [catLabel(it.category), it.city, it.year, it.material].filter(Boolean).join(" · ");
-        const imageLeft = i % 2 === 0;
-        return (
-          <Reveal key={it.id}>
-            <Link
-              href={`/portfolio/${it.id}`}
-              data-cursor="Открыть"
-              className="group grid items-center gap-6 border-t border-line py-8 lg:grid-cols-12 lg:gap-8 lg:py-12"
-            >
-              <figure
-                className={`relative m-0 aspect-[16/10] overflow-hidden lg:col-span-8 ${
-                  imageLeft ? "lg:order-1" : "lg:order-2"
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={it.image}
-                  alt={it.title}
-                  loading={i < 2 ? "eager" : "lazy"}
-                  className="h-full w-full object-cover transition-transform duration-[1.6s] ease-symphony group-hover:scale-[1.04]"
-                />
-                <span className="absolute left-5 top-5 num text-sm text-white/85 [text-shadow:0_1px_10px_rgba(0,0,0,0.6)]">
-                  {n}
-                </span>
-              </figure>
-
-              <div className={`lg:col-span-4 ${imageLeft ? "lg:order-2" : "lg:order-1"}`}>
-                <div className="label mb-4 flex items-center gap-4">
-                  <span className="text-ink/60">{n}</span>
-                  <span className="h-px flex-1 bg-line" />
-                </div>
-                <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-ink transition-colors group-hover:text-brass sm:text-5xl">
-                  {it.title}
-                </h2>
-                <div className="label mt-4">{meta}</div>
-                {it.description && (
-                  <p className="mt-4 max-w-md leading-relaxed text-muted">{it.description}</p>
+    <div className="columns-1 gap-5 [column-fill:_balance] sm:columns-2">
+      {items.map((it, i) => (
+        <Reveal key={it.id}>
+          <Link
+            href={`/portfolio/${it.id}`}
+            data-cursor="Открыть"
+            className="group mb-5 block break-inside-avoid overflow-hidden"
+          >
+            <figure className="relative m-0 overflow-hidden bg-surface-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={it.image}
+                alt={it.title}
+                loading={i < 4 ? "eager" : "lazy"}
+                className="w-full object-cover transition-transform duration-[1.6s] ease-symphony group-hover:scale-[1.04]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+              <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white [text-shadow:0_1px_16px_rgba(0,0,0,0.6)] sm:p-8">
+                {it.complex && (
+                  <div className="font-mono text-[11px] uppercase tracking-[0.26em] text-white/90">
+                    ЖК {it.complex}
+                  </div>
                 )}
-                <span className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink">
-                  Открыть проект
-                  <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-                </span>
-              </div>
-            </Link>
-          </Reveal>
-        );
-      })}
+                <div className="mt-1.5 font-display text-2xl leading-tight tracking-tight sm:text-3xl">
+                  {it.title}
+                </div>
+                <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white/70">
+                  {[catLabel(it.category), it.city, it.year].filter(Boolean).join(" · ")}
+                </div>
+              </figcaption>
+            </figure>
+          </Link>
+        </Reveal>
+      ))}
     </div>
   );
 }

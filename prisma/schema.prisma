@@ -129,6 +129,8 @@ model PortfolioItem {
   city        String?
   year        Int?
   material    String?
+  complex     String?  // ЖК (жилой комплекс)
+  onHome      Boolean  @default(true) // показывать на главной
   order       Int      @default(0)
   isPublished Boolean  @default(true)
   createdAt   DateTime @default(now())
