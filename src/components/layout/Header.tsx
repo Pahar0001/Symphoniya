@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-categories";
-import { COMPANY_ADDRESS, COMPANY_MAP_URL, COMPANY_PHONE, COMPANY_PHONE_HREF } from "@/lib/site-config";
+import { COMPANY_ADDRESS, COMPANY_HOURS, COMPANY_MAP_URL, COMPANY_PHONE, COMPANY_PHONE_HREF } from "@/lib/site-config";
 
 const BRANCHES = PORTFOLIO_CATEGORIES.map((c) => ({ href: `/portfolio?cat=${c.slug}`, label: c.label }));
 
@@ -54,17 +54,44 @@ export function Header() {
   const linkCls = overlay ? "text-white/80 hover:text-white" : "text-muted hover:text-ink";
   const underlineCls = overlay ? "bg-white" : "bg-ink";
   const solidTextCls = overlay ? "text-white" : "text-ink";
+  const barTextCls = overlay ? "text-white/75" : "text-muted";
+  const barHover = overlay ? "hover:text-white" : "hover:text-ink";
+  const dividerCls = overlay ? "border-white/15" : "border-line";
 
   return (
     <header
       className={`sticky top-0 z-40 transition-colors duration-500 ${
-        overlay
-          ? "border-b border-transparent bg-transparent"
-          : "border-b border-line bg-paper/90 backdrop-blur-md"
+        overlay ? "bg-transparent" : "border-b border-line bg-paper/90 backdrop-blur-md"
       }`}
     >
+      {/* Верхняя полоса: адрес → Яндекс.Карты · часы · телефон */}
+      <div className={`border-b ${dividerCls}`}>
+        <div className={`container-x flex h-10 items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.14em] ${barTextCls}`}>
+          <a
+            href={COMPANY_MAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1.5 py-1 transition-colors ${barHover}`}
+            title="Открыть на Яндекс.Картах"
+          >
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+              <path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <span className="hidden sm:inline">{COMPANY_ADDRESS}</span>
+            <span className="sm:hidden">На карте</span>
+          </a>
+          <div className="flex items-center gap-4">
+            <span className="hidden md:inline">{COMPANY_HOURS}</span>
+            <a href={COMPANY_PHONE_HREF} className={`transition-colors ${barHover}`}>
+              {COMPANY_PHONE}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Основной ряд: логотип · навигация · действия */}
       <div className="container-x flex h-20 items-center justify-between gap-6 sm:h-24">
-        {/* Логотип — крупнее и читается поверх фото */}
         <Link href="/" className="flex shrink-0 items-center leading-none" aria-label="Симфония мебели">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -74,7 +101,6 @@ export function Header() {
           />
         </Link>
 
-        {/* Навигация — моно-лейблы */}
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex xl:gap-7">
           {NAV_DESKTOP.map((l) => (
             <Link
@@ -88,29 +114,7 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Действия */}
         <div className="flex shrink-0 items-center gap-4">
-          {/* Адрес → Яндекс.Карты (кликабельный, новая вкладка) */}
-          <a
-            href={COMPANY_MAP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`group hidden items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors xl:inline-flex ${linkCls}`}
-            title="Открыть на Яндекс.Картах"
-          >
-            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-              <path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" />
-              <circle cx="12" cy="10" r="2.5" />
-            </svg>
-            {COMPANY_ADDRESS}
-          </a>
-          <a
-            href={COMPANY_PHONE_HREF}
-            className={`hidden font-mono text-[11px] uppercase tracking-[0.16em] transition-colors xl:inline-flex ${solidTextCls} hover:opacity-80`}
-          >
-            {COMPANY_PHONE}
-          </a>
-
           <ThemeToggle />
           <Link
             href="/kontakty"

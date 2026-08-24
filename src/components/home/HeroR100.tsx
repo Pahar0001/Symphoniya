@@ -8,7 +8,7 @@ import { HERO_IMAGE, HERO_IMAGE_ALT } from "@/lib/site-config";
 // чтобы получилась единая композиция «интерфейс поверх фотографии».
 export function HeroR100() {
   return (
-    <section className="relative isolate -mt-20 flex min-h-[92svh] items-end overflow-hidden sm:-mt-24 lg:min-h-screen">
+    <section className="relative isolate -mt-[120px] flex min-h-[92svh] items-end overflow-hidden sm:-mt-[136px] lg:min-h-screen">
       {/* Фон — главное фото (заменяется через HERO_IMAGE) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
