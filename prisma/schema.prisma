@@ -130,6 +130,7 @@ model PortfolioItem {
   year        Int?
   material    String?
   complex     String?  // ЖК (жилой комплекс)
+  zones       String[] @default([]) // зоны комплексного ЖК-проекта: Кухня, Гардеробная, Санузел…
   onHome      Boolean  @default(true) // показывать на главной
   order       Int      @default(0)
   isPublished Boolean  @default(true)

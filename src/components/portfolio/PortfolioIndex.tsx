@@ -37,7 +37,9 @@ export function PortfolioIndex({ items }: { items: PortfolioItem[] }) {
                   {it.title}
                 </div>
                 <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white/70">
-                  {[catLabel(it.category), it.city, it.year].filter(Boolean).join(" · ")}
+                  {it.category === "zhk" && it.zones?.length
+                    ? it.zones.join(" · ")
+                    : [catLabel(it.category), it.city, it.year].filter(Boolean).join(" · ")}
                 </div>
               </figcaption>
             </figure>

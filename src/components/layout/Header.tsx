@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-categories";
+import { COMPANY_ADDRESS, COMPANY_MAP_URL, COMPANY_PHONE, COMPANY_PHONE_HREF } from "@/lib/site-config";
 
 const BRANCHES = PORTFOLIO_CATEGORIES.map((c) => ({ href: `/portfolio?cat=${c.slug}`, label: c.label }));
 
@@ -12,6 +14,7 @@ const BRANCHES = PORTFOLIO_CATEGORIES.map((c) => ({ href: `/portfolio?cat=${c.sl
 export const NAV_LINKS = [
   { href: "/", label: "Главная" },
   ...BRANCHES,
+  { href: "/portfolio?cat=zhk", label: "ЖК" },
   { href: "/portfolio", label: "Все проекты" },
   { href: "/fasady", label: "Материалы" },
   { href: "/stati", label: "Журнал" },
@@ -23,10 +26,16 @@ export const NAV_LINKS = [
   { href: "/kontakty", label: "Контакты" },
 ];
 
-// Десктопная шапка: ветки + журнал + о нас.
-const NAV_DESKTOP = [...BRANCHES, { href: "/stati", label: "Журнал" }, { href: "/o-nas", label: "О нас" }];
+// Десктопная шапка: ветки + ЖК + журнал + о нас.
+const NAV_DESKTOP = [
+  ...BRANCHES,
+  { href: "/portfolio?cat=zhk", label: "ЖК" },
+  { href: "/stati", label: "Журнал" },
+  { href: "/o-nas", label: "О нас" },
+];
 
 export function Header() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -37,45 +46,83 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // На главной шапка «лежит» поверх фото Hero и прозрачна до скролла.
+  const isHome = pathname === "/";
+  const overlay = isHome && !scrolled;
+
+  // Цвета зависят от режима: поверх фото — светлые, на плотном фоне — фирменные.
+  const linkCls = overlay ? "text-white/80 hover:text-white" : "text-muted hover:text-ink";
+  const underlineCls = overlay ? "bg-white" : "bg-ink";
+  const solidTextCls = overlay ? "text-white" : "text-ink";
+
   return (
     <header
-      className={`sticky top-0 z-40 border-b backdrop-blur-md transition-colors duration-500 ${
-        scrolled ? "border-line bg-paper/90" : "border-transparent bg-paper/70"
+      className={`sticky top-0 z-40 transition-colors duration-500 ${
+        overlay
+          ? "border-b border-transparent bg-transparent"
+          : "border-b border-line bg-paper/90 backdrop-blur-md"
       }`}
     >
       <div className="container-x flex h-20 items-center justify-between gap-6 sm:h-24">
-        {/* Вордмарк */}
-        <Link href="/" className="flex items-center leading-none" aria-label="Симфония мебели">
+        {/* Логотип — крупнее и читается поверх фото */}
+        <Link href="/" className="flex shrink-0 items-center leading-none" aria-label="Симфония мебели">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-symphony.png" alt="Симфония мебели" className="h-14 w-auto sm:h-16 dark:invert" />
+          <img
+            src="/logo-symphony.png"
+            alt="Симфония мебели"
+            className={`h-16 w-auto sm:h-20 ${overlay ? "[filter:invert(1)]" : "dark:invert"}`}
+          />
         </Link>
 
         {/* Навигация — моно-лейблы */}
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 lg:flex">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex xl:gap-7">
           {NAV_DESKTOP.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="group relative font-mono text-[11px] uppercase tracking-[0.2em] text-muted transition-colors hover:text-ink"
+              className={`group relative font-mono text-[11px] uppercase tracking-[0.2em] transition-colors ${linkCls}`}
             >
               {l.label}
-              <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-ink transition-all duration-500 ease-symphony group-hover:w-full" />
+              <span className={`absolute -bottom-1.5 left-0 h-px w-0 transition-all duration-500 ease-symphony group-hover:w-full ${underlineCls}`} />
             </Link>
           ))}
         </nav>
 
         {/* Действия */}
-        <div className="flex items-center gap-4">
+        <div className="flex shrink-0 items-center gap-4">
+          {/* Адрес → Яндекс.Карты (кликабельный, новая вкладка) */}
+          <a
+            href={COMPANY_MAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`group hidden items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors xl:inline-flex ${linkCls}`}
+            title="Открыть на Яндекс.Картах"
+          >
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+              <path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            {COMPANY_ADDRESS}
+          </a>
+          <a
+            href={COMPANY_PHONE_HREF}
+            className={`hidden font-mono text-[11px] uppercase tracking-[0.16em] transition-colors xl:inline-flex ${solidTextCls} hover:opacity-80`}
+          >
+            {COMPANY_PHONE}
+          </a>
+
           <ThemeToggle />
           <Link
             href="/kontakty"
-            className="group hidden items-center gap-1.5 border-b border-ink pb-0.5 font-mono text-[11px] uppercase tracking-[0.2em] text-ink lg:inline-flex"
+            className={`group hidden items-center gap-1.5 border-b pb-0.5 font-mono text-[11px] uppercase tracking-[0.2em] lg:inline-flex ${
+              overlay ? "border-white text-white" : "border-ink text-ink"
+            }`}
           >
             Контакты
             <span className="transition-transform duration-500 group-hover:translate-x-0.5">→</span>
           </Link>
           <button
-            className="grid h-9 w-9 place-items-center text-ink lg:hidden"
+            className={`grid h-9 w-9 place-items-center lg:hidden ${solidTextCls}`}
             onClick={() => setMobileOpen(true)}
             aria-label="Открыть меню"
           >

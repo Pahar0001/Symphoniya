@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { COMPANY_ADDRESS, COMPANY_MAP_URL } from "@/lib/site-config";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -32,7 +33,11 @@ export function Footer() {
         <div>
           <div className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-muted">Контакты</div>
           <ul className="space-y-2.5 text-sm text-ink">
-            <li>Москва</li>
+            <li>
+              <a href={COMPANY_MAP_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-brass">
+                {COMPANY_ADDRESS} ↗
+              </a>
+            </li>
             <li><a href="tel:+79951167286" className="transition-colors hover:text-brass">+7 (995) 116 72 86</a></li>
           </ul>
         </div>

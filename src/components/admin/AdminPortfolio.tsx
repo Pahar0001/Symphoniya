@@ -7,7 +7,7 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import { GalleryUploader } from "@/components/admin/GalleryUploader";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
-import { PORTFOLIO_CATEGORIES, catLabel } from "@/lib/portfolio-categories";
+import { FILTER_CATEGORIES, catLabel } from "@/lib/portfolio-categories";
 
 interface Row {
   id: string;
@@ -20,6 +20,7 @@ interface Row {
   complex: string | null;
   onHome: boolean;
   gallery: string[];
+  zones: string[];
   isPublished: boolean;
   description: string | null;
 }
@@ -34,11 +35,12 @@ type FormState = {
   complex: string;
   onHome: boolean;
   gallery: string[];
+  zones: string;
   description: string;
 };
 
 const EMPTY: FormState = {
-  title: "", image: "", category: "kuhni", city: "", year: "", material: "", complex: "", onHome: true, gallery: [], description: "",
+  title: "", image: "", category: "kuhni", city: "", year: "", material: "", complex: "", onHome: true, gallery: [], zones: "", description: "",
 };
 
 // null — форма закрыта, "new" — создание, иначе id редактируемой работы.
@@ -73,6 +75,7 @@ export function AdminPortfolio({ items, scope = "home" }: { items: Row[]; scope?
       complex: it.complex ?? "",
       onHome: it.onHome,
       gallery: it.gallery ?? [],
+      zones: (it.zones ?? []).join(", "),
       description: it.description ?? "",
     });
     setMode(it.id);
@@ -102,6 +105,7 @@ export function AdminPortfolio({ items, scope = "home" }: { items: Row[]; scope?
         complex: form.complex,
         onHome: form.onHome,
         gallery: form.gallery,
+        zones: form.zones.split(",").map((z) => z.trim()).filter(Boolean),
         description: form.description,
         year: form.year ? Number(form.year) : null,
       }),
@@ -159,11 +163,12 @@ export function AdminPortfolio({ items, scope = "home" }: { items: Row[]; scope?
             <GalleryUploader value={form.gallery} onChange={(g) => setForm((f) => ({ ...f, gallery: g }))} />
           </div>
           <Select label="Категория" value={form.category} onChange={(v) => setForm({ ...form, category: v })}
-            options={PORTFOLIO_CATEGORIES.map((c) => ({ value: c.slug, label: c.label }))} />
+            options={FILTER_CATEGORIES.map((c) => ({ value: c.slug, label: c.label }))} />
           <Input label="Город" value={form.city} onChange={set("city")} />
           <Input label="Год" type="number" value={form.year} onChange={set("year")} />
           <Input label="Материал" value={form.material} onChange={set("material")} />
           <Input label="ЖК (жилой комплекс)" value={form.complex} onChange={set("complex")} placeholder="напр. Прайм Парк" />
+          <Input label="Зоны (для категории ЖК, через запятую)" value={form.zones} onChange={set("zones")} placeholder="Кухня, Гардеробная, Санузел, Прихожая" />
           <label className="flex items-center gap-2 text-sm text-graphite-600 sm:col-span-2">
             <input type="checkbox" checked={form.onHome} onChange={(e) => setForm((f) => ({ ...f, onHome: e.target.checked }))} />
             Показывать на главной странице

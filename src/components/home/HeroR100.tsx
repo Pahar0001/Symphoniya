@@ -1,69 +1,62 @@
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
-import { HeroSlideshow } from "@/components/home/HeroSlideshow";
-import { GridOverlay } from "@/components/layout/GridOverlay";
+import { HERO_IMAGE, HERO_IMAGE_ALT } from "@/lib/site-config";
 
-// Кадры героя сменяют друг друга (файлы на сервере /opt/symphony/uploads).
-const HERO_IMAGES = [
-  "/uploads/hero-1.jpg",
-  "/uploads/hero-2.jpg",
-  "/uploads/hero-3.jpg",
-  "/uploads/hero-5.jpg",
-  "/uploads/hero-6.jpg",
-  "/uploads/hero-7.jpg",
-  "/uploads/hero-8.jpg",
-  "/uploads/hero-9.jpg",
-  "/uploads/hero-10.jpg",
-];
-
-// R100-герой: минимум UI, максимум композиции. Огромный гротеск, сетка,
-// сменяющиеся фотографии мебели.
+// Full-bleed hero: одно фото на всю ширину экрана, поверх него — шапка и текст.
+// Фото задаётся ОДНИМ источником — HERO_IMAGE (см. src/lib/site-config.ts).
+// Отрицательный верхний отступ уводит фото под «липкую» прозрачную шапку,
+// чтобы получилась единая композиция «интерфейс поверх фотографии».
 export function HeroR100() {
   return (
-    <section className="relative overflow-hidden border-b border-line">
-      <GridOverlay />
-      <div className="container-x relative z-10">
-        <div className="grid items-center gap-10 py-12 lg:min-h-[82vh] lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-7 text-center">
-            <h1 className="sr-only">Симфония мебели — кухни, шкафы, гардеробные и сан-узлы на заказ</h1>
-            <Reveal delay={120}>
-              <p className="mt-8 mx-auto max-w-lg text-lg leading-relaxed text-muted lg:text-xl">
-                Мебель, созданная для пространства. Кухни, шкафы, гардеробные и сан-узлы на заказ —
-                спроектированные как&nbsp;архитектура.
-              </p>
-            </Reveal>
-            <Reveal delay={220}>
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-                <Link
-                  href="#projects"
-                  className="group inline-flex items-center gap-2 border-b border-ink pb-1 font-mono text-xs uppercase tracking-[0.2em] text-ink"
-                >
-                  Смотреть проекты
-                  <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-                </Link>
-                <Link
-                  href="/kontakty"
-                  className="group inline-flex items-center gap-2 border-b border-transparent pb-1 font-mono text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:border-line hover:text-ink"
-                >
-                  Обсудить проект
-                  <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-                </Link>
-              </div>
-            </Reveal>
-          </div>
+    <section className="relative isolate -mt-20 flex min-h-[92svh] items-end overflow-hidden sm:-mt-24 lg:min-h-screen">
+      {/* Фон — главное фото (заменяется через HERO_IMAGE) */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={HERO_IMAGE}
+        alt={HERO_IMAGE_ALT}
+        fetchPriority="high"
+        className="absolute inset-0 -z-10 h-full w-full object-cover"
+      />
+      {/* Деликатный градиент: читаемость шапки сверху и текста снизу */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/15 to-black/65" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_18%_100%,transparent_45%,rgba(0,0,0,0.4))]" />
 
-          <div className="lg:col-span-5">
-            <Reveal delay={160}>
-              <figure data-cursor="Смотреть" className="relative m-0">
-                <HeroSlideshow images={HERO_IMAGES} className="aspect-[4/5]">
-                  <figcaption className="label absolute bottom-4 left-4 z-10 rounded-full bg-paper/85 px-3 py-1 text-ink backdrop-blur-sm">
-                    Мебель на заказ
-                  </figcaption>
-                </HeroSlideshow>
-              </figure>
-            </Reveal>
+      <div className="container-x relative z-10 pb-16 pt-36 sm:pb-24 sm:pt-44">
+        <Reveal>
+          <p className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/75">
+            Мебель · Архитектура · Москва и область
+          </p>
+        </Reveal>
+        <Reveal delay={90}>
+          <h1 className="mt-5 max-w-4xl text-balance font-display text-[clamp(2.4rem,6vw,5rem)] font-medium leading-[0.98] tracking-tightest text-white">
+            Мебель на заказ
+            <br className="hidden sm:block" /> в Москве и области
+          </h1>
+        </Reveal>
+        <Reveal delay={180}>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
+            Кухни, шкафы, гардеробные и сан-узлы — спроектированные как архитектура,
+            под ваше пространство и сценарий жизни.
+          </p>
+        </Reveal>
+        <Reveal delay={260}>
+          <div className="mt-9 flex flex-wrap items-center gap-4">
+            <Link
+              href="/kontakty"
+              className="group inline-flex items-center gap-2 rounded-full bg-paper px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink shadow-soft transition-transform duration-500 ease-symphony hover:-translate-y-0.5"
+            >
+              Рассчитать проект
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </Link>
+            <Link
+              href="#projects"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/40 px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white transition-colors duration-500 hover:border-white/80"
+            >
+              Смотреть проекты
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </Link>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

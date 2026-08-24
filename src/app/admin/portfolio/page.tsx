@@ -25,6 +25,7 @@ export default async function AdminPortfolioPage() {
           complex: i.complex,
           onHome: i.onHome,
           gallery: i.gallery,
+          zones: i.zones,
           isPublished: i.isPublished,
           description: i.description,
         }))}

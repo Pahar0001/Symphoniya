@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { LocationMap } from "@/components/maps/LocationMap";
+import { COMPANY_ADDRESS, COMPANY_MAP_URL } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Контакты",
@@ -61,7 +62,15 @@ export default function ContactsPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Адрес</div>
-                  <div className="mt-1.5 text-lg text-ink">Москва, Тимирязевская ул., 2/3</div>
+                  <a
+                    href={COMPANY_MAP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1.5 inline-flex items-center gap-1.5 text-lg text-ink underline decoration-line underline-offset-4 transition-colors hover:text-brass hover:decoration-brass"
+                  >
+                    {COMPANY_ADDRESS}
+                    <span aria-hidden>↗</span>
+                  </a>
                   <div className="text-sm text-muted">Шоурум по записи</div>
                 </div>
               </div>

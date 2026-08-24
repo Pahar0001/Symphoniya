@@ -24,6 +24,7 @@ export default async function AdminCatalogPage() {
           complex: i.complex,
           onHome: i.onHome,
           gallery: i.gallery,
+          zones: i.zones,
           isPublished: i.isPublished,
           description: i.description,
         }))}
