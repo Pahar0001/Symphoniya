@@ -50,18 +50,21 @@ export function Header() {
   const isHome = pathname === "/";
   const overlay = isHome && !scrolled;
 
-  // Цвета зависят от режима: поверх фото — светлые, на плотном фоне — фирменные.
+  // Прозрачная шапка поверх фото — ТОЛЬКО на десктопе (lg+): там фото высокое.
+  // На мобильном шапка всегда плотная (фото 16:9 короткое, иначе шапка перекроет его).
+  // Навигация и «Контакты» видны только на lg+, поэтому им хватает overlay-цветов.
   const linkCls = overlay ? "text-white/80 hover:text-white" : "text-muted hover:text-ink";
   const underlineCls = overlay ? "bg-white" : "bg-ink";
-  const solidTextCls = overlay ? "text-white" : "text-ink";
-  const barTextCls = overlay ? "text-white/75" : "text-muted";
-  const barHover = overlay ? "hover:text-white" : "hover:text-ink";
-  const dividerCls = overlay ? "border-white/15" : "border-line";
+  const barTextCls = overlay ? "text-muted lg:text-white/75" : "text-muted";
+  const barHover = overlay ? "hover:text-ink lg:hover:text-white" : "hover:text-ink";
+  const dividerCls = overlay ? "border-line lg:border-white/15" : "border-line";
 
   return (
     <header
       className={`sticky top-0 z-40 transition-colors duration-500 ${
-        overlay ? "bg-transparent" : "border-b border-line bg-paper/90 backdrop-blur-md"
+        overlay
+          ? "border-b border-line bg-paper/90 backdrop-blur-md lg:border-transparent lg:bg-transparent lg:backdrop-blur-none"
+          : "border-b border-line bg-paper/90 backdrop-blur-md"
       }`}
     >
       {/* Верхняя полоса: адрес → Яндекс.Карты · часы · телефон */}
@@ -97,7 +100,7 @@ export function Header() {
           <img
             src="/logo-symphony.png"
             alt="Симфония мебели"
-            className={`h-16 w-auto sm:h-20 ${overlay ? "[filter:invert(1)]" : "dark:invert"}`}
+            className={`h-16 w-auto sm:h-20 ${overlay ? "dark:invert lg:[filter:invert(1)]" : "dark:invert"}`}
           />
         </Link>
 
@@ -126,7 +129,7 @@ export function Header() {
             <span className="transition-transform duration-500 group-hover:translate-x-0.5">→</span>
           </Link>
           <button
-            className={`grid h-9 w-9 place-items-center lg:hidden ${solidTextCls}`}
+            className="grid h-9 w-9 place-items-center text-ink lg:hidden"
             onClick={() => setMobileOpen(true)}
             aria-label="Открыть меню"
           >

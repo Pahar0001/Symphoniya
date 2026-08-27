@@ -2,61 +2,65 @@ import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { HERO_IMAGE, HERO_IMAGE_ALT } from "@/lib/site-config";
 
-// Full-bleed hero: одно фото на всю ширину экрана, поверх него — шапка и текст.
-// Фото задаётся ОДНИМ источником — HERO_IMAGE (см. src/lib/site-config.ts).
-// Отрицательный верхний отступ уводит фото под «липкую» прозрачную шапку,
-// чтобы получилась единая композиция «интерфейс поверх фотографии».
+// Hero: фото в СВОЁЙ пропорции 16:9 на всю ширину экрана.
+// Контейнер = 16:9, картинка 16:9 (1920×1080) → показывается ЦЕЛИКОМ,
+// без обрезки и без чёрных полос на любом мониторе. Крупный текст — под фото
+// (наложение поверх несовместимо с «видно целиком» на мобильных/1080p).
+// Шапка на десктопе прозрачно лежит поверх верхней части фото.
 export function HeroR100() {
   return (
-    <section className="relative isolate -mt-[120px] flex min-h-[92svh] items-end overflow-hidden sm:-mt-[136px] lg:min-h-screen">
-      {/* Фон — главное фото (заменяется через HERO_IMAGE) */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={HERO_IMAGE}
-        alt={HERO_IMAGE_ALT}
-        fetchPriority="high"
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
-      />
-      {/* Деликатный градиент: читаемость шапки сверху и текста снизу */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/15 to-black/65" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_18%_100%,transparent_45%,rgba(0,0,0,0.4))]" />
+    <section className="relative w-full lg:-mt-[136px]">
+      {/* Фото 16:9 — всегда целиком, без полос, на всю ширину */}
+      <div className="relative w-full overflow-hidden aspect-[16/9]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={HERO_IMAGE}
+          alt={HERO_IMAGE_ALT}
+          fetchPriority="high"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Лёгкое затемнение вверху — чтобы читалась прозрачная шапка (только desktop) */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 hidden h-56 bg-gradient-to-b from-black/45 to-transparent lg:block" />
+      </div>
 
-      <div className="container-x relative z-10 pb-16 pt-36 sm:pb-24 sm:pt-44">
-        <Reveal>
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/75">
-            Мебель · Архитектура · Москва и область
-          </p>
-        </Reveal>
-        <Reveal delay={90}>
-          <h1 className="mt-5 max-w-4xl text-balance font-display text-[clamp(2.4rem,6vw,5rem)] font-medium leading-[0.98] tracking-tightest text-white">
-            Мебель на заказ
-            <br className="hidden sm:block" /> в Москве и области
-          </h1>
-        </Reveal>
-        <Reveal delay={180}>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
-            Кухни, шкафы, гардеробные и сан-узлы — спроектированные как архитектура,
-            под ваше пространство и сценарий жизни.
-          </p>
-        </Reveal>
-        <Reveal delay={260}>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <Link
-              href="/kontakty"
-              className="group inline-flex items-center gap-2 rounded-full bg-paper px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink shadow-soft transition-transform duration-500 ease-symphony hover:-translate-y-0.5"
-            >
-              Рассчитать проект
-              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-            </Link>
-            <Link
-              href="#projects"
-              className="group inline-flex items-center gap-2 rounded-full border border-white/40 px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white transition-colors duration-500 hover:border-white/80"
-            >
-              Смотреть проекты
-              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-            </Link>
-          </div>
-        </Reveal>
+      {/* Текст под фото: заголовок, подзаголовок, CTA */}
+      <div className="border-b border-line bg-paper">
+        <div className="container-x py-10 sm:py-14">
+          <Reveal>
+            <p className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-muted">
+              Мебель · Архитектура · Москва и область
+            </p>
+          </Reveal>
+          <Reveal delay={90}>
+            <h1 className="mt-4 max-w-4xl text-balance font-display text-[clamp(2rem,5vw,4.4rem)] font-medium leading-[1] tracking-tightest text-ink">
+              Мебель на заказ в Москве и области
+            </h1>
+          </Reveal>
+          <Reveal delay={180}>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+              Кухни, шкафы, гардеробные и сан-узлы — спроектированные как архитектура,
+              под ваше пространство и сценарий жизни.
+            </p>
+          </Reveal>
+          <Reveal delay={260}>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Link
+                href="/kontakty"
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-paper transition-transform duration-500 ease-symphony hover:-translate-y-0.5"
+              >
+                Рассчитать проект
+                <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+              </Link>
+              <Link
+                href="#projects"
+                className="group inline-flex items-center gap-2 rounded-full border border-line px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink transition-colors duration-500 hover:border-ink"
+              >
+                Смотреть проекты
+                <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
