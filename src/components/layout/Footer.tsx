@@ -44,7 +44,14 @@ export function Footer() {
       </div>
       <div className="container-x flex flex-col items-start justify-between gap-2 border-t border-line py-6 font-mono text-[11px] uppercase tracking-wider text-muted sm:flex-row sm:items-center">
         <span>© {year} Симфония мебели</span>
-        <span>Сделано с вниманием к материалу</span>
+        <a
+          href="https://burbey.ru/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-brass"
+        >
+          Сделано командой Vanta Digital Group ↗
+        </a>
       </div>
     </footer>
   );
