@@ -25,9 +25,6 @@ export function MobileNav({ open, onClose }: { open: boolean; onClose: () => voi
             {l.label}
           </Link>
         ))}
-        <Link href="/korzina" onClick={onClose} className="py-5 font-mono text-sm uppercase tracking-widest text-brass">
-          Корзина →
-        </Link>
       </nav>
     </div>
   );

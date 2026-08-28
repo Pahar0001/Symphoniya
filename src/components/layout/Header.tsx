@@ -60,6 +60,7 @@ export function Header() {
   const dividerCls = overlay ? "border-line lg:border-white/15" : "border-line";
 
   return (
+    <>
     <header
       className={`sticky top-0 z-40 transition-colors duration-500 ${
         overlay
@@ -139,7 +140,10 @@ export function Header() {
           </button>
         </div>
       </div>
-      <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </header>
+    {/* Мобильное меню — ВНЕ <header>: у шапки backdrop-blur создаёт containing block
+        для fixed-потомков, из-за чего меню занимало лишь высоту шапки (не было фона). */}
+    <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
+    </>
   );
 }
