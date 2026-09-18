@@ -1,42 +1,40 @@
 // Бесплатная карта на OpenStreetMap (iframe-эмбед). Не требует ключей/регистрации,
-// работает в РФ. Координаты и адрес шоурума задаются здесь; при необходимости
-// можно переопределить готовым src Яндекс-карты через NEXT_PUBLIC_YANDEX_MAP_SRC
-// (например, если у заказчика появится карточка в Яндекс.Бизнесе).
-
-// Тимирязевская ул., 2/3, Москва
-const LAT = 55.8079;
-const LON = 37.5733;
-const ADDRESS = "Москва, Тимирязевская ул., 2/3";
+// работает в РФ. Координаты и адрес салона приходят из настроек сайта (/admin/site).
+// Для ОСНОВНОГО салона src можно переопределить готовой Яндекс-картой через
+// NEXT_PUBLIC_YANDEX_MAP_SRC (например, когда появится карточка в Яндекс.Бизнесе).
 
 // bbox для эмбеда OSM (небольшая область вокруг точки).
 const D_LON = 0.008;
 const D_LAT = 0.004;
 const r = (n: number) => n.toFixed(6);
-const bbox = [r(LON - D_LON), r(LAT - D_LAT), r(LON + D_LON), r(LAT + D_LAT)].join("%2C");
 
-const OSM_SRC = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${LAT}%2C${LON}`;
-const OSM_LINK = `https://www.openstreetmap.org/?mlat=${LAT}&mlon=${LON}#map=17/${LAT}/${LON}`;
-
-export function LocationMap({ className = "" }: { className?: string }) {
-  // Если заказчик задаст готовый src (Яндекс-конструктор/Бизнес) — используем его.
-  const src = process.env.NEXT_PUBLIC_YANDEX_MAP_SRC || OSM_SRC;
+export function LocationMap({
+  lat,
+  lon,
+  address,
+  srcOverride,
+  className = "",
+}: {
+  lat: number;
+  lon: number;
+  address: string;
+  srcOverride?: string;
+  className?: string;
+}) {
+  const bbox = [r(lon - D_LON), r(lat - D_LAT), r(lon + D_LON), r(lat + D_LAT)].join("%2C");
+  const src = srcOverride || `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lon}`;
+  const link = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-line ${className}`}>
-      <iframe
-        title={`Мы на карте — ${ADDRESS}`}
-        src={src}
-        className="h-full w-full"
-        loading="lazy"
-        allowFullScreen
-      />
+    <div className={`flex flex-col overflow-hidden rounded-xl border border-line ${className}`}>
+      <iframe title={`Мы на карте — ${address}`} src={src} className="min-h-0 w-full flex-1" loading="lazy" allowFullScreen />
       <a
-        href={OSM_LINK}
+        href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="block bg-surface-2 px-3 py-2 text-center font-mono text-xs uppercase tracking-widest text-muted hover:text-fg"
+        className="block bg-surface-2 px-3 py-2 text-center font-mono text-xs uppercase tracking-widest text-muted hover:text-ink"
       >
-        {ADDRESS} — открыть карту ↗
+        {address} — открыть карту ↗
       </a>
     </div>
   );

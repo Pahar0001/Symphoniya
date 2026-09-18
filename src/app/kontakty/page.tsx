@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { LocationMap } from "@/components/maps/LocationMap";
-import { COMPANY_ADDRESS, COMPANY_MAP_URL } from "@/lib/site-config";
+import { salonMapUrl, telHref } from "@/lib/site-config";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: "Контакты",
   description:
-    "Симфония мебели — кухни и корпусная мебель на заказ. Москва, шоурум по записи. Телефон, почта, адрес и схема проезда.",
+    "Симфония мебели — мебель на заказ в Москве и области. Адреса салонов, телефоны, режим работы и схема проезда.",
 };
 
 const STEPS = [
@@ -16,7 +17,8 @@ const STEPS = [
   { n: "03", t: "Проект и смета", d: "Готовим визуализацию, точную смету и сроки. Без скрытых доплат по ходу." },
 ];
 
-export default function ContactsPage() {
+export default async function ContactsPage() {
+  const { salons, hours } = await getSiteSettings();
   return (
     <>
       {/* ── Заголовок ── */}
@@ -31,55 +33,64 @@ export default function ContactsPage() {
                 Свяжитесь с нами
               </h1>
               <p className="max-w-sm text-muted">
-                Позвоните или напишите — обсудим задумку, материалы и сроки. Шоурум работает по записи.
+                Позвоните или напишите — обсудим задумку, материалы и сроки. Перед визитом в салон лучше позвонить.
               </p>
             </div>
           </Reveal>
         </Container>
       </header>
 
-      {/* ── Контакты + карта ── */}
+      {/* ── Салоны: контакты + карта ── */}
       <section className="py-16 sm:py-24">
-        <Container className="grid gap-14 lg:grid-cols-[0.5fr_0.5fr] lg:gap-20">
-          <div className="space-y-10">
+        <Container className="space-y-16 sm:space-y-24">
+          {hours && (
             <Reveal>
               <div>
-                <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Телефон</div>
-                <a
-                  href="tel:+79951167286"
-                  className="mt-2 block font-display text-4xl text-ink transition-colors hover:text-brass sm:text-5xl"
-                >
-                  +7 (995) 116 72 86
-                </a>
+                <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Режим работы салонов</div>
+                <div className="mt-1.5 text-lg text-ink">{hours}</div>
               </div>
             </Reveal>
-
-            <Reveal delay={60}>
-              <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
-                <div>
-                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Режим работы</div>
-                  <div className="mt-1.5 text-lg text-ink">Ежедневно, 10:00–21:00</div>
-                </div>
-                <div className="sm:col-span-2">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Адрес</div>
+          )}
+          {salons.map((salon, i) => (
+            <div key={salon.address} className="grid gap-8 lg:grid-cols-2 lg:gap-20">
+              <Reveal>
+                <div className="space-y-6">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-brass">
+                    {String(i + 1).padStart(2, "0")} · {salon.title || "Салон"}
+                  </div>
                   <a
-                    href={COMPANY_MAP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1.5 inline-flex items-center gap-1.5 text-lg text-ink underline decoration-line underline-offset-4 transition-colors hover:text-brass hover:decoration-brass"
+                    href={telHref(salon.phone)}
+                    className="block font-display text-4xl text-ink transition-colors hover:text-brass sm:text-5xl"
                   >
-                    {COMPANY_ADDRESS}
-                    <span aria-hidden>↗</span>
+                    {salon.phone}
                   </a>
-                  <div className="text-sm text-muted">Шоурум по записи</div>
+                  <div>
+                    <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Адрес</div>
+                    <a
+                      href={salonMapUrl(salon)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1.5 inline-flex items-center gap-1.5 text-lg text-ink underline decoration-line underline-offset-4 transition-colors hover:text-brass hover:decoration-brass"
+                    >
+                      {salon.address}
+                      <span aria-hidden>↗</span>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={120}>
-            <LocationMap className="aspect-[4/3] lg:aspect-[3/4]" />
-          </Reveal>
+              </Reveal>
+              {typeof salon.lat === "number" && typeof salon.lon === "number" && (
+                <Reveal delay={120}>
+                  <LocationMap
+                    lat={salon.lat}
+                    lon={salon.lon}
+                    address={salon.address}
+                    srcOverride={i === 0 ? process.env.NEXT_PUBLIC_YANDEX_MAP_SRC : undefined}
+                    className="aspect-[4/3] lg:aspect-[16/10]"
+                  />
+                </Reveal>
+              )}
+            </div>
+          ))}
         </Container>
       </section>
 

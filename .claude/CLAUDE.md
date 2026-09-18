@@ -4,7 +4,8 @@
 
 ## Что это
 Сайт мебельной компании «Симфония мебели» (ребрендинг THE WOOD): кухни и корпусная мебель на
-заказ. Next.js 14 (App Router, TS) + Tailwind + Prisma/Postgres + NextAuth + ЮKassa + Claude API.
+заказ. Next.js 14 (App Router, TS) + Tailwind + Prisma/Postgres + NextAuth + ЮKassa.
+Статьи, ИИ-услуги и ИИ-визуализация удалены по просьбе заказчика (2026-09-18) — не возвращать.
 
 ## Стек и конвенции
 - **Next.js App Router**, все компоненты по умолчанию серверные; `"use client"` — только там, где
@@ -19,9 +20,10 @@
 
 ## Ключевые модули
 - `src/lib/db.ts` — Prisma singleton.
-- `src/lib/ai.ts` — Claude API (модель Haiku), системный промпт консультанта.
 - `src/lib/yookassa.ts` — REST-обёртка ЮKassa (создание/получение платежа).
-- `src/lib/video.ts` — задел под виртуализацию квартиры по планировке (Runway/аналог).
+- `src/lib/site-config.ts` + `src/lib/site-settings.ts` — настройки сайта (Hero, салоны, соцсети):
+  умолчания/типы и чтение из БД (`SiteSetting`). Редактируются в `/admin/site` — не хардкодить
+  телефоны/адреса/тексты Hero в компонентах.
 - `src/lib/cart.ts` — клиентская корзина (zustand + localStorage).
 - `src/lib/catalog.ts` — выборки каталога с фильтрами.
 - `src/lib/auth.ts` — NextAuth (credentials) для `/admin`.

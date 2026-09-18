@@ -8,6 +8,7 @@ import { canAccessAdmin, canManageUsers, ROLE_LABEL, type Role } from "@/lib/rol
 const NAV = [
   { href: "/admin", label: "Дашборд" },
   { href: "/admin/analytics", label: "Аналитика" },
+  { href: "/admin/site", label: "Сайт" },
   { href: "/admin/catalog", label: "Каталог" },
   { href: "/admin/portfolio", label: "Портфолио" },
   { href: "/admin/reviews", label: "Отзывы" },

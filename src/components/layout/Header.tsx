@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-categories";
-import { COMPANY_ADDRESS, COMPANY_HOURS, COMPANY_MAP_URL, COMPANY_PHONE, COMPANY_PHONE_HREF } from "@/lib/site-config";
+import { salonMapUrl, shortAddress, telHref, type SiteSettings } from "@/lib/site-config";
 
 const BRANCHES = PORTFOLIO_CATEGORIES.map((c) => ({ href: `/portfolio?cat=${c.slug}`, label: c.label }));
 
@@ -17,8 +17,6 @@ export const NAV_LINKS = [
   { href: "/portfolio?cat=zhk", label: "ЖК" },
   { href: "/portfolio", label: "Все проекты" },
   { href: "/fasady", label: "Материалы" },
-  { href: "/stati", label: "Журнал" },
-  { href: "/uslugi", label: "Услуги" },
   { href: "/otzyvy", label: "Отзывы" },
   { href: "/o-nas", label: "О нас" },
   { href: "/garantiya", label: "Гарантия" },
@@ -26,15 +24,15 @@ export const NAV_LINKS = [
   { href: "/kontakty", label: "Контакты" },
 ];
 
-// Десктопная шапка: ветки + ЖК + журнал + о нас.
+// Десктопная шапка: ветки + ЖК + о нас.
 const NAV_DESKTOP = [
   ...BRANCHES,
   { href: "/portfolio?cat=zhk", label: "ЖК" },
-  { href: "/stati", label: "Журнал" },
   { href: "/o-nas", label: "О нас" },
 ];
 
-export function Header() {
+export function Header({ settings }: { settings: SiteSettings }) {
+  const { salons, hours } = settings;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -53,11 +51,13 @@ export function Header() {
   // Прозрачная шапка поверх фото — ТОЛЬКО на десктопе (lg+): там фото высокое.
   // На мобильном шапка всегда плотная (фото 16:9 короткое, иначе шапка перекроет его).
   // Навигация и «Контакты» видны только на lg+, поэтому им хватает overlay-цветов.
-  const linkCls = overlay ? "text-white/80 hover:text-white" : "text-muted hover:text-ink";
+  // Поверх фото — чистый белый с мягкой тенью: тонкий моно-шрифт иначе теряется на светлых участках.
+  const shadowCls = overlay ? "lg:[text-shadow:0_1px_10px_rgba(0,0,0,0.55)]" : "";
+  const linkCls = overlay ? "text-white hover:text-white/75" : "text-ink/75 hover:text-ink";
   const underlineCls = overlay ? "bg-white" : "bg-ink";
-  const barTextCls = overlay ? "text-muted lg:text-white/75" : "text-muted";
-  const barHover = overlay ? "hover:text-ink lg:hover:text-white" : "hover:text-ink";
-  const dividerCls = overlay ? "border-line lg:border-white/15" : "border-line";
+  const barTextCls = overlay ? "text-ink/75 lg:text-white" : "text-ink/75";
+  const barHover = overlay ? "hover:text-ink lg:hover:text-white/75" : "hover:text-ink";
+  const dividerCls = overlay ? "border-line lg:border-white/20" : "border-line";
 
   return (
     <>
@@ -68,28 +68,40 @@ export function Header() {
           : "border-b border-line bg-paper/90 backdrop-blur-md"
       }`}
     >
-      {/* Верхняя полоса: адрес → Яндекс.Карты · часы · телефон */}
+      {/* Верхняя полоса: адреса салонов → Яндекс.Карты · часы · телефоны.
+          Высота полосы прежняя (h-10) — крупнее стал только шрифт. */}
       <div className={`border-b ${dividerCls}`}>
-        <div className={`container-x flex h-10 items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.14em] ${barTextCls}`}>
-          <a
-            href={COMPANY_MAP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1.5 py-1 transition-colors ${barHover}`}
-            title="Открыть на Яндекс.Картах"
-          >
-            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-              <path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" />
-              <circle cx="12" cy="10" r="2.5" />
-            </svg>
-            <span className="hidden sm:inline">{COMPANY_ADDRESS}</span>
-            <span className="sm:hidden">На карте</span>
-          </a>
-          <div className="flex items-center gap-4">
-            <span className="hidden md:inline">{COMPANY_HOURS}</span>
-            <a href={COMPANY_PHONE_HREF} className={`transition-colors ${barHover}`}>
-              {COMPANY_PHONE}
-            </a>
+        <div className={`container-x flex h-10 items-center justify-between gap-4 font-mono text-[12px] uppercase tracking-[0.06em] xl:text-[13px] ${barTextCls} ${shadowCls}`}>
+          <div className="flex min-w-0 items-center gap-5">
+            {salons.map((salon, i) => (
+              <a
+                key={salon.address}
+                href={salonMapUrl(salon)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`items-center gap-1.5 whitespace-nowrap py-1 transition-colors ${barHover} ${i === 0 ? "inline-flex" : "hidden lg:inline-flex"}`}
+                title="Открыть на Яндекс.Картах"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                  <path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+                <span className="hidden sm:inline">{shortAddress(salon.address)}</span>
+                <span className="sm:hidden">На карте</span>
+              </a>
+            ))}
+          </div>
+          <div className="flex items-center gap-5 whitespace-nowrap">
+            <span className="hidden xl:inline">{hours}</span>
+            {salons.map((salon, i) => (
+              <a
+                key={salon.phone}
+                href={telHref(salon.phone)}
+                className={`transition-colors ${barHover} ${i === 0 ? "" : "hidden md:inline"}`}
+              >
+                {salon.phone}
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -110,7 +122,7 @@ export function Header() {
             <Link
               key={l.href}
               href={l.href}
-              className={`group relative font-mono text-[11px] uppercase tracking-[0.2em] transition-colors ${linkCls}`}
+              className={`group relative font-mono text-[13px] uppercase tracking-[0.12em] transition-colors ${linkCls} ${shadowCls}`}
             >
               {l.label}
               <span className={`absolute -bottom-1.5 left-0 h-px w-0 transition-all duration-500 ease-symphony group-hover:w-full ${underlineCls}`} />
@@ -119,10 +131,10 @@ export function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-4">
-          <ThemeToggle />
+          <ThemeToggle className={overlay ? "lg:border-white/60 lg:text-white" : ""} />
           <Link
             href="/kontakty"
-            className={`group hidden items-center gap-1.5 border-b pb-0.5 font-mono text-[11px] uppercase tracking-[0.2em] lg:inline-flex ${
+            className={`group hidden items-center gap-1.5 border-b pb-0.5 font-mono text-[13px] uppercase tracking-[0.12em] lg:inline-flex ${shadowCls} ${
               overlay ? "border-white text-white" : "border-ink text-ink"
             }`}
           >

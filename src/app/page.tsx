@@ -6,10 +6,13 @@ import { HeroR100 } from "@/components/home/HeroR100";
 import { HeroGallery, type Slide } from "@/components/home/HeroGallery";
 import { PORTFOLIO_CATEGORIES, catLabel } from "@/lib/portfolio-categories";
 import { prisma } from "@/lib/db";
+import { getSiteSettings } from "@/lib/site-settings";
+import { telHref } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
+  const settings = await getSiteSettings();
   const projects = await prisma.portfolioItem.findMany({
     where: { isPublished: true, onHome: true },
     orderBy: [{ order: "asc" }, { createdAt: "desc" }],
@@ -27,7 +30,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ── HERO ── */}
-      <HeroR100 />
+      <HeroR100 hero={settings.hero} />
 
       {/* ── НАПРАВЛЕНИЯ (4 ветки) ── */}
       <section className="pt-16 sm:pt-24">
@@ -74,17 +77,22 @@ export default async function HomePage() {
           <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8">
               <Reveal>
-                <h2 className="display-lg max-w-3xl text-ink">
-                  Готовы обсудить<br />ваш проект?
-                </h2>
+                <h2 className="display-lg max-w-3xl text-balance text-ink">{settings.homeCtaTitle}</h2>
               </Reveal>
             </div>
             <div className="lg:col-span-4">
               <Reveal delay={120}>
-                <div className="flex flex-col gap-3">
-                  <a href="tel:+79951167286" className="font-display text-3xl text-ink transition-colors hover:text-brass">
-                    +7 (995) 116 72 86
-                  </a>
+                <div className="flex flex-col gap-5">
+                  {settings.salons.map((salon) => (
+                    <div key={salon.phone}>
+                      {salon.title && (
+                        <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{salon.title}</div>
+                      )}
+                      <a href={telHref(salon.phone)} className="mt-1 block font-display text-3xl text-ink transition-colors hover:text-brass">
+                        {salon.phone}
+                      </a>
+                    </div>
+                  ))}
                   <div className="mt-4">
                     <ButtonLink href="/kontakty" withArrow>Контакты и адрес</ButtonLink>
                   </div>

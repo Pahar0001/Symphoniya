@@ -91,13 +91,13 @@ export default function WarrantyPage() {
               ))}
             </ul>
             <p className="mt-4 text-sm text-muted">
-              Как правильно ухаживать за разными фасадами — рассказали в гайде «Уход за фасадами».
+              Чем отличаются фасады и как они ведут себя в быту — рассказали в разделе «Материалы».
             </p>
           </div>
 
           <div className="flex flex-wrap gap-4">
             <ButtonLink href="/kontakty">Обратиться в сервис</ButtonLink>
-            <ButtonLink href="/stati/uhod-za-fasadami" variant="outline">Гайд по уходу</ButtonLink>
+            <ButtonLink href="/fasady" variant="outline">Материалы фасадов</ButtonLink>
           </div>
         </Container>
       </section>

@@ -1,8 +1,7 @@
 import { randomUUID } from "crypto";
 
 // Обёртка над ЮKassa REST API.
-// Сценарии: предоплата/задаток за проект, оплата платных услуг ИИ-агента,
-// (в перспективе) оплата виртуализации квартиры.
+// Сценарий: предоплата/задаток за проект либо полная оплата заказа.
 const SHOP_ID = process.env.YOOKASSA_SHOP_ID;
 const SECRET_KEY = process.env.YOOKASSA_SECRET_KEY;
 const API_URL = "https://api.yookassa.ru/v3";

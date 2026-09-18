@@ -37,11 +37,8 @@ services:
       NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
       ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@symphony-mebeli.ru}"
       ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin12345}"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
-      ANTHROPIC_MODEL: "${ANTHROPIC_MODEL:-claude-haiku-4-5-20251001}"
       YOOKASSA_SHOP_ID: "${YOOKASSA_SHOP_ID:-}"
       YOOKASSA_SECRET_KEY: "${YOOKASSA_SECRET_KEY:-}"
-      VIDEO_PROVIDER: "${VIDEO_PROVIDER:-none}"
 
 volumes:
   pgdata:

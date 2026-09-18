@@ -149,6 +149,15 @@ model Review {
   createdAt   DateTime @default(now())
 }
 
+// Редактируемые из админки настройки сайта (/admin/site): тексты и фото Hero,
+// салоны, часы работы, соцсети. Одна строка key="site", value — JSON
+// (см. SiteSettings в lib/site-config.ts). Пусто → работают значения по умолчанию.
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
 // Собственная аналитика (без внешних сервисов). Анонимно, без PII:
 // хранится только тип события, путь, реферер, устройство и случайный ID сессии
 // (первичная cookie). Питает дашборд /admin/analytics.

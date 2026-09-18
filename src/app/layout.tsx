@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
 // Устанавливаем тему до первой отрисовки — без «моргания».
 const themeScript = `(function(){try{var t=localStorage.getItem('symphony-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Контакты/соцсети для шапки и футера — из админки (/admin/site).
+  const settings = await getSiteSettings();
   return (
     <html
       lang="ru"
@@ -31,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider>
-          <SiteChrome>{children}</SiteChrome>
+          <SiteChrome settings={settings}>{children}</SiteChrome>
           <AnalyticsTracker />
         </ThemeProvider>
       </body>
